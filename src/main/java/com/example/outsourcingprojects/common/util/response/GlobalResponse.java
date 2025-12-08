@@ -1,4 +1,4 @@
-package com.example.outsourcingprojects.common.util;
+package com.example.outsourcingprojects.common.util.response;
 
 import lombok.Builder;
 import lombok.Getter;
