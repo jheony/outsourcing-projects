@@ -21,5 +21,6 @@ public class TeamMember extends BaseEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "customer_id")
-    Customer CustomerId;
+    User userId;
+
 }
