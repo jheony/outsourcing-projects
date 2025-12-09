@@ -1,4 +1,7 @@
 package com.example.outsourcingprojects.domain.user.repository;
 
-public interface UserRepository {
+import com.example.outsourcingprojects.common.entity.User;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface UserRepository extends JpaRepository<User, Long> {
 }
