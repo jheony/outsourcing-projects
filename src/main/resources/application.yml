@@ -1,9 +1,9 @@
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    username: root
-    url: jdbc:mysql://localhost:3306/outsourcing
-    password: '12345678'
+    username: ${DATA_SOURCE_USERNAME}
+    url: ${DATA_SOURCE_URL}
+    password: ${DATA_SOURCE_PASSWORD}
   jpa:
     properties:
       hibernate:
@@ -16,4 +16,4 @@ spring:
     name: outsourcing-projects
 jwt:
   secret:
-    key:
+    key:${JWT_SECRET_KEY}
