@@ -16,10 +16,19 @@ public class TeamService {
 
     @Transactional
     public CreateTeamResponseDto createTeam(CreateTeamRequestDto requestDto) {
-        Team team = new Team(requestDto.getName(), requestDto.getDescription());
+        // 팀 이름 중복 검사
+        if(teamRepository.existsByName(requestDto.getName())) {
+            throw new IllegalArgumentException("존재하는 팀 이름입니다.");
+        }
 
-        Team createdTeam = teamRepository.save(team);
+        // 정적 팩토리 메서드로 팀 생성
+        Team team = Team.of(requestDto.getName(), requestDto.getDescription());
 
-        return new CreateTeamResponseDto(createdTeam.getId(), createdTeam.getName(), createdTeam.getDescription(), createdTeam.getCreatedAt());
+        // 저장
+        Team savedTeam = teamRepository.save(team);
+
+        // 정적 팩토리 메소드 응답 DTO 생성 및 반환
+        return CreateTeamResponseDto.from(savedTeam);
+
     }
 }

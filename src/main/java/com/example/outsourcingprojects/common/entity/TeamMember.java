@@ -1,5 +1,6 @@
 package com.example.outsourcingprojects.common.entity;
 
+import com.example.outsourcingprojects.domain.team.dto.response.TeamMemberResponseDto;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -23,4 +24,12 @@ public class TeamMember extends BaseEntity {
     @JoinColumn(name = "customer_id")
     private User user;
 
+    private TeamMember(Team team, User user) {
+        this.team = team;
+        this.user = user;
+    }
+
+    public static TeamMember of(Team team, User user) {
+        return new TeamMember(team, user);
+    }
 }

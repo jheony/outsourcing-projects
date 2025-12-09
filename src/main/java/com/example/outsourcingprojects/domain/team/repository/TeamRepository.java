@@ -7,5 +7,5 @@ import java.util.List;
 
 public interface TeamRepository extends JpaRepository<Team, Long> {
 
-    List<Team> findByName(String name);
+    boolean existsByName(String name);
 }

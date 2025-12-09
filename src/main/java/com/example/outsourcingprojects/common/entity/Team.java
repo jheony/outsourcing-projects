@@ -1,9 +1,15 @@
 package com.example.outsourcingprojects.common.entity;
 
+import com.example.outsourcingprojects.domain.team.dto.response.CreateTeamResponseDto;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+
+import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Table(name = "teams")
@@ -21,8 +27,13 @@ public class Team extends BaseEntity {
     @Column
     private String description;
 
-    public Team(String name, String description) {
+    private Team(String name, String description) {
         this.name = name;
         this.description = description;
     }
+
+    public static Team of(String name, String description) {
+        return new Team(name, description);
+    }
+
 }
