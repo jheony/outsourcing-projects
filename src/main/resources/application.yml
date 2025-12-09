@@ -1,19 +1,29 @@
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    username: ${DATA_SOURCE_USERNAME}
     url: ${DATA_SOURCE_URL}
+    username: ${DATA_SOURCE_USERNAME}
     password: ${DATA_SOURCE_PASSWORD}
+
   jpa:
+    hibernate:
+      ddl-auto: create-drop
+    show-sql: true
     properties:
       hibernate:
+        format_sql: true
         dialect: org.hibernate.dialect.MySQL8Dialect
-        format_sql: 'true'
-    hibernate:
-      ddl-auto: create
-    show-sql: 'true'
+    defer-datasource-initialization: true
+
+  sql:
+    init:
+      mode: always
+      continue-on-error: true
+      data-locations: classpath:data.sql
+
   application:
     name: outsourcing-projects
+
 jwt:
   secret:
     key: ${JWT_SECRET_KEY}
