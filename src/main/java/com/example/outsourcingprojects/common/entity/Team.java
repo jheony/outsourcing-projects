@@ -20,4 +20,9 @@ public class Team extends BaseEntity {
 
     @Column
     private String description;
+
+    public Team(String name, String description) {
+        this.name = name;
+        this.description = description;
+    }
 }
