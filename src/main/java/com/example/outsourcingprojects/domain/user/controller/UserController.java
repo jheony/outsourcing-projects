@@ -7,16 +7,17 @@ import com.example.outsourcingprojects.domain.user.service.UserService;
 import com.example.outsourcingprojects.domain.user.dto.SignUpRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/users")
+@Slf4j
 public class UserController {
 
-    private static final Log log = LogFactory.getLog(UserController.class);
     private final UserService userService;
 
     //회원가입
@@ -34,6 +35,12 @@ public class UserController {
     }
 
     // 사용자 목록 조회
+    @GetMapping
+    public GlobalResponse<List<UserInfoResponse.AllUserinfoResponse>> getUsersInfo() {
+        List<UserInfoResponse.AllUserinfoResponse> allUsersInfo = userService.usersInfo();
+    return GlobalResponse.success("[사용자 목록 조회 성공]", allUsersInfo);
+
+    }
 
     // 사용자 정보 수정
 

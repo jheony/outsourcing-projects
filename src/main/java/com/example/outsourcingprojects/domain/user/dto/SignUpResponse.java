@@ -22,4 +22,10 @@ public class SignUpResponse {
         this.role = role;
         this.createdAt = createdAt;
     }
+
+    public String getRole() {
+        if (this.role == 20L) return "USER";
+        if (this.role == 10L) return "ADMIN";
+        return "UNKNOWN";
+    }
 }
