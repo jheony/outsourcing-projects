@@ -24,29 +24,19 @@ public class UserController {
     //회원가입
     @PostMapping
     public GlobalResponse<SignUpResponse> signUp(@RequestBody SignUpRequest request) {
-        log.info("로그 찍힘");
         SignUpResponse userResponse = userService.signUpUser(request);
         return GlobalResponse.success("회원가입이 완료되었습니다", userResponse);
     }
 
-    /**
-     *사용자 정보 조회
-     */
+    // 사용자 정보 조회
 
-    /**
-     * 사용자 목록 조회
-     */
+    // 사용자 목록 조회
 
-    /**
-     * 사용자 정보 수정
-     */
+    // 사용자 정보 수정
 
-    /**
-     * 회원 탈퇴(영구 삭제)
-     */
+    // 회원 탈퇴(영구 삭제)
 
-    /**
-     * 추가 가능한 사용자 조회
-     */
+    // 추가 가능한 사용자 조회
+
 }
 

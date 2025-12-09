@@ -1,5 +1,8 @@
 package com.example.outsourcingprojects.domain.user.dto;
 
+import lombok.Getter;
+
+@Getter
 public class SignUpRequest {
 
     private final String username;
@@ -13,9 +16,4 @@ public class SignUpRequest {
         this.password = password;
         this.name = name;
     }
-
-    public String getUsername() {return username;}
-    public String getEmail() {return email;}
-    public String getPassword() {return password;}
-    public String getName() {return name;}
 }
