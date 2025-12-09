@@ -17,10 +17,10 @@ public class TeamMember extends BaseEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "team_id")
-    Team teamId;
+    Team team;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "customer_id")
-    User userId;
+    User user;
 
 }
