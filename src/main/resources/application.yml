@@ -16,4 +16,4 @@ spring:
     name: outsourcing-projects
 jwt:
   secret:
-    key: ${JWT_SECRET_KEY}
+    key:

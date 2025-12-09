@@ -1,3 +1,10 @@
+### Environment Files ###
+.env
+.env.*
+dotenv
+*.env
+
+### Build ###
 HELP.md
 .gradle
 build/

@@ -21,8 +21,7 @@ public class Task extends BaseEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "assignee_id")
-    private User assigneeId;
-//  private Long assigneeId;(dto에서만)
+    private User assignee;
 
     @Column(length = 100)
     @NotNull
@@ -39,6 +38,5 @@ public class Task extends BaseEntity {
 
     @Column
     private LocalDateTime dueDate;
-
 
 }
