@@ -103,7 +103,7 @@ INSERT INTO teams (name, description, created_at, updated_at, deleted_at) VALUES
                                                                               ('Delta Team','DevOps and deployment',NOW() - INTERVAL 27 DAY,NOW() - INTERVAL 26 DAY,NULL),
                                                                               ('Epsilon Team','Research and innovation',NOW() - INTERVAL 26 DAY,NOW() - INTERVAL 25 DAY,NULL);
 
-INSERT INTO teammembers (customer_id, team_id, created_at, updated_at, deleted_at) VALUES
+INSERT INTO team_members (customer_id, team_id, created_at, updated_at, deleted_at) VALUES
                                                                                           (1,1,NOW() - INTERVAL 30 DAY,NOW() - INTERVAL 29 DAY,NULL),
                                                                                           (2,1,NOW() - INTERVAL 29 DAY,NOW() - INTERVAL 28 DAY,NULL),
                                                                                           (3,2,NOW() - INTERVAL 28 DAY,NOW() - INTERVAL 27 DAY,NOW() - INTERVAL 5 DAY),

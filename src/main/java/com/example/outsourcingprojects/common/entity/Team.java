@@ -13,11 +13,11 @@ public class Team extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    Long id;
+    private Long id;
 
     @Column(nullable = false, unique = true, length = 100)
-    String name;
+    private String name;
 
     @Column
-    String description;
+    private String description;
 }
