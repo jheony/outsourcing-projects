@@ -4,16 +4,24 @@ spring:
     username: ${DATA_SOURCE_USERNAME}
     url: ${DATA_SOURCE_URL}
     password: ${DATA_SOURCE_PASSWORD}
+
   jpa:
     properties:
       hibernate:
         dialect: org.hibernate.dialect.MySQL8Dialect
         format_sql: 'true'
     hibernate:
-      ddl-auto: create
+      ddl-auto: create-drop
     show-sql: 'true'
+    defer-datasource-initialization: true
+
+  sql:
+    init:
+      mode: always
+
   application:
     name: outsourcing-projects
+
 jwt:
   secret:
     key: ${JWT_SECRET_KEY}
