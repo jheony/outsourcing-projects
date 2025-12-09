@@ -31,8 +31,7 @@ public class TaskService {
                       throw new IllegalArgumentException("담당자를 찾을 수 없습니다.");
                   });
 
-        // 2. Task 인스턴스화
-        Task task = new Task();
+
 
 
     }
