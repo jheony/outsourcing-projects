@@ -14,7 +14,7 @@ import java.time.LocalDateTime;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Task extends BaseEntity {
-
+    // 속
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -39,4 +39,32 @@ public class Task extends BaseEntity {
     @Column
     private LocalDateTime dueDate;
 
-}
+    // 생
+    public Task(String title, String description, long priority, long status,User assignee,LocalDateTime dueDate) {
+        this.title = title;
+        this.description = description;
+        this.priority = priority;
+        this.status = status;
+        this.assignee = assignee;
+        this.dueDate = dueDate;
+    }
+
+    // getter
+    public Long getId() {return id;}
+
+    public String getTitle() {return title;}
+
+    public String getDescription() {return description;}
+
+    public long getPriority() {return priority;}
+
+    public long getStatus() {return status;}
+
+    public User getAssignee() {return assignee;}
+
+    public LocalDateTime getDueDate() {return dueDate;}
+
+
+
+    }
+
