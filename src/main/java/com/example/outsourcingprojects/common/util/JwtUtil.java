@@ -38,8 +38,8 @@ public class JwtUtil {
     public String generateToken(String username, String userRole, Long userId) {
         Date now = new Date();
         return BEARER_PREFIX + Jwts.builder()
-                .claim("sub", userId)
-                .claim("username", username)
+                .subject(username)
+                .claim("userId", userId)
                 .claim("role", userRole)
                 .issuedAt(now)
                 .expiration(new Date(now.getTime() + TOKEN_TIME))

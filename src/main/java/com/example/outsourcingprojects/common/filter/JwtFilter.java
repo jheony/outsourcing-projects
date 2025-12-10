@@ -34,12 +34,14 @@ public class JwtFilter extends OncePerRequestFilter {
         }
 
         String authorizationHeader = request.getHeader("Authorization");
+
         if (authorizationHeader == null || authorizationHeader.isBlank()) {
             response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "JWT가 필요합니다.");
             return;
         }
 
         String jwt = authorizationHeader.substring(7);
+
         if (!jwtUtil.validateToken(jwt)) {
             response.setStatus(HttpServletResponse.SC_FORBIDDEN);
             response.getWriter().write("error: Unauthorized");
