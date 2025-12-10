@@ -1,6 +1,7 @@
 package com.example.outsourcingprojects.domain.task.repository;
 
 import com.example.outsourcingprojects.common.entity.Task;
+import com.example.outsourcingprojects.domain.task.tempDto.DailyTaskDTO;
 import com.querydsl.core.Tuple;
 import org.springframework.data.domain.Page;
 
@@ -16,4 +17,6 @@ public interface TempTaskRepositoryCustom {
     Long countOverdueTask();
 
     Long countMyTaskToday(Long userId);
+
+    DailyTaskDTO getDailyTask(Integer before,Long userId);
 }
