@@ -38,8 +38,8 @@ public class JwtUtil {
     public String generateToken(String username, String userRole, Long userId) {
         Date now = new Date();
         return BEARER_PREFIX + Jwts.builder()
-                .subject(username)
-                .claim("userId", userId)
+                .subject(userId.toString())
+                .claim("username", username)
                 .claim("role", userRole)
                 .issuedAt(now)
                 .expiration(new Date(now.getTime() + TOKEN_TIME))
@@ -67,15 +67,15 @@ public class JwtUtil {
         return parser.parseSignedClaims(token).getPayload();
     }
 
-    public String extractUsername(String token) {
-        return extractAllClaims(token).getSubject();
+    public Long extractUserId(String token) {
+        return Long.parseLong(extractAllClaims(token).getSubject());
     }
 
     public String extractUserRole(String token) {
         return extractAllClaims(token).get("role", String.class);
     }
 
-    public Long extractUserId(String token) {
-        return extractAllClaims(token).get("userId", Long.class);
+    public String extractUsername(String token) {
+        return extractAllClaims(token).get("username", String.class);
     }
 }
