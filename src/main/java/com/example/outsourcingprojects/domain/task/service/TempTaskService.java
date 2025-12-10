@@ -79,7 +79,7 @@ public class TempTaskService {
     public List<DailyTaskDTO> getWeeklyTasks(Long userId) {
         List<DailyTaskDTO> result = new ArrayList<>();
 
-        for (int i = 0; i < 7; i++) {
+        for (int i = 6; i >= 0; i--) {
             result.add(tempTaskRepository.getDailyTask(i, userId));
         }
 
