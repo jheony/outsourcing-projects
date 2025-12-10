@@ -2,9 +2,11 @@ package com.example.outsourcingprojects.domain.task.controller;
 
 import com.example.outsourcingprojects.common.util.response.GlobalResponse;
 import com.example.outsourcingprojects.domain.task.service.TempTaskService;
+import com.example.outsourcingprojects.domain.task.tempDto.DashBoardDTO;
 import com.example.outsourcingprojects.domain.task.tempDto.GetTaskSummaryResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -15,9 +17,16 @@ public class DashBoardController {
 
     //인증인가시, 코드수정
     @GetMapping("/api/dashboard/tasks")
-    public GlobalResponse<GetTaskSummaryResponse> GetSummaryTasks(Long userId) {
-        GetTaskSummaryResponse result = tempTaskService.GetTaskSummaries(userId);
+    public GlobalResponse<GetTaskSummaryResponse> getSummaryTasksHandler(Long userId) {
+        GetTaskSummaryResponse result = tempTaskService.getTaskSummaries(userId);
 
         return GlobalResponse.success("내 작업 요약 조회 성공", result);
+    }
+
+    @GetMapping("/api/dashboard/stats")
+    public GlobalResponse<DashBoardDTO> getDashBoardHandler(@RequestParam Long userId){
+        DashBoardDTO result = tempTaskService.getDashBoard(userId);
+
+        return GlobalResponse.success("대시보드 통계 조회 성공",result);
     }
 }
