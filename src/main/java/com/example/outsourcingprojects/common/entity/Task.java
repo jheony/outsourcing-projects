@@ -42,6 +42,7 @@ public class Task extends BaseEntity {
 
     // 생
     public Task(String title, String description, long priority, long status, User assignee, LocalDateTime dueDate) {
+        //필요없어요 Why? 상단의 @NoArgsConstructor를 통해서 이 생성자의 역할을 대신 하고 있습니다.
         this.title = title;
         this.description = description;
         this.priority = priority;

@@ -36,6 +36,7 @@ public class User extends BaseEntity {
     private Long role;
 
     public User(String username, String email, String password, String name, Long role) {
+    //필요없어요 Why? 상단의 @NoArgsConstructor를 통해서 이 생성자의 역할을 대신 하고 있습니다.
         this.username = username;
         this.email = email;
         this.password = password;
