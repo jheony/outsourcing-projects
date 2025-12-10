@@ -3,6 +3,7 @@ package com.example.outsourcingprojects.domain.user.controller;
 import com.example.outsourcingprojects.common.util.response.GlobalResponse;
 import com.example.outsourcingprojects.domain.user.dto.SignUpResponse;
 import com.example.outsourcingprojects.domain.user.dto.UserInfoResponse;
+import com.example.outsourcingprojects.domain.user.dto.UserListResponse;
 import com.example.outsourcingprojects.domain.user.service.UserService;
 import com.example.outsourcingprojects.domain.user.dto.SignUpRequest;
 import jakarta.validation.Valid;
@@ -36,8 +37,8 @@ public class UserController {
 
     // 사용자 목록 조회
     @GetMapping
-    public GlobalResponse<List<UserInfoResponse.AllUserinfoResponse>> getUsersInfo() {
-        List<UserInfoResponse.AllUserinfoResponse> allUsersInfo = userService.usersInfo();
+    public GlobalResponse<UserListResponse> getUsersInfo() {
+        UserListResponse allUsersInfo = userService.usersInfo();
     return GlobalResponse.success("[사용자 목록 조회 성공]", allUsersInfo);
 
     }

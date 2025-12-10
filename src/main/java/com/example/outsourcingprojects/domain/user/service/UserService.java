@@ -3,15 +3,10 @@ package com.example.outsourcingprojects.domain.user.service;
 
 import com.example.outsourcingprojects.common.entity.User;
 import com.example.outsourcingprojects.common.util.PasswordEncoder;
-import com.example.outsourcingprojects.domain.user.dto.SignUpRequest;
-import com.example.outsourcingprojects.domain.user.dto.SignUpResponse;
-import com.example.outsourcingprojects.domain.user.dto.UserInfoResponse;
+import com.example.outsourcingprojects.domain.user.dto.*;
 import com.example.outsourcingprojects.domain.user.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -67,11 +62,11 @@ public class UserService {
     }
 
     // 사용자 목록 조회
-    public List<UserInfoResponse.AllUserinfoResponse> usersInfo() {
+    public UserListResponse usersInfo() {
 
-        return userRepository.findAll()
+        List<UserSummaryResponse> userSummaryResponseList =  userRepository.findAll()
                 .stream()
-                .map(user -> new UserInfoResponse.AllUserinfoResponse(
+                .map(user -> new UserSummaryResponse(
                         user.getId(),
                         user.getUsername(),
                         user.getEmail(),
@@ -80,6 +75,9 @@ public class UserService {
                         user.getCreatedAt()
                 ))
                 .collect(Collectors.toList());
+        UserListResponse userListResponse = new UserListResponse(userSummaryResponseList);
+
+        return userListResponse;
     }
 
     // 사용자 정보 수정
