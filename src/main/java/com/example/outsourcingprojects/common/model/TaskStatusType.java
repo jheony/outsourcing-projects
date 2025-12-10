@@ -13,4 +13,15 @@ public enum TaskStatusType {
 
     private final long statusNum;
 
+    public static TaskStatusType toType(Long value) throws Exception {
+        if (value == null) throw new Exception();
+
+        for (TaskStatusType type : TaskStatusType.values()) {
+            if (type.getStatusNum() == value) {
+                return type;
+            }
+        }
+
+        throw new Exception();
+    }
 }

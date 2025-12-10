@@ -13,4 +13,15 @@ public enum PriorityType {
 
     private final long priorityNum;
 
+    public static PriorityType toType(Long value) throws Exception {
+        if (value == null) throw new Exception();
+
+        for (PriorityType type : PriorityType.values()) {
+            if (type.getPriorityNum() == value) {
+                return type;
+            }
+        }
+
+        throw new Exception();
+    }
 }

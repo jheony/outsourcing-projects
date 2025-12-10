@@ -12,4 +12,15 @@ public enum UserRoleType {
 
     private final long roleNum;
 
+    public static UserRoleType toType(Long value) throws Exception {
+        if (value == null) throw new Exception();
+
+        for (UserRoleType type : UserRoleType.values()) {
+            if (type.getRoleNum() == value) {
+                return type;
+            }
+        }
+
+        throw new Exception();
+    }
 }
