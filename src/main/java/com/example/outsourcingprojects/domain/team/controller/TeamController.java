@@ -1,11 +1,8 @@
 package com.example.outsourcingprojects.domain.team.controller;
 
-import com.example.outsourcingprojects.common.entity.Team;
 import com.example.outsourcingprojects.common.util.response.GlobalResponse;
 import com.example.outsourcingprojects.domain.team.dto.request.CreateTeamRequestDto;
 import com.example.outsourcingprojects.domain.team.dto.response.CreateTeamResponseDto;
-//import com.example.outsourcingprojects.domain.team.dto.response.TeamResponseDto;
-import com.example.outsourcingprojects.domain.team.dto.response.TeamMemberResponseDto;
 import com.example.outsourcingprojects.domain.team.dto.response.TeamResponseDto;
 import com.example.outsourcingprojects.domain.team.service.TeamService;
 import jakarta.validation.Valid;

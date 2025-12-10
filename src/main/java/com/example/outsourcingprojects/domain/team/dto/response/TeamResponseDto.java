@@ -1,6 +1,7 @@
 package com.example.outsourcingprojects.domain.team.dto.response;
 
 import com.example.outsourcingprojects.common.entity.Team;
+import com.example.outsourcingprojects.common.entity.TeamMember;
 import com.example.outsourcingprojects.common.entity.User;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -27,12 +28,7 @@ public class TeamResponseDto {
         this.members = members;
     }
 
-    public static TeamResponseDto from(Team team) {
-        List<TeamMemberResponseDto> members = team.getTeamMembers().stream()
-                .filter(teamMember -> teamMember.getDeletedAt() == null)
-                .map(teamMember -> TeamMemberResponseDto.from(teamMember.getUser()))
-                .collect(Collectors.toList());
-
+    public static TeamResponseDto of(Team team, List<TeamMemberResponseDto> members) {
         return new TeamResponseDto(
                 team.getId(),
                 team.getName(),

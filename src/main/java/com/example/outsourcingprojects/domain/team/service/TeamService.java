@@ -1,22 +1,28 @@
 package com.example.outsourcingprojects.domain.team.service;
 
 import com.example.outsourcingprojects.common.entity.Team;
+import com.example.outsourcingprojects.common.entity.User;
 import com.example.outsourcingprojects.domain.team.dto.request.CreateTeamRequestDto;
 import com.example.outsourcingprojects.domain.team.dto.response.CreateTeamResponseDto;
 import com.example.outsourcingprojects.domain.team.dto.response.TeamMemberResponseDto;
 import com.example.outsourcingprojects.domain.team.dto.response.TeamResponseDto;
 import com.example.outsourcingprojects.domain.team.repository.TeamRepository;
+import com.example.outsourcingprojects.domain.teammember.repository.TeamMemberRepository;
+import com.example.outsourcingprojects.domain.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 public class TeamService {
 
     private final TeamRepository teamRepository;
+    private final UserRepository userRepository;
+    private final TeamMemberRepository teamMemberRepository;
 
     @Transactional
     public CreateTeamResponseDto createTeam(CreateTeamRequestDto requestDto) {
@@ -40,8 +46,14 @@ public class TeamService {
     public List<TeamResponseDto> getAllTeams() {
         return teamRepository.findAll().stream()
                 .filter(team -> team.getDeletedAt() == null)
-                .map(TeamResponseDto::from)
-                .toList();
+                .map(team -> {
+                    List<User> users = userRepository.getUsersByTeam(team.getId());
+                    List<TeamMemberResponseDto> members = users.stream()
+                            .map(TeamMemberResponseDto::from)
+                            .collect(Collectors.toList());
+                    return TeamResponseDto.of(team, members);
+                })
+                .collect(Collectors.toList());
     }
 
     // 팀 상세 조회
@@ -49,6 +61,10 @@ public class TeamService {
     public TeamResponseDto getTeamById(Long id) {
         Team team = teamRepository.findByIdAndDeletedAtIsNull(id)
                 .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 팀입니다."));
-        return TeamResponseDto.from(team);
+        List<User> users = userRepository.getUsersByTeam(team.getId());
+        List<TeamMemberResponseDto> members = users.stream()
+                .map(TeamMemberResponseDto::from)
+                .toList();
+        return TeamResponseDto.of(team, members);
     }
 }

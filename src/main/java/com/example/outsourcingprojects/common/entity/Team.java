@@ -28,8 +28,6 @@ public class Team extends BaseEntity {
     @Column
     private String description;
 
-    @OneToMany(mappedBy = "team", fetch = FetchType.LAZY)
-    private List<TeamMember> teamMembers = new ArrayList<>();
 
     private Team(String name, String description) {
         this.name = name;
