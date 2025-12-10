@@ -28,7 +28,7 @@ public class TeamService {
     @Transactional
     public CreateTeamResponseDto createTeam(CreateTeamRequestDto requestDto) {
         // 팀 이름 중복 검사
-        if(teamRepository.existsByName(requestDto.getName())) {
+        if (teamRepository.existsByName(requestDto.getName())) {
             throw new IllegalArgumentException("존재하는 팀 이름입니다.");
         }
 

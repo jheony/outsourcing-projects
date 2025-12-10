@@ -1,7 +1,9 @@
 package com.example.outsourcingprojects.domain.team.dto.response;
 
 import com.example.outsourcingprojects.common.entity.Team;
+
 import java.util.Collections;
+
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -13,11 +15,11 @@ import java.util.List;
 @Getter
 public class CreateTeamResponseDto {
 
-    private  Long id;
-    private  String name;
-    private  String description;
-    private  LocalDateTime createdAt;
-    private  List<TeamMemberResponseDto> members;
+    private Long id;
+    private String name;
+    private String description;
+    private LocalDateTime createdAt;
+    private List<TeamMemberResponseDto> members;
 
     // 생성자
     private CreateTeamResponseDto(Long id, String name, String description, LocalDateTime createdAt, List<TeamMemberResponseDto> members) {

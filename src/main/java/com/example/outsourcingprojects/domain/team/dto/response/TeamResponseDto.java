@@ -14,9 +14,9 @@ import java.util.stream.Collectors;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class TeamResponseDto {
-    private  Long id;
-    private  String name;
-    private  String description;
+    private Long id;
+    private String name;
+    private String description;
     private LocalDateTime createdAt;
     private List<TeamMemberResponseDto> members;
 

@@ -51,7 +51,7 @@ public class TeamController {
     // 팀 수정
     @PutMapping("/{id}")
     public GlobalResponse<TeamResponseDto> updateTeam(@PathVariable Long id, @Valid @RequestBody UpdateTeamRequestDto request) {
-        TeamResponseDto responseDto  = teamService.updateTeam(id, request);
+        TeamResponseDto responseDto = teamService.updateTeam(id, request);
         return GlobalResponse.success("팀 정보가 수정되었습니다.", responseDto);
     }
 
