@@ -1,7 +1,12 @@
 package com.example.outsourcingprojects.common.entity;
 
+import com.fasterxml.jackson.annotation.JsonGetter;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Size;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -37,4 +42,18 @@ public class User extends BaseEntity {
         this.name = name;
         this.role = role;
     }
+
+    public void update (String name, String email, String password) {
+        this.name = name;
+        this.email = email;
+        this.password = password;
+    }
+
+    @JsonGetter("role")
+    public String roleToString() {
+        if (this.role == 20L) return "USER";
+        if (this.role == 10L) return "ADMIN";
+        return "UNKNOWN";
+    }
+
 }
