@@ -63,7 +63,7 @@ public class JwtUtil {
     }
 
     public String extractUsername(String token) {
-        return extractAllClaims(token).get("username", String.class);
+        return extractAllClaims(token).get("sub", String.class);
     }
 
     public String extractUserRole(String token) {
@@ -71,6 +71,6 @@ public class JwtUtil {
     }
 
     public Long extractUserId(String token) {
-        return extractAllClaims(token).get("sub", Long.class);
+        return extractAllClaims(token).get("userId", Long.class);
     }
 }
