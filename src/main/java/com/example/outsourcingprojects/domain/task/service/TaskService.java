@@ -65,7 +65,7 @@ public class TaskService {
         );
     }
 
-    // 전체 작업(목록) 조회
+    // 2. 전체 작업(목록) 조회
     @org.springframework.transaction.annotation.Transactional(readOnly = true)
     public List<CreateTaskResponseDto> getAllTasks() {
         List<Task> tasks = taskRepository.findAll();
@@ -90,7 +90,7 @@ public class TaskService {
         return responseDto;
     }
 
-    // 작업 상세 조회
+    // 3. 작업 상세 조회
     @org.springframework.transaction.annotation.Transactional(readOnly = true)
     public CreateTaskResponseDto getTaskById(Long taskId) {
         Task task = taskRepository.findById(taskId)
@@ -111,7 +111,7 @@ public class TaskService {
 
     }
 
-    // 작업 수정
+    // 4. 작업 수정
     @Transactional
     public CreateTaskResponseDto updateTask(Long taskId, CreateTaskRequestDto requestDto, Long userId) {
         Task task = taskRepository.findById(taskId)
@@ -127,9 +127,29 @@ public class TaskService {
                 requestDto.getStatus(),
                 requestDto.getDueDate()
         );
-
-
+        return new CreateTaskResponseDto(
+                task.getId(),
+                task.getAssignee().getId(),
+                task.getTitle(),
+                task.getDescription(),
+                task.getPriority(),
+                task.getStatus(),
+                task.getDueDate(),
+                task.getCreatedAt(),
+                task.getUpdatedAt(),
+                task.getDeletedAt()
+        );
     }
+
+
+//    // 5. 작업 삭제
+//    Transactional
+//    public void deleTask(Long taskId, Long userId) {
+//        Task task = taskRepository.findById(taskId)
+//                .orElseThrow(() -> new IllegalArgumentException("작업을 찾을 수 없습니다"));
+//
+//        if (!task.getId().equals(userId))
+//    }
 }
 
 

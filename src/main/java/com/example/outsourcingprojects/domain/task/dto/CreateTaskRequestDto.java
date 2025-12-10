@@ -3,9 +3,10 @@ package com.example.outsourcingprojects.domain.task.dto;
 import com.example.outsourcingprojects.common.entity.User;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
-
+@NoArgsConstructor
 @Getter
 public class CreateTaskRequestDto {
 
