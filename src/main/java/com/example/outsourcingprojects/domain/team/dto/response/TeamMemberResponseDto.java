@@ -24,6 +24,12 @@ public class TeamMemberResponseDto {
         this.createdAt = createdAt;
     }
 
+    public String getRole(Long roleNum) {
+        if (this.role == 20L) return "USER";
+        if (this.role == 10L) return "ADMIN";
+        return "UNKNOWN";
+    }
+
     public static TeamMemberResponseDto from(User user) {
         return new TeamMemberResponseDto(
                 user.getId(),
@@ -34,5 +40,6 @@ public class TeamMemberResponseDto {
                 user.getCreatedAt()
         );
     }
+
 
 }

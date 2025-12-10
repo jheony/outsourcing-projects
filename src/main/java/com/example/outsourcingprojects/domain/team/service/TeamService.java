@@ -3,10 +3,14 @@ package com.example.outsourcingprojects.domain.team.service;
 import com.example.outsourcingprojects.common.entity.Team;
 import com.example.outsourcingprojects.domain.team.dto.request.CreateTeamRequestDto;
 import com.example.outsourcingprojects.domain.team.dto.response.CreateTeamResponseDto;
+import com.example.outsourcingprojects.domain.team.dto.response.TeamMemberResponseDto;
+import com.example.outsourcingprojects.domain.team.dto.response.TeamResponseDto;
 import com.example.outsourcingprojects.domain.team.repository.TeamRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -29,6 +33,13 @@ public class TeamService {
 
         // 정적 팩토리 메소드 응답 DTO 생성 및 반환
         return CreateTeamResponseDto.from(savedTeam);
+    }
 
+    // 팀 목록 조회
+    @Transactional(readOnly = true)
+    public List<TeamResponseDto> getAllTeams() {
+        return teamRepository.findAll().stream()
+                .map(TeamResponseDto::from)
+                .toList();
     }
 }

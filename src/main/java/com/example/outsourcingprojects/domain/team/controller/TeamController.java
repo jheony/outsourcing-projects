@@ -3,13 +3,14 @@ package com.example.outsourcingprojects.domain.team.controller;
 import com.example.outsourcingprojects.common.util.response.GlobalResponse;
 import com.example.outsourcingprojects.domain.team.dto.request.CreateTeamRequestDto;
 import com.example.outsourcingprojects.domain.team.dto.response.CreateTeamResponseDto;
+//import com.example.outsourcingprojects.domain.team.dto.response.TeamResponseDto;
+import com.example.outsourcingprojects.domain.team.dto.response.TeamResponseDto;
 import com.example.outsourcingprojects.domain.team.service.TeamService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -23,5 +24,12 @@ public class TeamController {
     public GlobalResponse<CreateTeamResponseDto> createTeam(@Valid @RequestBody CreateTeamRequestDto request) {
         CreateTeamResponseDto responseDto = teamService.createTeam(request);
         return GlobalResponse.success("팀이 생성되었습니다", responseDto);
+    }
+
+    // 팀 목록 조회
+    @GetMapping
+    public GlobalResponse<List<TeamResponseDto>> getAllTeams() {
+        List<TeamResponseDto> teams = teamService.getAllTeams();
+        return GlobalResponse.success("팀 목록 조회 성공", teams);
     }
 }
