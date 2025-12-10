@@ -6,4 +6,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface TempTaskRepository extends JpaRepository<Task, Long>, TempTaskRepositoryCustom {
+    long countTasksByAssignee_Id(Long assigneeId);
 }

@@ -26,6 +26,6 @@ public class GlobalResponse<T> {
     }
 
     public static <T> GlobalResponse<T> fail(String message, T data) {
-        return of(false, message, data);
+        return of(false, message, null);
     }
 }
