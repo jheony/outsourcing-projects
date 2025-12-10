@@ -1,6 +1,7 @@
 package com.example.outsourcingprojects.domain.auth.service;
 
 import com.example.outsourcingprojects.common.entity.User;
+import com.example.outsourcingprojects.common.model.UserRoleType;
 import com.example.outsourcingprojects.common.util.JwtUtil;
 import com.example.outsourcingprojects.common.util.PasswordEncoder;
 import com.example.outsourcingprojects.domain.auth.dto.request.LoginRequest;
@@ -34,16 +35,26 @@ public class AuthService {
             throw new IllegalStateException("비밀번호가 일치하지 않습니다.");
         }
 
-        String token = jwtUtil.generateToken(user.getUsername());
+        String token = jwtUtil.generateToken(
+                user.getUsername(),
+                UserRoleType.USER.name(),
+                user.getId()).substring(7);
+
         return new LoginResponse(token);
     }
 
-    public VerifyPasswordResponse verifyPasswordHandler(VerifyPasswordRequest request) {
+    @Transactional
+    public VerifyPasswordResponse verifyPasswordHandler(String username, VerifyPasswordRequest request) {
 
-//        if(!passwordEncoder.matches(request.getPassword(), user.getPassword())){
-//            throw new IllegalStateException("비밀번호가 일치하지 않습니다.");
-//        }
+        User user = userRepository.findByUsername(username).orElseThrow(
+                () -> new IllegalStateException("등록된 사용자가 없습니다.")
+        );
 
-        return null;
+        if(!passwordEncoder.matches(request.getPassword(), user.getPassword())){
+//            new VerifyPasswordResponse(false);
+            throw new IllegalStateException("비밀번호가 일치하지 않습니다.");
+        }
+
+        return new VerifyPasswordResponse(true);
     }
 }

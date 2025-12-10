@@ -4,16 +4,15 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.JwtParser;
 import io.jsonwebtoken.Jwts;
-
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import jakarta.annotation.PostConstruct;
-
-import java.util.Date;
-import javax.crypto.SecretKey;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
+
+import javax.crypto.SecretKey;
+import java.util.Date;
 
 @Slf4j(topic = "JwtUtil")
 @Component
@@ -36,10 +35,12 @@ public class JwtUtil {
                 .build();
     }
 
-    public String generateToken(String username) {
+    public String generateToken(String username, String userRole, Long userId) {
         Date now = new Date();
         return BEARER_PREFIX + Jwts.builder()
+                .claim("sub", userId)
                 .claim("username", username)
+                .claim("role", userRole)
                 .issuedAt(now)
                 .expiration(new Date(now.getTime() + TOKEN_TIME))
                 .signWith(key, Jwts.SIG.HS256)
@@ -65,4 +66,11 @@ public class JwtUtil {
         return extractAllClaims(token).get("username", String.class);
     }
 
+    public String extractUserRole(String token) {
+        return extractAllClaims(token).get("userRole", String.class);
+    }
+
+    public Long extractUserId(String token) {
+        return extractAllClaims(token).get("sub", Long.class);
+    }
 }

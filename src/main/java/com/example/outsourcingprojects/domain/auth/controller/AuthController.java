@@ -1,6 +1,7 @@
 package com.example.outsourcingprojects.domain.auth.controller;
 
 import com.example.outsourcingprojects.common.util.response.GlobalResponse;
+import com.example.outsourcingprojects.domain.auth.dto.LoginUserDTO;
 import com.example.outsourcingprojects.domain.auth.dto.request.LoginRequest;
 import com.example.outsourcingprojects.domain.auth.dto.request.VerifyPasswordRequest;
 import com.example.outsourcingprojects.domain.auth.dto.response.LoginResponse;
@@ -8,10 +9,11 @@ import com.example.outsourcingprojects.domain.auth.dto.response.VerifyPasswordRe
 import com.example.outsourcingprojects.domain.auth.service.AuthService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.boot.autoconfigure.security.SecurityProperties;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/auth")
@@ -29,9 +31,14 @@ public class AuthController {
     }
 
     @PostMapping("/verify-password")
-    public GlobalResponse<VerifyPasswordResponse> verifyPassword(@Valid @RequestBody VerifyPasswordRequest request) {
+    public GlobalResponse<VerifyPasswordResponse> verifyPassword(
+            @AuthenticationPrincipal UserDetails userDetails,
+            @Valid @RequestBody VerifyPasswordRequest request
+    ) {
 
-        VerifyPasswordResponse response = authService.verifyPasswordHandler(request);
+        String username = userDetails.getUsername();
+
+        VerifyPasswordResponse response = authService.verifyPasswordHandler(username, request);
 
         return GlobalResponse.success("비밀번호가 확인되었습니다.", response);
     }

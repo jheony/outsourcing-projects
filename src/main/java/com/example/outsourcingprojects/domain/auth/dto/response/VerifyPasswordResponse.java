@@ -2,10 +2,11 @@ package com.example.outsourcingprojects.domain.auth.dto.response;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
 
 @Getter
-@NoArgsConstructor
+@RequiredArgsConstructor
 public class VerifyPasswordResponse {
 
-    private boolean isValid;
+    private final boolean isValid;
 }

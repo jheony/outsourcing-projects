@@ -45,8 +45,14 @@ public class JwtFilter extends OncePerRequestFilter {
             response.getWriter().write("error: Unauthorized");
         }
 
+        Long userId = jwtUtil.extractUserId(jwt);
         String username = jwtUtil.extractUsername(jwt);
+        String userRole = jwtUtil.extractUserRole(jwt);
+//        UserRoleType userRoleType = UserUserRoleType.get(userRole);
+
+        request.setAttribute("subject", userId);
         request.setAttribute("username", username);
+        request.setAttribute("userRole", userRole);
 
         User user = new User(username, "", List.of());
         SecurityContextHolder.getContext().setAuthentication(new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities()));
