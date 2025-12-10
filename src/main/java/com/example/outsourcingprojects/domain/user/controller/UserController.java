@@ -11,8 +11,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/users")
@@ -39,13 +37,13 @@ public class UserController {
     @GetMapping
     public GlobalResponse<UserListResponse> getUsersInfo() {
         UserListResponse allUsersInfo = userService.usersInfo();
-    return GlobalResponse.success("[사용자 목록 조회 성공]", allUsersInfo);
+        return GlobalResponse.success("[사용자 목록 조회 성공]", allUsersInfo);
 
     }
 
     // 사용자 정보 수정
 
-    // 회원 탈퇴(영구 삭제)
+    // 회원 탈퇴
 
     // 추가 가능한 사용자 조회
 

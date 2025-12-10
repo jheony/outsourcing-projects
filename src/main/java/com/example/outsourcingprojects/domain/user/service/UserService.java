@@ -1,6 +1,5 @@
 package com.example.outsourcingprojects.domain.user.service;
 
-
 import com.example.outsourcingprojects.common.entity.User;
 import com.example.outsourcingprojects.common.util.PasswordEncoder;
 import com.example.outsourcingprojects.domain.user.dto.*;
@@ -56,7 +55,7 @@ public class UserService {
                 user.getRole(),
                 user.getCreatedAt(),
                 user.getUpdatedAt()
-                );
+        );
 
         return userInfo;
     }
@@ -64,7 +63,7 @@ public class UserService {
     // 사용자 목록 조회
     public UserListResponse usersInfo() {
 
-        List<UserSummaryResponse> userSummaryResponseList =  userRepository.findAll()
+        List<UserSummaryResponse> userSummaryResponseList = userRepository.findAll()
                 .stream()
                 .map(user -> new UserSummaryResponse(
                         user.getId(),

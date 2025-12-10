@@ -24,7 +24,7 @@ public class UserSummaryResponse {
     }
 
     @JsonGetter("role")
-    public String getRole() {
+    public String roleToString() {
         if (this.role == 20L) return "USER";
         if (this.role == 10L) return "ADMIN";
         return "UNKNOWN";
