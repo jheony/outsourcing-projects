@@ -53,51 +53,6 @@ public class TempTaskRepositoryImpl implements TempTaskRepositoryCustom {
         return new PageImpl<>(result, pageable, total);
     }
 
-//    @Override
-//    public Double getTeamProgressByUserId(Long userID) {
-//        QUser user = QUser.user;
-//        QTask task = QTask.task;
-//        QTeamMember teamMember = QTeamMember.teamMember;
-//
-//        Long myTeamId = queryFactory.select(teamMember.team.id)
-//                .from(teamMember)
-//                .where(teamMember.user.id.eq(userID))
-//                .fetchOne();
-//
-//        if (myTeamId == null) {
-//            return 0.0;
-//        }
-//
-//        List<Long> teamUserIds = queryFactory
-//                .select(teamMember.user.id)
-//                .from(teamMember)
-//                .where(teamMember.team.id.eq(myTeamId))
-//                .fetch();
-//
-//        if (teamUserIds == null || teamUserIds.isEmpty()) {
-//            return 0.0;
-//        }
-//
-//        Long totalTasks = queryFactory
-//                .select(task.id.count())
-//                .from(task)
-//                .where(task.assignee.id.in(teamUserIds))
-//                .fetchOne();
-//
-//        if (totalTasks == null || totalTasks == 0) {
-//            return 0.0;
-//        }
-//
-//        Long completedTasks = queryFactory
-//                .select(task.id.count())
-//                .from(task)
-//                .where(task.assignee.id.in(teamUserIds).and(task.status.eq(TaskStatusType.DONE.getStatusNum())))
-//                .fetchOne();
-//
-//
-//        return (completedTasks.doubleValue() / totalTasks.doubleValue()) * 100.0;
-//    }
-
     @Override
     public List<Tuple> countTasksByStatus() {
 
