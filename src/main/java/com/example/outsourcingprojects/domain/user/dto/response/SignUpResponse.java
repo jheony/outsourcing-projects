@@ -1,5 +1,6 @@
-package com.example.outsourcingprojects.domain.user.dto;
+package com.example.outsourcingprojects.domain.user.dto.response;
 
+import com.fasterxml.jackson.annotation.JsonGetter;
 import lombok.Getter;
 
 import java.time.LocalDateTime;
@@ -23,6 +24,7 @@ public class SignUpResponse {
         this.createdAt = createdAt;
     }
 
+    @JsonGetter("role")
     public String roleToString() {
         if (this.role == 20L) return "USER";
         if (this.role == 10L) return "ADMIN";
