@@ -4,6 +4,7 @@ import com.example.outsourcingprojects.common.entity.QTask;
 import com.example.outsourcingprojects.common.entity.Task;
 import com.example.outsourcingprojects.common.model.TaskStatusType;
 import com.example.outsourcingprojects.domain.task.repository.TempTaskRepository;
+import com.example.outsourcingprojects.domain.task.tempDto.DailyTaskDTO;
 import com.example.outsourcingprojects.domain.task.tempDto.DashBoardDTO;
 import com.example.outsourcingprojects.domain.task.tempDto.GetTaskSummaryResponse;
 import com.example.outsourcingprojects.domain.task.tempDto.TaskSummaryDTO;
@@ -12,6 +13,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -72,4 +75,14 @@ public class TempTaskService {
         return new DashBoardDTO(totalTasks, completedTasks, inProgressTasks, todoTasks, overdueTasks, teamProgress, myTasksToday, completionRate);
     }
 
+
+    public List<DailyTaskDTO> getWeeklyTasks(Long userId) {
+        List<DailyTaskDTO> result = new ArrayList<>();
+
+        for (int i = 6; i >= 0; i--) {
+            result.add(tempTaskRepository.getDailyTask(i, userId));
+        }
+
+        return result;
+    }
 }

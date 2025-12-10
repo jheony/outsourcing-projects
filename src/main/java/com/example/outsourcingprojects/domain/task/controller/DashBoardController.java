@@ -2,12 +2,15 @@ package com.example.outsourcingprojects.domain.task.controller;
 
 import com.example.outsourcingprojects.common.util.response.GlobalResponse;
 import com.example.outsourcingprojects.domain.task.service.TempTaskService;
+import com.example.outsourcingprojects.domain.task.tempDto.DailyTaskDTO;
 import com.example.outsourcingprojects.domain.task.tempDto.DashBoardDTO;
 import com.example.outsourcingprojects.domain.task.tempDto.GetTaskSummaryResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -28,5 +31,12 @@ public class DashBoardController {
         DashBoardDTO result = tempTaskService.getDashBoard(userId);
 
         return GlobalResponse.success("대시보드 통계 조회 성공",result);
+    }
+
+    @GetMapping("/api/dashboard/weekly-trend")
+    public GlobalResponse<List<DailyTaskDTO>> getWeeklyTasksHandler(@RequestParam Long userId){
+        List<DailyTaskDTO> result = tempTaskService.getWeeklyTasks(userId);
+
+        return GlobalResponse.success("주간 작업 추세 조회 성공", result);
     }
 }

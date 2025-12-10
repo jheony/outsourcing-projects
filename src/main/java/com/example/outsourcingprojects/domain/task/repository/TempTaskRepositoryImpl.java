@@ -4,6 +4,7 @@ import com.example.outsourcingprojects.common.entity.QTask;
 import com.example.outsourcingprojects.common.entity.QUser;
 import com.example.outsourcingprojects.common.entity.Task;
 import com.example.outsourcingprojects.common.model.TaskStatusType;
+import com.example.outsourcingprojects.domain.task.tempDto.DailyTaskDTO;
 import com.querydsl.core.Tuple;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
@@ -11,7 +12,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -52,51 +55,6 @@ public class TempTaskRepositoryImpl implements TempTaskRepositoryCustom {
 
         return new PageImpl<>(result, pageable, total);
     }
-
-//    @Override
-//    public Double getTeamProgressByUserId(Long userID) {
-//        QUser user = QUser.user;
-//        QTask task = QTask.task;
-//        QTeamMember teamMember = QTeamMember.teamMember;
-//
-//        Long myTeamId = queryFactory.select(teamMember.team.id)
-//                .from(teamMember)
-//                .where(teamMember.user.id.eq(userID))
-//                .fetchOne();
-//
-//        if (myTeamId == null) {
-//            return 0.0;
-//        }
-//
-//        List<Long> teamUserIds = queryFactory
-//                .select(teamMember.user.id)
-//                .from(teamMember)
-//                .where(teamMember.team.id.eq(myTeamId))
-//                .fetch();
-//
-//        if (teamUserIds == null || teamUserIds.isEmpty()) {
-//            return 0.0;
-//        }
-//
-//        Long totalTasks = queryFactory
-//                .select(task.id.count())
-//                .from(task)
-//                .where(task.assignee.id.in(teamUserIds))
-//                .fetchOne();
-//
-//        if (totalTasks == null || totalTasks == 0) {
-//            return 0.0;
-//        }
-//
-//        Long completedTasks = queryFactory
-//                .select(task.id.count())
-//                .from(task)
-//                .where(task.assignee.id.in(teamUserIds).and(task.status.eq(TaskStatusType.DONE.getStatusNum())))
-//                .fetchOne();
-//
-//
-//        return (completedTasks.doubleValue() / totalTasks.doubleValue()) * 100.0;
-//    }
 
     @Override
     public List<Tuple> countTasksByStatus() {
@@ -139,6 +97,40 @@ public class TempTaskRepositoryImpl implements TempTaskRepositoryCustom {
                 .fetchOne();
 
         return result != null ? result : 0L;
+    }
+
+    @Override
+    public DailyTaskDTO getDailyTask(Integer before, Long userId) {
+
+        QTask task = QTask.task;
+
+        LocalDate date = LocalDate.now().minusDays(before);
+
+        LocalDateTime startOfDay = date.atStartOfDay();
+        LocalDateTime endOfDay = date.atTime(LocalTime.MAX);
+
+        Tuple result = queryFactory
+                .select(
+                        task.id.count(),
+                        task.status.eq(TaskStatusType.DONE.getStatusNum()).count()
+                )
+                .from(task)
+                .where(task.createdAt.between(startOfDay, endOfDay)
+                        .and(task.assignee.id.eq(userId))
+                        .and(task.deletedAt.isNull())
+                        )
+                .fetchOne();
+
+        Long tasks = result != null ? result.get(task.id.count()) : 0L;
+        Long completed = result != null ? result.get(task.status.eq(TaskStatusType.DONE.getStatusNum()).count()) : 0L;
+
+        String[] korDays = {"일", "월", "화", "수", "목", "금", "토"};
+        int dayIndex = date.getDayOfWeek().getValue();
+        Character dayChar = korDays[dayIndex % 7].charAt(0);
+
+        String dateStr = date.toString();
+
+        return new DailyTaskDTO(dayChar, tasks, completed, dateStr);
     }
 
 }
