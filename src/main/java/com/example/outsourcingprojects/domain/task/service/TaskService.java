@@ -27,9 +27,9 @@ public class TaskService {
     public CreateTaskResponseDto createTask(CreateTaskRequestDto request) {
 
         // 담당자 조회
-        User assignee = userRepository.findById(request.getAssignedId())
+        User assignee = userRepository.findById(request.getAssigneeId())
                 .orElseThrow(() -> {
-                    log.error("담당자를 찾을 수 없습니다." + request.getAssignedId());
+                    log.error("담당자를 찾을 수 없습니다." + request.getAssigneeId());
                     throw new IllegalArgumentException("담당자를 찾을 수 없습니다.");
                 });
 
@@ -117,7 +117,7 @@ public class TaskService {
         Task task = taskRepository.findById(taskId)
                 .orElseThrow(() -> new IllegalArgumentException("작업을 찾을 수 없습니다"));
 
-        if (!task.getId().equals(userId)) {
+        if (!task.getAssignee().getId().equals(userId)) {
             throw new IllegalArgumentException("작업을 수정할 수 없습니다");
         }
 
@@ -141,15 +141,17 @@ public class TaskService {
         );
     }
 
+    // 5. 작업 삭제
+    @Transactional
+    public void deleTask(Long taskId, Long userId) {
+        Task task = taskRepository.findById(taskId)
+                .orElseThrow(() -> new IllegalArgumentException("작업을 찾을 수 없습니다"));
 
-//    // 5. 작업 삭제
-//    Transactional
-//    public void deleTask(Long taskId, Long userId) {
-//        Task task = taskRepository.findById(taskId)
-//                .orElseThrow(() -> new IllegalArgumentException("작업을 찾을 수 없습니다"));
-//
-//        if (!task.getId().equals(userId))
-//    }
+        if (!task.getAssignee().getId().equals(userId)) {
+            throw new IllegalArgumentException("작업을 삭제할 수 없습니다");
+        }
+        taskRepository.delete(task);
+    }
 }
 
 

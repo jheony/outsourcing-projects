@@ -26,7 +26,6 @@ public class TaskController {
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
-
     // 작업 전체 조회
     @GetMapping
     public ResponseEntity<List<CreateTaskResponseDto>> getAllTasks() {
@@ -44,7 +43,7 @@ public class TaskController {
     // 작업 수정
     @PutMapping("/{taskId}")
     public ResponseEntity<CreateTaskResponseDto> updateTask(
-            @PathVariable Long taskId, @RequestBody CreateTaskRequestDto request,@RequestParam Long userId) {
+            @PathVariable Long taskId, @RequestBody CreateTaskRequestDto request, @RequestParam Long userId) {
         CreateTaskResponseDto response = taskService.updateTask(taskId, request, userId);
         return ResponseEntity.ok(response);
 
