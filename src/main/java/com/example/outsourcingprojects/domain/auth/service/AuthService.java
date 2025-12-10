@@ -32,7 +32,7 @@ public class AuthService {
 //            throw new IllegalStateException("비밀번호가 일치하지 않습니다.");
 //        }
 
-        String token = jwtUtil.generateToken(user.getUsername());
+        String token = jwtUtil.generateToken(user.getUsername()).substring(7);
         return new LoginResponse(token);
     }
 }
