@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -16,19 +17,21 @@ public class TeamResponseDto {
     private  String name;
     private  String description;
     private LocalDateTime createdAt;
-    private List<User> members;
+    private List<TeamMemberResponseDto> members;
 
-    private TeamResponseDto(Long id, String name, String description, LocalDateTime createdAt, List<User> members) {
+    private TeamResponseDto(Long id, String name, String description, LocalDateTime createdAt, List<TeamMemberResponseDto> members) {
         this.id = id;
         this.name = name;
         this.description = description;
         this.createdAt = createdAt;
         this.members = members;
     }
+
     public static TeamResponseDto from(Team team) {
-        List<User> members = team.getTeamMembers().stream()
-                .map(tm -> tm.getUser())
-                .toList();
+        List<TeamMemberResponseDto> members = team.getTeamMembers().stream()
+                .filter(teamMember -> teamMember.getDeletedAt() == null)
+                .map(teamMember -> TeamMemberResponseDto.from(teamMember.getUser()))
+                .collect(Collectors.toList());
 
         return new TeamResponseDto(
                 team.getId(),

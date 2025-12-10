@@ -1,6 +1,8 @@
 package com.example.outsourcingprojects.domain.team.dto.response;
 
 import com.example.outsourcingprojects.common.entity.User;
+import com.example.outsourcingprojects.common.model.UserRoleType;
+import jakarta.validation.constraints.Null;
 import lombok.Getter;
 
 import java.time.LocalDateTime;
@@ -12,10 +14,10 @@ public class TeamMemberResponseDto {
     private final String username;
     private final String email;
     private final String name;
-    private final Long role;
+    private final String role;
     private final LocalDateTime createdAt;
 
-    public TeamMemberResponseDto(Long id, String username, String email, String name, Long role, LocalDateTime createdAt) {
+    public TeamMemberResponseDto(Long id, String username, String email, String name, String role, LocalDateTime createdAt) {
         this.id = id;
         this.username = username;
         this.email = email;
@@ -24,10 +26,10 @@ public class TeamMemberResponseDto {
         this.createdAt = createdAt;
     }
 
-    public String getRole(Long roleNum) {
-        if (this.role == 20L) return "USER";
-        if (this.role == 10L) return "ADMIN";
-        return "UNKNOWN";
+    private static String roleToString(Long roleNum) {
+        if (roleNum == 20L) return UserRoleType.USER.name();
+        if (roleNum == 10L) return UserRoleType.ADMIN.name();
+        return null;
     }
 
     public static TeamMemberResponseDto from(User user) {
@@ -36,10 +38,10 @@ public class TeamMemberResponseDto {
                 user.getUsername(),
                 user.getEmail(),
                 user.getName(),
-                user.getRole(),
+                roleToString(user.getRole()),
+
                 user.getCreatedAt()
         );
     }
-
 
 }
