@@ -2,7 +2,9 @@ package com.example.outsourcingprojects.domain.team.controller;
 
 import com.example.outsourcingprojects.common.util.response.GlobalResponse;
 import com.example.outsourcingprojects.domain.team.dto.request.CreateTeamRequestDto;
+import com.example.outsourcingprojects.domain.team.dto.request.UpdateTeamRequestDto;
 import com.example.outsourcingprojects.domain.team.dto.response.CreateTeamResponseDto;
+import com.example.outsourcingprojects.domain.team.dto.response.TeamMemberResponseDto;
 import com.example.outsourcingprojects.domain.team.dto.response.TeamResponseDto;
 import com.example.outsourcingprojects.domain.team.service.TeamService;
 import jakarta.validation.Valid;
@@ -39,4 +41,22 @@ public class TeamController {
         return GlobalResponse.success("팀 멤버 조회 성공", team);
     }
 
+    // 팀 멤버 조회
+    @GetMapping("/{teamId}/members")
+    public GlobalResponse<List<TeamMemberResponseDto>> getTeamMembers(@PathVariable Long teamId) {
+        List<TeamMemberResponseDto> members = teamService.getTeamMembers(teamId);
+        return GlobalResponse.success("팀 멤버 조회 성공", members);
+    }
+
+    // 팀 수정
+    @PutMapping("/{id}")
+    public GlobalResponse<TeamResponseDto> updateTeam(@PathVariable Long id, @Valid @RequestBody UpdateTeamRequestDto request) {
+        TeamResponseDto responseDto  = teamService.updateTeam(id, request);
+        return GlobalResponse.success("팀 정보가 수정되었습니다.", responseDto);
+    }
+
+    // 팀 멤버 추가
+
+    // 팀 삭제
+    //@DeleteMapping("/{id}")
 }
