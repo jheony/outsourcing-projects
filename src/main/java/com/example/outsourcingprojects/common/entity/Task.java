@@ -1,6 +1,7 @@
 package com.example.outsourcingprojects.common.entity;
 
 
+import com.example.outsourcingprojects.domain.task.dto.CreateTaskResponseDto;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.AccessLevel;
@@ -40,7 +41,7 @@ public class Task extends BaseEntity {
     private LocalDateTime dueDate;
 
     // 생
-    public Task(String title, String description, long priority, long status,User assignee,LocalDateTime dueDate) {
+    public Task(String title, String description, long priority, long status, User assignee, LocalDateTime dueDate) {
         this.title = title;
         this.description = description;
         this.priority = priority;
@@ -50,21 +51,41 @@ public class Task extends BaseEntity {
     }
 
     // getter
-    public Long getId() {return id;}
-
-    public String getTitle() {return title;}
-
-    public String getDescription() {return description;}
-
-    public long getPriority() {return priority;}
-
-    public long getStatus() {return status;}
-
-    public User getAssignee() {return assignee;}
-
-    public LocalDateTime getDueDate() {return dueDate;}
-
-
-
+    public Long getId() {
+        return id;
     }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public long getPriority() {
+        return priority;
+    }
+
+    public long getStatus() {
+        return status;
+    }
+
+    public User getAssignee() {
+        return assignee;
+    }
+
+    public LocalDateTime getDueDate() {
+        return dueDate;
+    }
+
+    // 작업 수정 메서드
+    public void update(String title, String description, Long status, LocalDateTime dueDate) {
+        this.title = title;
+        this.description = description;
+        this.status = status;
+        this.dueDate = dueDate;
+    }
+}
+
 

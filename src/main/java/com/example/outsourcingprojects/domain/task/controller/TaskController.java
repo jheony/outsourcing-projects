@@ -6,10 +6,9 @@ import com.example.outsourcingprojects.domain.task.service.TaskService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -26,4 +25,21 @@ public class TaskController {
         CreateTaskResponseDto response = taskService.createTask(request);
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
+
+
+    // 작업 전체 조회
+    @GetMapping
+    public ResponseEntity<List<CreateTaskResponseDto>> getAllTasks() {
+        List<CreateTaskResponseDto> tasks = taskService.getAllTasks();
+        return ResponseEntity.ok(tasks);
+    }
+
+    // 특정 작업 조회
+    @GetMapping("/{taskId}")
+    public ResponseEntity<CreateTaskResponseDto> getTaskById(@PathVariable Long taskId) {
+        CreateTaskResponseDto task = taskService.getTaskById(taskId);
+        return ResponseEntity.ok(task);
+    }
+
+
 }
