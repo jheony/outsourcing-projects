@@ -49,6 +49,11 @@ public class JwtUtil {
 
     public boolean validateToken(String token) {
         if (token == null || token.isBlank()) return false;
+
+        if (token.startsWith(BEARER_PREFIX)) {
+            token = token.substring(BEARER_PREFIX.length());
+        }
+
         try {
             parser.parseSignedClaims(token);
             return true;
@@ -67,7 +72,7 @@ public class JwtUtil {
     }
 
     public String extractUserRole(String token) {
-        return extractAllClaims(token).get("userRole", String.class);
+        return extractAllClaims(token).get("role", String.class);
     }
 
     public Long extractUserId(String token) {

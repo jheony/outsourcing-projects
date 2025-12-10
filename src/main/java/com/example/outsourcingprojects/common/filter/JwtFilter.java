@@ -8,6 +8,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Component;
@@ -40,6 +41,11 @@ public class JwtFilter extends OncePerRequestFilter {
             return;
         }
 
+        if(!authorizationHeader.startsWith("Bearer ")) {
+            response.sendError(HttpServletResponse.SC_NOT_FOUND, "JWT가 존재하지 않습니다.");
+            return;
+        }
+
         String jwt = authorizationHeader.substring(7);
 
         if (!jwtUtil.validateToken(jwt)) {
@@ -50,9 +56,8 @@ public class JwtFilter extends OncePerRequestFilter {
         Long userId = jwtUtil.extractUserId(jwt);
         String username = jwtUtil.extractUsername(jwt);
         String userRole = jwtUtil.extractUserRole(jwt);
-//        UserRoleType userRoleType = UserUserRoleType.get(userRole);
 
-        request.setAttribute("subject", userId);
+        request.setAttribute("userId", userId);
         request.setAttribute("username", username);
         request.setAttribute("userRole", userRole);
 
