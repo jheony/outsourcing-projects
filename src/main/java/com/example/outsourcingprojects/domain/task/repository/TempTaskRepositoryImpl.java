@@ -115,7 +115,10 @@ public class TempTaskRepositoryImpl implements TempTaskRepositoryCustom {
                         task.status.eq(TaskStatusType.DONE.getStatusNum()).count()
                 )
                 .from(task)
-                .where(task.createdAt.between(startOfDay, endOfDay).and(task.assignee.id.eq(userId)))
+                .where(task.createdAt.between(startOfDay, endOfDay)
+                        .and(task.assignee.id.eq(userId))
+                        .and(task.deletedAt.isNull())
+                        )
                 .fetchOne();
 
         Long tasks = result != null ? result.get(task.id.count()) : 0L;
