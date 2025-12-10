@@ -68,7 +68,7 @@ public class JwtUtil {
     }
 
     public String extractUsername(String token) {
-        return extractAllClaims(token).get("sub", String.class);
+        return extractAllClaims(token).getSubject();
     }
 
     public String extractUserRole(String token) {

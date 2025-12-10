@@ -41,7 +41,7 @@ public class JwtFilter extends OncePerRequestFilter {
             return;
         }
 
-        if(!authorizationHeader.startsWith("Bearer ")) {
+        if (!authorizationHeader.startsWith("Bearer ")) {
             response.sendError(HttpServletResponse.SC_NOT_FOUND, "JWT가 존재하지 않습니다.");
             return;
         }
@@ -59,9 +59,11 @@ public class JwtFilter extends OncePerRequestFilter {
 
         request.setAttribute("userId", userId);
         request.setAttribute("username", username);
-        request.setAttribute("userRole", userRole);
+        request.setAttribute("role", userRole);
 
-        User user = new User(username, "", List.of());
+        List<SimpleGrantedAuthority> authorities = List.of(new SimpleGrantedAuthority(userRole));
+
+        User user = new User(username, "", authorities);
         SecurityContextHolder.getContext().setAuthentication(new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities()));
 
         filterChain.doFilter(request, response);
