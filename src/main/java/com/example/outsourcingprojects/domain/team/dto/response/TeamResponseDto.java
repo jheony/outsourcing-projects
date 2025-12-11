@@ -9,8 +9,6 @@ import java.util.List;
 
 @Getter
 public class TeamResponseDto {
-    //response 응답객체의 필드는 final로 지정하는것에 대해 고민해보시기 바랍니다.
-    //final로 지정하면 상단의 생성자 어노테이션도 변경되어야 합니다.
     private final Long id;
     private final String name;
     private final String description;
