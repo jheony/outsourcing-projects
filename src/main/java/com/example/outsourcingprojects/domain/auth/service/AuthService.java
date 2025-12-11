@@ -45,7 +45,8 @@ public class AuthService {
 
     @Transactional
     public VerifyPasswordResponse verifyPasswordHandler(String username, VerifyPasswordRequest request) {
-
+        //Handler라는 명칭은 Controller에서 사용하기로 약속하였습니다.
+        //주석이 남아있습니다. 확인 해주세요.
         User user = userRepository.findByUsername(username).orElseThrow(
                 () -> new IllegalStateException("등록된 사용자가 없습니다.")
         );

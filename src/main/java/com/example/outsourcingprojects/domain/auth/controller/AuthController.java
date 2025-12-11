@@ -37,7 +37,7 @@ public class AuthController {
             @AuthenticationPrincipal UserDetails userDetails,
             @Valid @RequestBody VerifyPasswordRequest request
     ) {
-
+    //메서드명 약속한대로 Handler 작성해주셔야 합니다.
         String username = userDetails.getUsername();
 
         VerifyPasswordResponse response = authService.verifyPasswordHandler(username, request);

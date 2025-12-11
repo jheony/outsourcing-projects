@@ -22,7 +22,10 @@ public class CreateTeamRequestDto {
         this.description = description;
     }
 
+
     public static CreateTeamRequestDto of(String name, String description) {
+        //정적 팩토리 메서드를 리퀘스트에서 사용하는걸 처음보네요
+        //혹시 학습하신 곳이 있으시다면 공유 부탁드립니다.
         return new CreateTeamRequestDto(name, description);
     }
 }

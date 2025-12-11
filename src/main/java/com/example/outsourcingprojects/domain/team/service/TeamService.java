@@ -23,6 +23,7 @@ public class TeamService {
 
     private final TeamRepository teamRepository;
     private final UserRepository userRepository;
+    //아직 작성이 되지 않았는지 모르겠지만 사용하지 않는 Repository가 존재합니다. 확인해주세요.
     private final TeamMemberRepository teamMemberRepository;
 
     @Transactional
