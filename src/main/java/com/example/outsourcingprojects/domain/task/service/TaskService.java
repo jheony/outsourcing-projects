@@ -9,10 +9,14 @@ import com.example.outsourcingprojects.domain.user.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
+//import java.util.ArrayList;
+//import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -67,12 +71,13 @@ public class TaskService {
 
     // 2. 전체 작업(목록) 조회
     @org.springframework.transaction.annotation.Transactional(readOnly = true)
-    public List<CreateTaskResponseDto> getAllTasks() {
-        List<Task> tasks = taskRepository.findAll();
-        List<CreateTaskResponseDto> responseDto = new ArrayList<>();
+    public Page<CreateTaskResponseDto> getAllTasks(int page, int size) {
+        // Pageable 객체 생성 ( Sort.by("createdAt").descending() -> 생성일 기준으로 최신순 정렬)
+        Pageable pageable = PageRequest.of(page, size ,Sort.by("createdAt").descending());
+        Page<Task> taskPage = taskRepository.findAll(pageable);
+//        List<CreateTaskResponseDto> responseDto = new ArrayList<>();
 
-        for (Task task : tasks) {
-            CreateTaskResponseDto dto = new CreateTaskResponseDto(
+        return taskPage.map(task -> new CreateTaskResponseDto(
                     task.getId(),
                     task.getAssignee().getId(),
                     task.getTitle(),
@@ -83,11 +88,11 @@ public class TaskService {
                     task.getCreatedAt(),
                     task.getUpdatedAt(),
                     task.getDeletedAt()
-            );
-            responseDto.add(dto);
-
-        }
-        return responseDto;
+            ));
+//            responseDto.add(dto);
+//
+//        }
+//        return responseDto;
     }
 
     // 3. 작업 상세 조회
@@ -143,7 +148,7 @@ public class TaskService {
 
     // 5. 작업 삭제
     @Transactional
-    public void deleTask(Long taskId, Long userId) {
+    public void deleteTask(Long taskId, Long userId) {
         Task task = taskRepository.findById(taskId)
                 .orElseThrow(() -> new IllegalArgumentException("작업을 찾을 수 없습니다"));
 

@@ -8,7 +8,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface TaskRepository extends JpaRepository<Task, Long> {
 
-    // 페이징 전체 조회
-    Page<Task> findAll(Pageable pageable);
+
 
 }
