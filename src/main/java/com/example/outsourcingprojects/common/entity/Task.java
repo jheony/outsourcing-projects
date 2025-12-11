@@ -1,7 +1,6 @@
 package com.example.outsourcingprojects.common.entity;
 
 
-import com.example.outsourcingprojects.domain.task.dto.CreateTaskResponseDto;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.AccessLevel;

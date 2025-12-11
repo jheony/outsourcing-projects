@@ -28,7 +28,7 @@ INSERT INTO customers (username, email, password, name, role, created_at, update
                                                                                                   ('amy.han','amy.han@example.com','password','Amy Han',10,NOW() - INTERVAL 4 DAY,NOW() - INTERVAL 3 DAY,NOW() - INTERVAL 11 DAY),
                                                                                                   ('brian.lim','brian.lim@example.com','password','Brian Lim',20,NOW() - INTERVAL 3 DAY,NOW() - INTERVAL 2 DAY,NULL),
                                                                                                   ('cara.seo','cara.seo@example.com','password','Cara Seo',10,NOW() - INTERVAL 2 DAY,NOW() - INTERVAL 1 DAY,NULL),
-                                                                                                  ('daniel.oh','daniel.oh@example.com','password','Daniel Oh',20,NOW() - INTERVAL 1 DAY,NOW(),NOW() - INTERVAL 13 DAY);
+                                                                                                  ('앙팡','daniel.oh@example.com','$2a$04$M3G.ZuXIEEqy7UMQ3wd/H.KdGfI0xIRMD4uO2Uuqu1tg4ne1.Rf4S','Daniel Oh',20,NOW() - INTERVAL 1 DAY,NOW(),NOW() - INTERVAL 13 DAY);
 
 
 INSERT INTO tasks (assignee_id, title, description, priority, status, due_date, created_at, updated_at, deleted_at) VALUES
