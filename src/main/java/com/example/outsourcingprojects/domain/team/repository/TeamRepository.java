@@ -7,11 +7,9 @@ import org.springframework.stereotype.Repository;
 import java.util.Optional;
 
 @Repository
-public interface TeamRepository extends JpaRepository<Team, Long> {
+public interface TeamRepository extends JpaRepository<Team, Long>, TeamRepositoryCustom {
 
     boolean existsByName(String name);
 
     Optional<Team> findByIdAndDeletedAtIsNull(Long id);
-
-
 }
