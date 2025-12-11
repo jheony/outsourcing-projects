@@ -30,6 +30,7 @@ public class Team extends BaseEntity {
 
 
     private Team(String name, String description) {
+        //필요없어요 Why? 상단의 @NoArgsConstructor를 통해서 이 생성자의 역할을 대신 하고 있습니다.
         this.name = name;
         this.description = description;
     }

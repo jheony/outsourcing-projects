@@ -14,6 +14,8 @@ import java.util.stream.Collectors;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class TeamResponseDto {
+    //response 응답객체의 필드는 final로 지정하는것에 대해 고민해보시기 바랍니다.
+    //final로 지정하면 상단의 생성자 어노테이션도 변경되어야 합니다.
     private Long id;
     private String name;
     private String description;

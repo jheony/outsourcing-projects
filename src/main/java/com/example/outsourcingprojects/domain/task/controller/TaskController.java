@@ -16,7 +16,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @RequestMapping("/api/tasks")
 public class TaskController {
-
+    //Controller에서 사용하는 메서드는 서비스의 메서드명과 곂치지 않도록 Handler를 붙여주기로 약속했습니다.
     private final TaskService taskService;
 
     // 작업 생성

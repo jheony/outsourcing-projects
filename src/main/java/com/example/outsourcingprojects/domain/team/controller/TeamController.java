@@ -17,7 +17,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @RequestMapping("/api/teams")
 public class TeamController {
-
+    //Controller의 메서드명의 끝에 Handler를 붙여주기로 약속했습니다. 확인하고 수정해주세요.
     private final TeamService teamService;
 
     // 팀 생성

@@ -22,7 +22,7 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 @Slf4j
 public class TaskService {
-
+    //사용하지 않는 어노테이션은 제거해주세요.
     private final TaskRepository taskRepository;
     private final UserRepository userRepository;
 
@@ -55,6 +55,9 @@ public class TaskService {
     }
 
     private CreateTaskResponseDto Response(Task task) {
+        //메서드 명은 소문자로 시작해야 합니다.
+        // 이 메서드는 정적 팩토리 메서드의 역할을 하고 있는것 같은데
+        // 정적 팩토리 메서드에 대해서 공부해보시고 CreateTaskResponseDto에서 작성하고 활용하시면 더 좋을 것 같습니다.
         return new CreateTaskResponseDto(
                 task.getId(),
                 task.getAssignee().getId(),
@@ -76,8 +79,18 @@ public class TaskService {
         Pageable pageable = PageRequest.of(page, size ,Sort.by("createdAt").descending());
         Page<Task> taskPage = taskRepository.findAll(pageable);
 //        List<CreateTaskResponseDto> responseDto = new ArrayList<>();
+    public List<CreateTaskResponseDto> getAllTasks() {
+        //상단의 @Transactional과 같은 어노테이션인데 임포트문이 이곳에 추가적으로 붙어있네요.
+        //제거해주시기 바랍니다.
+        List<Task> tasks = taskRepository.findAll();
+        List<CreateTaskResponseDto> responseDto = new ArrayList<>();
 
         return taskPage.map(task -> new CreateTaskResponseDto(
+        for (Task task : tasks) {
+            //상단에 task를 통해 객체를 생성하는 Response라는 메서드를 작성해주셨는데
+            //활용하지않고 계시네요
+            //활용하여 작성하시면 조금 더 보기 편할 것 같습니다.
+            CreateTaskResponseDto dto = new CreateTaskResponseDto(
                     task.getId(),
                     task.getAssignee().getId(),
                     task.getTitle(),

@@ -12,8 +12,8 @@ public enum UserRoleType {
 
     private final long roleNum;
 
-    public static UserRoleType toType(Long value) throws Exception {
-        if (value == null) throw new Exception();
+    public static UserRoleType toType(Long value) throws IllegalArgumentException {
+        if (value == null) throw new IllegalArgumentException();
 
         for (UserRoleType type : UserRoleType.values()) {
             if (type.getRoleNum() == value) {
@@ -21,6 +21,17 @@ public enum UserRoleType {
             }
         }
 
-        throw new Exception();
+        throw new IllegalArgumentException();
+    }
+
+    public static UserRoleType strToType(String value) throws IllegalArgumentException {
+        if (value == null) throw new IllegalArgumentException();
+
+        for (UserRoleType type : UserRoleType.values()) {
+            if (type.name().equals(value)) {
+                return type;
+            }
+        }
+        return null;
     }
 }
