@@ -9,18 +9,21 @@ import com.example.outsourcingprojects.domain.task.repository.TaskRepository;
 import com.example.outsourcingprojects.domain.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.hibernate.query.Page;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.time.ZoneOffset;
+
 
 @Service
 @RequiredArgsConstructor
 @Slf4j
 public class TaskService {
-    //사용하지 않는 어노테이션은 제거해주세요.
+    //사용하지 않는 어노테이션은 제거해주세요. ok
     private final TaskRepository taskRepository;
     private final UserRepository userRepository;
 
@@ -34,6 +37,7 @@ public class TaskService {
                     log.error("담당자를 찾을 수 없습니다." + request.getAssigneeId());
                     throw new IllegalArgumentException("담당자를 찾을 수 없습니다.");
                 });
+        // TODO 이넘 타입 요청 및 응답 객체 수정. / deletedat 안나오게.
 
         // Task 인스턴스 생성
         Task task = new Task(
@@ -42,82 +46,65 @@ public class TaskService {
                 request.getPriority(),
                 request.getStatus(),
                 assignee,
-                request.getDueDate()
+                request.getDueDate() != null ? request.getDueDate().toLocalDateTime() : null
         );
 
         // DB 저장
         Task savedTask = taskRepository.save(task);
 
         // Entity -> Response DTO 변환 후 반환
-        return Response(savedTask);
+        return response(savedTask);
     }
 
-    private CreateTaskResponseDto Response(Task task) {
-        //메서드 명은 소문자로 시작해야 합니다.
+    private CreateTaskResponseDto response(Task task) {
+        //메서드 명은 소문자로 시작해야 합니다. ok
         // 이 메서드는 정적 팩토리 메서드의 역할을 하고 있는것 같은데
         // 정적 팩토리 메서드에 대해서 공부해보시고 CreateTaskResponseDto에서 작성하고 활용하시면 더 좋을 것 같습니다.
         return new CreateTaskResponseDto(
                 task.getId(),
-                task.getAssignee().getId(),
+                task.getAssignee() != null ? task.getAssignee().getId() : null,
                 task.getTitle(),
                 task.getDescription(),
-                task.getPriority(),
-                task.getStatus(),
-                task.getDueDate(),
-                task.getCreatedAt(),
-                task.getUpdatedAt(),
-                task.getDeletedAt()
+                task.getPriority().name(),
+                task.getStatus().name(),
+                task.getDueDate() != null ? task.getDueDate().atOffset(ZoneOffset.UTC) : null,
+                task.getCreatedAt().atOffset(ZoneOffset.UTC),
+                task.getUpdatedAt().atOffset(ZoneOffset.UTC)
+
         );
     }
 
     // 2. 전체 작업(목록) 조회
     @Transactional(readOnly = true)
-    public PageDataDTO<CreateTaskResponseDto> getAllTasks() {
+    public PageDataDTO<CreateTaskResponseDto> getAllTasks(int page, int size) {
         //상단의 @Transactional과 같은 어노테이션인데 임포트문이 이곳에 추가적으로 붙어있네요.
-        //제거해주시기 바랍니다.
-        Page<Task> tasks = taskRepository.findAll();
-        List<CreateTaskResponseDto> responseDto = new ArrayList<>();
+        //제거해주시기 바랍니다. ok
+        //Pageable 인스턴스화
+        Pageable pageable = PageRequest.of(page, size, Sort.by("createdAt").descending());
+
+        Page<Task> taskPage = taskRepository.findAll(pageable);
+//        List<CreateTaskResponseDto> responseDto = new ArrayList<>();
 
 
-            //상단에 task를 통해 객체를 생성하는 Response라는 메서드를 작성해주셨는데
-            //활용하지않고 계시네요
-            //활용하여 작성하시면 조금 더 보기 편할 것 같습니다.
-            CreateTaskResponseDto dto = new CreateTaskResponseDto(
-                    task.getId(),
-                    task.getAssignee().getId(),
-                    task.getTitle(),
-                    task.getDescription(),
-                    task.getPriority(),
-                    task.getStatus(),
-                    task.getDueDate(),
-                    task.getCreatedAt(),
-                    task.getUpdatedAt(),
-                    task.getDeletedAt()
-            );
-            responseDto.add(dto);
+        //상단에 task를 통해 객체를 생성하는 Response라는 메서드를 작성해주셨는데
+        //활용하지않고 계시네요
+        //활용하여 작성하시면 조금 더 보기 편할 것 같습니다. ok
+        Page<CreateTaskResponseDto> responseDtoPage = taskPage.map(this::response);
 
-        }
-        return PageDataDTO.of(responseDto);
+        return PageDataDTO.of(responseDtoPage);
     }
 
     // 3. 작업 상세 조회
-    @org.springframework.transaction.annotation.Transactional(readOnly = true)
+    @Transactional(readOnly = true)
     public CreateTaskResponseDto getTaskById(Long taskId) {
         Task task = taskRepository.findById(taskId)
-                .orElseThrow(() -> new IllegalArgumentException("작업을 찾을 수 없습니다"));
+                .orElseThrow(() -> {
+                    log.error("작업을 찾을 수 없습니다, taskID");
+                    return new IllegalArgumentException("작업을 찾을 수 없습니다");
+                });
 
-        return new CreateTaskResponseDto(
-                task.getId(),
-                task.getAssignee().getId(),
-                task.getTitle(),
-                task.getDescription(),
-                task.getPriority(),
-                task.getStatus(),
-                task.getDueDate(),
-                task.getCreatedAt(),
-                task.getUpdatedAt(),
-                task.getDeletedAt()
-        );
+        return response(task);
+
 
     }
 
@@ -135,25 +122,18 @@ public class TaskService {
                 requestDto.getTitle(),
                 requestDto.getDescription(),
                 requestDto.getStatus(),
-                requestDto.getDueDate()
+                requestDto.getDueDate() != null ? requestDto.getDueDate().toLocalDateTime() : null
         );
-        return new CreateTaskResponseDto(
-                task.getId(),
-                task.getAssignee().getId(),
-                task.getTitle(),
-                task.getDescription(),
-                task.getPriority(),
-                task.getStatus(),
-                task.getDueDate(),
-                task.getCreatedAt(),
-                task.getUpdatedAt(),
-                task.getDeletedAt()
-        );
+
+
+        return response(task);
+
+
     }
 
     // 5. 작업 삭제
     @Transactional
-    public void deleTask(Long taskId, Long userId) {
+    public void deleteTask(Long taskId, Long userId) {
         Task task = taskRepository.findById(taskId)
                 .orElseThrow(() -> new IllegalArgumentException("작업을 찾을 수 없습니다"));
 
@@ -163,6 +143,8 @@ public class TaskService {
         taskRepository.delete(task);
     }
 }
+
+
 
 
 

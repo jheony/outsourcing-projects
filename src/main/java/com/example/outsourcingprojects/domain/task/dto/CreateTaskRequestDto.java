@@ -1,11 +1,16 @@
 package com.example.outsourcingprojects.domain.task.dto;
 
 
+import com.example.outsourcingprojects.common.model.PriorityType;
+import com.example.outsourcingprojects.common.model.TaskStatusType;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 
+@AllArgsConstructor
 @NoArgsConstructor
 @Getter
 public class CreateTaskRequestDto {
@@ -16,9 +21,10 @@ public class CreateTaskRequestDto {
 
     private String description;
 
-    private Long priority;
+    private PriorityType priority;
 
-    private Long status;
+    private TaskStatusType status;
 
-    private LocalDateTime dueDate;
+    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
+    private OffsetDateTime dueDate;
 }
