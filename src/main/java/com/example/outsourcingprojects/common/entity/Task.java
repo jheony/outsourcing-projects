@@ -1,7 +1,7 @@
 package com.example.outsourcingprojects.common.entity;
 
-
-import com.example.outsourcingprojects.domain.task.dto.CreateTaskResponseDto;
+import com.example.outsourcingprojects.common.model.PriorityType;
+import com.example.outsourcingprojects.common.model.TaskStatusType;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.AccessLevel;
@@ -31,18 +31,20 @@ public class Task extends BaseEntity {
     @Column
     private String description;
 
+    @Enumerated(EnumType.STRING)
     @Column
-    private Long priority;
+    private PriorityType priority;
 
+    @Enumerated(EnumType.STRING)
     @Column
-    private Long status;
+    private TaskStatusType status;
 
     @Column
     private LocalDateTime dueDate;
 
     // 생
-    public Task(String title, String description, long priority, long status, User assignee, LocalDateTime dueDate) {
-        //필요없어요 Why? 상단의 @NoArgsConstructor를 통해서 이 생성자의 역할을 대신 하고 있습니다.
+    public Task(String title, String description, PriorityType priority, TaskStatusType status, User assignee, LocalDateTime dueDate) {
+        //필요없어요 Why? 상단의 @NoArgsConstructor를 통해서 이 생성자의 역할을 대신 하고 있습니다. ok
         this.title = title;
         this.description = description;
         this.priority = priority;
@@ -64,11 +66,11 @@ public class Task extends BaseEntity {
         return description;
     }
 
-    public long getPriority() {
+    public PriorityType getPriority() {
         return priority;
     }
 
-    public long getStatus() {
+    public TaskStatusType getStatus() {
         return status;
     }
 
@@ -81,7 +83,7 @@ public class Task extends BaseEntity {
     }
 
     // 작업 수정 메서드
-    public void update(String title, String description, Long status, LocalDateTime dueDate) {
+    public void update(String title, String description, TaskStatusType status, LocalDateTime dueDate) {
         this.title = title;
         this.description = description;
         this.status = status;
