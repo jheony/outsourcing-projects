@@ -1,11 +1,9 @@
 package com.example.outsourcingprojects.domain.task.controller;
 
 import com.example.outsourcingprojects.domain.task.dto.CreateTaskRequestDto;
-
 import com.example.outsourcingprojects.domain.task.dto.CreateTaskResponseDto;
 import com.example.outsourcingprojects.domain.task.service.TaskService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -30,10 +28,8 @@ public class TaskController {
 
     // 작업 전체 조회
     @GetMapping
-    public ResponseEntity<Page<CreateTaskResponseDto>> getAllTasks(
-            @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "10") int size) {
-        Page<CreateTaskResponseDto> tasks = taskService.getAllTasks(page, size);
+    public ResponseEntity<List<CreateTaskResponseDto>> getAllTasks() {
+        List<CreateTaskResponseDto> tasks = taskService.getAllTasks();
         return ResponseEntity.ok(tasks);
     }
 
@@ -51,14 +47,6 @@ public class TaskController {
         CreateTaskResponseDto response = taskService.updateTask(taskId, request, userId);
         return ResponseEntity.ok(response);
 
-    }
-
-    // 작업 삭제
-    @DeleteMapping("/{taskId}")
-    public ResponseEntity<Void> deleteTask(
-            @PathVariable Long taskId, @RequestParam Long userId) {
-        taskService.deleteTask(taskId, userId);
-        return ResponseEntity.ok().build();
     }
 
 
