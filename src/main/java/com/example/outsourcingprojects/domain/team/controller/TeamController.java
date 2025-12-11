@@ -1,6 +1,7 @@
 package com.example.outsourcingprojects.domain.team.controller;
 
 import com.example.outsourcingprojects.common.util.response.GlobalResponse;
+import com.example.outsourcingprojects.domain.team.dto.request.AddTeamMemberRequestDto;
 import com.example.outsourcingprojects.domain.team.dto.request.CreateTeamRequestDto;
 import com.example.outsourcingprojects.domain.team.dto.request.UpdateTeamRequestDto;
 import com.example.outsourcingprojects.domain.team.dto.response.CreateTeamResponseDto;
@@ -63,4 +64,9 @@ public class TeamController {
     }
 
     // 팀 멤버 추가
+    @PostMapping("/{teamId}/ members")
+    public GlobalResponse<TeamResponseDto> addTeamMemberHandler(@PathVariable Long teamId, @Valid @RequestBody AddTeamMemberRequestDto request)  {
+        TeamResponseDto responseDto = teamService.addTeamMember(teamId, request.getMemberId());
+        return GlobalResponse.success("팀 멤버가 추가되었습니다.", responseDto);
+    }
 }

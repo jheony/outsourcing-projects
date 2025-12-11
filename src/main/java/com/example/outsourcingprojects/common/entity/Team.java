@@ -1,16 +1,10 @@
 package com.example.outsourcingprojects.common.entity;
 
-import com.example.outsourcingprojects.domain.team.dto.response.CreateTeamResponseDto;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Size;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 
 @Entity
 @Table(name = "teams")
