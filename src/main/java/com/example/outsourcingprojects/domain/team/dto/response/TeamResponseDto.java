@@ -1,26 +1,19 @@
 package com.example.outsourcingprojects.domain.team.dto.response;
 
 import com.example.outsourcingprojects.common.entity.Team;
-import com.example.outsourcingprojects.common.entity.TeamMember;
-import com.example.outsourcingprojects.common.entity.User;
-import lombok.AccessLevel;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.stream.Collectors;
+
 
 @Getter
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class TeamResponseDto {
-    //response 응답객체의 필드는 final로 지정하는것에 대해 고민해보시기 바랍니다.
-    //final로 지정하면 상단의 생성자 어노테이션도 변경되어야 합니다.
-    private Long id;
-    private String name;
-    private String description;
-    private LocalDateTime createdAt;
-    private List<TeamMemberResponseDto> members;
+    private final Long id;
+    private final String name;
+    private final String description;
+    private final LocalDateTime createdAt;
+    private final List<TeamMemberResponseDto> members;
 
     private TeamResponseDto(Long id, String name, String description, LocalDateTime createdAt, List<TeamMemberResponseDto> members) {
         this.id = id;
