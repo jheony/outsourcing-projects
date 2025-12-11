@@ -26,16 +26,14 @@ public class ActivityLoggingAspect {
 
         HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
         String requestURI = request.getRequestURI();
-        String requestMethod  = request.getMethod();
-
+        String requestMethod = request.getMethod();
 //        User user;
         Long userId = (Long) request.getAttribute("userId");
+        log.info("userId = {}", userId);
 
-        log.info(" retVal.toString() = {}",  retVal.toString());
+        log.info(" retVal.toString() = {}", retVal.toString());
         Object result = retVal.getClass();
-        log.info("result = {}",  result);
-
-
+        log.info("result = {}", result);
 
         log.info("requestURI = {}", requestURI);
         log.info("requestMethod = {}", requestMethod);
@@ -43,13 +41,13 @@ public class ActivityLoggingAspect {
         String[] uri = requestURI.split("/");
         String type = uri[2];
         log.info("type = {}", type);
-        if(type.startsWith("task")){
+        if (type.startsWith("task")) {
             log.info("task");
 //        Long taskId;
 //        Long type;
         }
 
-        if(type.startsWith("comment")){
+        if (type.startsWith("comment")) {
             log.info("comment");
 //        Long commentId;
 //        Long type;
@@ -62,6 +60,6 @@ public class ActivityLoggingAspect {
         //실행 시간, 호출자, 메서드명, 입력 파라미터, 실행 결과, 예외 발생 여부
         ActivityLog activityLog;
         log.info("AOP 성공~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {}", retVal);
-        return  retVal;
+        return retVal;
     }
 }
