@@ -20,6 +20,7 @@ import static com.example.outsourcingprojects.common.model.UserRoleType.USER;
 @RequiredArgsConstructor
 @Service
 public class UserService {
+    //사용하지 않는 어노테이션을 삭제해주세요.
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
@@ -44,6 +45,8 @@ public class UserService {
         );
 
         User savedUser = userRepository.save(user);
+
+        //응답객체 생성을 정적팩토리 메서드로 관리해보시기 바랍니다.
         SignUpResponse userResponse = new SignUpResponse(
                 savedUser.getId(),
                 savedUser.getUsername(),
@@ -61,6 +64,8 @@ public class UserService {
     public UserInfoResponse info(Long userId) {
 
         User user = userRepository.findById(userId).orElseThrow(() -> new IllegalArgumentException("유저 아이디가 없습니다."));
+
+        //응답객체 생성을 정적팩토리 메서드로 관리해보시기 바랍니다.
         UserInfoResponse userInfo = new UserInfoResponse(
                 user.getId(),
                 user.getUsername(),
@@ -80,6 +85,8 @@ public class UserService {
 
         List<UserSummaryResponse> userSummaryResponseList = userRepository.findAll()
                 .stream()
+
+                //응답객체 생성을 정적팩토리 메서드로 관리해보시기 바랍니다.
                 .map(user -> new UserSummaryResponse(
                         user.getId(),
                         user.getUsername(),

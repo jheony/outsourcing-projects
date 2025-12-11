@@ -7,7 +7,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 
 public interface TaskRepository extends JpaRepository<Task, Long> {
-
+    //레포지토리의 상단에는 레포지토리임을 표시해주는 어노테이션을 사용해주어야 합니다.
+    //@Repository는 클래스가 데이터베이스와 상호작용하는 객체임을 나타내는 마커 어노테이션입니다.
     // 페이징 전체 조회
     Page<Task> findAll(Pageable pageable);
 

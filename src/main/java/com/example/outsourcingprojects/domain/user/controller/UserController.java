@@ -18,7 +18,8 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/users")
 @Slf4j
 public class UserController {
-
+    //사용하지 않는 어노테이션이 남아있습니다. 확인하고 제거해주세요.
+    //Controller의 메서드명의 끝에 Handler를 붙여주기로 약속했습니다. 확인하고 수정해주세요.
     private final UserService userService;
 
     //회원가입

@@ -17,4 +17,15 @@ public enum ActivityType {
 
     private final long activityNum;
 
+    public static ActivityType toType(Long value) throws Exception {
+        if (value == null) throw new Exception();
+
+        for (ActivityType type : ActivityType.values()) {
+            if (type.getActivityNum() == value) {
+                return type;
+            }
+        }
+
+        throw new Exception();
+    }
 }
