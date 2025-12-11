@@ -1,8 +1,8 @@
 package com.example.outsourcingprojects.domain.user.repository;
 
-import com.example.outsourcingprojects.common.entity.QTeamMember;
-import com.example.outsourcingprojects.common.entity.QUser;
-import com.example.outsourcingprojects.common.entity.User;
+import com.example.outsourcingprojects.common.entity.*;
+import com.example.outsourcingprojects.domain.task.dto.SearchTaskResponse;
+import com.example.outsourcingprojects.domain.user.dto.response.SearchUserResponse;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 
@@ -11,14 +11,14 @@ import java.util.List;
 @RequiredArgsConstructor
 public class UserRepositoryImpl implements UserRepositoryCustom {
 
-    private final JPAQueryFactory jpaQueryFactory;
+    private final JPAQueryFactory queryFactory;
 
     @Override
     public List<User> getUsersByTeam(Long teamId) {
 
         QTeamMember teamMember = QTeamMember.teamMember;
         QUser user = QUser.user;
-        List<User> teamUsers = jpaQueryFactory.select(user)
+        List<User> teamUsers = queryFactory.select(user)
                 .from(teamMember)
                 .join(teamMember.user, user)
                 .where(user.deletedAt.isNull().and(teamMember.deletedAt.isNull()).and(teamMember.team.id.eq(teamId)))
@@ -27,6 +27,19 @@ public class UserRepositoryImpl implements UserRepositoryCustom {
         return teamUsers;
 
 
+    }
+
+    @Override
+    public List<SearchUserResponse> getSearchUsers(String query) {
+
+        QUser user = QUser.user;
+
+        List<User> users = queryFactory.select(user)
+                .from(user)
+                .where(user.name.containsIgnoreCase(query))
+                .fetch();
+
+        return users.stream().map(SearchUserResponse::from).toList();
     }
 
 }

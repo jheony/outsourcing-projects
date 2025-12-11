@@ -12,5 +12,4 @@ public interface TeamRepository extends JpaRepository<Team, Long> {
     boolean existsByName(String name);
 
     Optional<Team> findByIdAndDeletedAtIsNull(Long id);
-
 }
