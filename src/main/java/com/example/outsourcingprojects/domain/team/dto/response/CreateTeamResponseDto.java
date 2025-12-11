@@ -33,7 +33,6 @@ public class CreateTeamResponseDto {
     }
 
     public static CreateTeamResponseDto from(Team team) {
-
         return new CreateTeamResponseDto(
                 team.getId(),
                 team.getName(),

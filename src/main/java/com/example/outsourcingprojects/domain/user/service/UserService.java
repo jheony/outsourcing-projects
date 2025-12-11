@@ -1,6 +1,8 @@
 package com.example.outsourcingprojects.domain.user.service;
 
 import com.example.outsourcingprojects.common.entity.User;
+import com.example.outsourcingprojects.common.exception.CustomException;
+import com.example.outsourcingprojects.common.exception.ErrorCode;
 import com.example.outsourcingprojects.common.util.PasswordEncoder;
 import com.example.outsourcingprojects.domain.user.dto.request.SignUpRequest;
 import com.example.outsourcingprojects.domain.user.dto.request.UpdateRequest;
@@ -8,19 +10,15 @@ import com.example.outsourcingprojects.domain.user.dto.response.*;
 import com.example.outsourcingprojects.domain.user.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
-import static com.example.outsourcingprojects.common.model.UserRoleType.USER;
+import static com.example.outsourcingprojects.common.entity.QUser.user;
 
-@Slf4j
 @RequiredArgsConstructor
 @Service
 public class UserService {
-    //사용하지 않는 어노테이션을 삭제해주세요.
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
@@ -29,10 +27,10 @@ public class UserService {
     @Transactional
     public SignUpResponse signUpUser(SignUpRequest request) {
 
-        if(request.getEmail().equals(userRepository.findByEmail(request.getEmail()))) {
-            throw new IllegalArgumentException("이미 존재하는 미에밀 입니다.");
+        if (request.getEmail().equals(userRepository.findByEmail(request.getEmail()))) {
+            throw new CustomException(ErrorCode.ALREADY_TEAM_MEMBER);
         }
-        if(request.getName().equals(userRepository.findByName((request.getName())))) {
+        if (request.getName().equals(userRepository.findByName((request.getName())))) {
             throw new IllegalArgumentException("이미 존재하는 사용자명 입니다.");
         }
 
@@ -41,96 +39,111 @@ public class UserService {
                 request.getEmail(),
                 passwordEncoder.encode(request.getPassword()),
                 request.getName(),
-                USER.getRoleNum()
+                10L
         );
 
         User savedUser = userRepository.save(user);
 
-        //응답객체 생성을 정적팩토리 메서드로 관리해보시기 바랍니다.
-        SignUpResponse userResponse = new SignUpResponse(
-                savedUser.getId(),
-                savedUser.getUsername(),
-                savedUser.getEmail(),
-                savedUser.getName(),
-                savedUser.getRole(),
-                savedUser.getCreatedAt()
-        );
-
-        return userResponse;
+        return SignUpResponse.from(savedUser);
     }
 
     // 사용자 정보 조회
     @Transactional
-    public UserInfoResponse info(Long userId) {
+    public UserInfoResponse info(Long id, Long userId) {
+        if(userRepository.findByIdAndDeletedAtIsNull(userId).equals(userId)){
+            throw new IllegalArgumentException("인증이 필요합니다.");
+        }
 
-        User user = userRepository.findById(userId).orElseThrow(() -> new IllegalArgumentException("유저 아이디가 없습니다."));
+        User user = userRepository.findByIdAndDeletedAtIsNull(id)
+                .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을 수 없습니다."));
 
-        //응답객체 생성을 정적팩토리 메서드로 관리해보시기 바랍니다.
-        UserInfoResponse userInfo = new UserInfoResponse(
-                user.getId(),
-                user.getUsername(),
-                user.getEmail(),
-                user.getName(),
-                user.getRole(),
-                user.getCreatedAt(),
-                user.getUpdatedAt()
-        );
-
-        return userInfo;
+        return UserInfoResponse.from(user);
     }
 
     // 사용자 목록 조회
     @Transactional
-    public UserListResponse usersInfo() {
+    public UserListResponse usersInfo(Long userId) {
 
-        List<UserSummaryResponse> userSummaryResponseList = userRepository.findAll()
+        userRepository.findById(userId)
+                .orElseThrow(()-> new IllegalArgumentException("사용자 정보를 찾을 수 없습니다."));
+
+        List<User> users = userRepository.findAllByDeletedAtIsNull();
+
+        List<UserSummaryResponse> summaries = users
                 .stream()
+                .map(UserSummaryResponse::from)
+                .toList();
 
-                //응답객체 생성을 정적팩토리 메서드로 관리해보시기 바랍니다.
-                .map(user -> new UserSummaryResponse(
-                        user.getId(),
-                        user.getUsername(),
-                        user.getEmail(),
-                        user.getName(),
-                        user.getRole(),
-                        user.getCreatedAt()
-                ))
-                .collect(Collectors.toList());
-        UserListResponse userListResponse = new UserListResponse(userSummaryResponseList);
-
-        return userListResponse;
-    }
-
-    @Transactional
-    public UpdateResponse update(Long id, UpdateRequest request) {
-
-        User user = userRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("존재하지 않은 유저 입니다."));
-
-        //이름
-        if (user.getName().equals(request.getName())) {
-            throw new IllegalArgumentException("기존의 " + request.getName() +" 과 동일합니다.");
-        }//이메일
-        if (user.getEmail().equals(request.getEmail())) {
-            throw new IllegalArgumentException("기존의 " + request.getEmail() +" 과 동일합니다.");
-        }//비번
-        if (passwordEncoder.matches(request.getPassword(), user.getPassword())) {
-            throw new IllegalArgumentException("비밀번호가 변경되지 않았습니다.");
-        }
-        log.info("aafdsfdsf");
-        //변경되면 엔터티에 업데이트
-        user.update(
-                request.getName(),
-                request.getEmail(),
-                passwordEncoder.encode(request.getPassword())
-                );
-
-        return UpdateResponse.from(user);
+        return UserListResponse.from(summaries);
     }
 
     // 사용자 정보 수정
+    @Transactional
+    public UpdateResponse update(Long userId, Long targetId, UpdateRequest request) {
 
-    // 회원 탈퇴(영구 삭제)
+        if(userRepository.findByIdAndDeletedAtIsNull(userId).equals(userId)){
+            throw new IllegalArgumentException("인증이 필요합니다.");
+        }
+
+        User targetUser = userRepository.findById(targetId)
+                .orElseThrow(() -> new IllegalArgumentException("존재하지 않은 유저 입니다."));
+
+        if (targetUser.getName().equals(request.getName())) {
+            throw new IllegalArgumentException("기존의 " + request.getName() + " 과 동일합니다.");
+        }
+        if (targetUser.getEmail().equals(request.getEmail())) {
+            throw new IllegalArgumentException("기존의 " + request.getEmail() + " 과 동일합니다.");
+        }
+        if (passwordEncoder.matches(request.getPassword(), targetUser.getPassword())) {
+            throw new IllegalArgumentException("비밀번호가 변경되지 않았습니다.");
+        }
+
+        targetUser.update(
+                request.getName(),
+                request.getEmail(),
+                passwordEncoder.encode(request.getPassword())
+        );
+
+        return UpdateResponse.from(targetUser);
+    }
+
+    // 회원 탈퇴
+    @Transactional
+    public void softDelete(Long targetId, Long sessionUserId) {
+
+        if (!sessionUserId.equals(userRepository.findById(targetId).get().getId())) {
+            throw new IllegalArgumentException("권한이 없습니다.");
+        }
+
+        User user = userRepository.findById(sessionUserId)
+                .orElseThrow(() -> new IllegalArgumentException("존재하지 않은 유저 입니다."));
+
+        if (user.getDeletedAt() != null) {
+            throw new IllegalArgumentException("이미 탈퇴 처리된 유저입니다.");
+        }
+
+        user.delete();
+    }
 
     // 추가 가능한 사용자 조회
+    @Transactional
+    public AbleUsersListResponse findAddableUsers(Long teamId, Long userId) {
+
+        userRepository.findById(userId)
+                .orElseThrow(()-> new IllegalArgumentException("사용자 정보를 찾을 수 없습니다."));
+
+        List<User> users;
+        if(teamId != null) {
+            users = userRepository.findUsersNotInTeam(teamId);
+        } else {
+            users = userRepository.findAllByDeletedAtIsNull();
+        }
+
+        List<AbleUserSummaryResponse> ableUserUsers = users.stream()
+                .map(AbleUserSummaryResponse::from)
+                .toList();
+
+        return AbleUsersListResponse.from(ableUserUsers);
+    }
+
 }

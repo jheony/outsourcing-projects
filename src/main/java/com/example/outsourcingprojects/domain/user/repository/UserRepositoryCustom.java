@@ -10,4 +10,7 @@ public interface UserRepositoryCustom {
     List<User> getUsersByTeam(Long teamId);
 
     List<SearchUserResponse> getSearchUsers(String query);
+
+    List<User> findUsersNotInTeam(Long teamId);
+
 }

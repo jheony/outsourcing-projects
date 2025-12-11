@@ -41,4 +41,26 @@ public class UserRepositoryImpl implements UserRepositoryCustom {
         return users.stream().map(SearchUserResponse::from).toList();
     }
 
+    @Override
+    public List<User> findUsersNotInTeam(Long teamId) {
+
+        QUser user = QUser.user;
+        QTeamMember teamMember = QTeamMember.teamMember;
+        return queryFactory
+                .select(user)
+                .from(user)
+                .leftJoin(teamMember)
+                .on(
+                        teamMember.user.id.eq(user.id)
+                                .and(teamMember.team.id.eq(teamId))
+                                .and(teamMember.deletedAt.isNull())
+                )
+                .where(
+                        user.deletedAt.isNull(),
+                        teamMember.id.isNull()   // ★ 핵심! join 된게 없다는 뜻 → 팀에 속하지 않은 사용자
+                )
+                .fetch();
+    }
+
+
 }

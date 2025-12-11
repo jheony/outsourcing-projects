@@ -38,7 +38,6 @@ public class TeamService {
         // 저장
         Team savedTeam = teamRepository.save(team);
 
-        // 정적 팩토리 메소드 응답 DTO 생성 및 반환
         return CreateTeamResponseDto.from(savedTeam);
     }
 
