@@ -1,4 +1,4 @@
-package com.example.outsourcingprojects.domain.team.dto.response;
+package com.example.outsourcingprojects.domain.search.dto;
 
 import com.example.outsourcingprojects.common.entity.Team;
 import lombok.Getter;

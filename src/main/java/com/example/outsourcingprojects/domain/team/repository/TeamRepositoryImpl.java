@@ -1,11 +1,8 @@
 package com.example.outsourcingprojects.domain.team.repository;
 
 import com.example.outsourcingprojects.common.entity.QTeam;
-import com.example.outsourcingprojects.common.entity.QUser;
 import com.example.outsourcingprojects.common.entity.Team;
-import com.example.outsourcingprojects.common.entity.User;
-import com.example.outsourcingprojects.domain.team.dto.response.SearchTeamResponse;
-import com.example.outsourcingprojects.domain.user.dto.response.SearchUserResponse;
+import com.example.outsourcingprojects.domain.search.dto.SearchTeamResponse;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 
