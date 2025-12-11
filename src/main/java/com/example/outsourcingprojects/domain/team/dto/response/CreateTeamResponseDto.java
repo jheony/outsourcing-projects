@@ -20,7 +20,6 @@ public class CreateTeamResponseDto {
     private final List<TeamMemberResponseDto> members;
 
     public static CreateTeamResponseDto from(Team team) {
-
         return new CreateTeamResponseDto(
                 team.getId(),
                 team.getName(),
