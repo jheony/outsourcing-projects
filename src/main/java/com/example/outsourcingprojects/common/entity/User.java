@@ -43,10 +43,9 @@ public class User extends BaseEntity {
         this.role = role;
     }
 
-    public void update (String name, String email, String password) {
-        this.name = name;
-        this.email = email;
-        this.password = password;
+    public void update(String name, String email) {
+        if (name != null) this.name = name;
+        if (email != null) this.email = email;
     }
 
     @JsonGetter("role")
