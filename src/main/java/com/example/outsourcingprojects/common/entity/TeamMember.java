@@ -25,7 +25,6 @@ public class TeamMember extends BaseEntity {
     private User user;
 
     private TeamMember(Team team, User user) {
-        //필요없어요 Why? 상단의 @NoArgsConstructor를 통해서 이 생성자의 역할을 대신 하고 있습니다.
         this.team = team;
         this.user = user;
     }

@@ -15,6 +15,7 @@ public enum ErrorCode {
     INVALID_STATUS_VALUE(HttpStatus.BAD_REQUEST, "유효하지 않은 상태 값입니다."),
     EMPTY_COMMENT(HttpStatus.BAD_REQUEST, "댓글 내용은 필수입니다."),
     EMPTY_SEARCH_KEYWORD(HttpStatus.BAD_REQUEST, "검색어를 입력해주세요."),
+    EMPTY_TEAM_NAME(HttpStatus.BAD_REQUEST, "팀 이름은 필수입니다."),
 
     // 401 Unauthorized
     INVALID_CREDENTIALS(HttpStatus.UNAUTHORIZED, "이메일 또는 비밀번호가 일치하지 않습니다."),
@@ -39,7 +40,8 @@ public enum ErrorCode {
 
     // 409 Conflict
     TEAM_HAS_MEMBERS(HttpStatus.CONFLICT, "팀에 멤버가 존재하여 삭제할 수 없습니다."),
-    ALREADY_TEAM_MEMBER(HttpStatus.CONFLICT, "이미 팀에 속한 멤버입니다.");
+    ALREADY_TEAM_MEMBER(HttpStatus.CONFLICT, "이미 팀에 속한 멤버입니다."),
+    DUPLICATE_TEAM_NAME(HttpStatus.CONFLICT, "이미 존재하는 팀 이름입니다.");
 
     private final HttpStatus status;
     private final String message;
