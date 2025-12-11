@@ -8,24 +8,27 @@ import java.time.LocalDateTime;
 @Getter
 @Builder
 public class GlobalResponse<T> {
+
     private final boolean success;
     private final String message;
     private final T data;
-    private final LocalDateTime timestamp = LocalDateTime.now();
+    private final LocalDateTime timestamp;
 
-    public static <T> GlobalResponse<T> of(boolean success, String message, T data) {
+    public static <T> GlobalResponse<T> success(String message, T data) {
         return GlobalResponse.<T>builder()
-                .success(success)
+                .success(true)
                 .message(message)
                 .data(data)
+                .timestamp(LocalDateTime.now())
                 .build();
     }
 
-    public static <T> GlobalResponse<T> success(String message, T data) {
-        return of(true, message, data);
-    }
-
     public static <T> GlobalResponse<T> fail(String message, T data) {
-        return of(false, message, null);
+        return GlobalResponse.<T>builder()
+                .success(false)
+                .message(message)
+                .data(data)
+                .timestamp(LocalDateTime.now())
+                .build();
     }
 }
