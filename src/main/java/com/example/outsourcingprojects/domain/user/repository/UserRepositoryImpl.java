@@ -1,8 +1,7 @@
 package com.example.outsourcingprojects.domain.user.repository;
 
 import com.example.outsourcingprojects.common.entity.*;
-import com.example.outsourcingprojects.domain.task.dto.SearchTaskResponse;
-import com.example.outsourcingprojects.domain.user.dto.response.SearchUserResponse;
+import com.example.outsourcingprojects.domain.search.dto.SearchUserResponse;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 
