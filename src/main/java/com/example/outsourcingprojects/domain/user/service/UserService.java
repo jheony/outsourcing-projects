@@ -27,10 +27,10 @@ public class UserService {
     @Transactional
     public SignUpResponse signUpUser(SignUpRequest request) {
 
-        if (request.getEmail().equals(userRepository.findByEmail(request.getEmail()))) {
+        if (userRepository.existsByEmail(request.getEmail())) {
             throw new CustomException(ErrorCode.ALREADY_TEAM_MEMBER);
         }
-        if (request.getName().equals(userRepository.findByName((request.getName())))) {
+        if (userRepository.existsByName(request.getName())) {
             throw new IllegalArgumentException("이미 존재하는 사용자명 입니다.");
         }
 
@@ -39,7 +39,7 @@ public class UserService {
                 request.getEmail(),
                 passwordEncoder.encode(request.getPassword()),
                 request.getName(),
-                10L
+                20L
         );
 
         User savedUser = userRepository.save(user);

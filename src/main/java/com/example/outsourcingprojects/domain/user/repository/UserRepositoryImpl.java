@@ -57,7 +57,7 @@ public class UserRepositoryImpl implements UserRepositoryCustom {
                 )
                 .where(
                         user.deletedAt.isNull(),
-                        teamMember.id.isNull()   // ★ 핵심! join 된게 없다는 뜻 → 팀에 속하지 않은 사용자
+                        teamMember.id.isNull()
                 )
                 .fetch();
     }
