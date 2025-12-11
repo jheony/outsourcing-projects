@@ -26,6 +26,7 @@ public class TeamService {
     //아직 작성이 되지 않았는지 모르겠지만 사용하지 않는 Repository가 존재합니다. 확인해주세요.
     private final TeamMemberRepository teamMemberRepository;
 
+    // 팀 생성
     @Transactional
     public CreateTeamResponseDto createTeam(CreateTeamRequestDto requestDto) {
         // 팀 이름 중복 검사
@@ -45,11 +46,12 @@ public class TeamService {
     // 팀 목록 조회
     @Transactional(readOnly = true)
     public List<TeamResponseDto> getAllTeams() {
+        // 삭제되지 않은 팀으로 필터링 후 반환
         return teamRepository.findAll().stream()
                 .filter(team -> team.getDeletedAt() == null)
                 .map(team -> {
-                    List<User> users = userRepository.getUsersByTeam(team.getId());
-                    List<TeamMemberResponseDto> members = users.stream()
+                    List<User> users = userRepository.getUsersByTeam(team.getId()); // 각 팀에 속한 유저 조회
+                    List<TeamMemberResponseDto> members = users.stream()    // 유저리스트를 TeamMemberResponseDto로
                             .map(TeamMemberResponseDto::from)
                             .collect(Collectors.toList());
                     return TeamResponseDto.of(team, members);
@@ -60,6 +62,7 @@ public class TeamService {
     // 팀 상세 조회
     @Transactional(readOnly = true)
     public TeamResponseDto getTeamById(Long id) {
+        // id에 해당하는 팀 존재여부 및 삭제여부 확인
         Team team = teamRepository.findByIdAndDeletedAtIsNull(id)
                 .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 팀입니다."));
         List<User> users = userRepository.getUsersByTeam(team.getId());
@@ -69,10 +72,11 @@ public class TeamService {
         return TeamResponseDto.of(team, members);
     }
 
-    // 팀 멤버 조회
+    // 특정 팀의 멤버 조회
     @Transactional(readOnly = true)
     public List<TeamMemberResponseDto> getTeamMembers(Long teamId) {
-        Team team = teamRepository.findByIdAndDeletedAtIsNull(teamId)
+        // id에 해당하는 팀 존재여부 및 삭제여부 확인
+        teamRepository.findByIdAndDeletedAtIsNull(teamId)
                 .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 팀입니다."));
 
         List<User> users = userRepository.getUsersByTeam(teamId);
