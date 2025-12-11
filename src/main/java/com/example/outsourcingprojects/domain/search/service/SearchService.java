@@ -1,0 +1,31 @@
+package com.example.outsourcingprojects.domain.search.service;
+
+import com.example.outsourcingprojects.domain.search.dto.SearchResponse;
+import com.example.outsourcingprojects.domain.search.dto.SearchTaskResponse;
+import com.example.outsourcingprojects.domain.dashboard.repository.DashBoardRepository;
+import com.example.outsourcingprojects.domain.search.dto.SearchTeamResponse;
+import com.example.outsourcingprojects.domain.team.repository.TeamRepository;
+import com.example.outsourcingprojects.domain.search.dto.SearchUserResponse;
+import com.example.outsourcingprojects.domain.user.repository.UserRepository;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+
+@Service
+@RequiredArgsConstructor
+public class SearchService {
+
+    private final DashBoardRepository taskRepository;
+    private final UserRepository userRepository;
+    private final TeamRepository teamRepository;
+
+    public SearchResponse search(String query) {
+
+        List<SearchUserResponse> users = userRepository.getSearchUsers(query);
+        List<SearchTeamResponse> teams = teamRepository.getSearchTeams(query);
+        List<SearchTaskResponse> tasks = taskRepository.getSearchTasks(query);
+
+        return new SearchResponse(tasks,teams,users);
+    }
+}

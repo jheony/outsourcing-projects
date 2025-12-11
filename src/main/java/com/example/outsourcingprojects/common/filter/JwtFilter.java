@@ -28,9 +28,10 @@ public class JwtFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
 
         String requestURI = request.getRequestURI();
+        String requestMethod = request.getMethod();
 
         // 인증이 필요 없는 경로 처리
-        if (requestURI.equals("/api/users") || requestURI.equals("/api/auth/login")) {
+        if ((requestMethod.equals("POST") && requestURI.equals("/api/users")) || requestURI.equals("/api/auth/login")) {
             filterChain.doFilter(request, response);
             return;
         }

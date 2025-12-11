@@ -1,10 +1,11 @@
-package com.example.outsourcingprojects.domain.task.repository;
+package com.example.outsourcingprojects.domain.dashboard.repository;
 
 import com.example.outsourcingprojects.common.entity.QTask;
 import com.example.outsourcingprojects.common.entity.QUser;
 import com.example.outsourcingprojects.common.entity.Task;
 import com.example.outsourcingprojects.common.model.TaskStatusType;
-import com.example.outsourcingprojects.domain.task.tempDto.DailyTaskDTO;
+import com.example.outsourcingprojects.domain.search.dto.SearchTaskResponse;
+import com.example.outsourcingprojects.domain.dashboard.dto.DailyTaskDTO;
 import com.querydsl.core.Tuple;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
@@ -18,7 +19,7 @@ import java.time.LocalTime;
 import java.util.List;
 
 @RequiredArgsConstructor
-public class TempTaskRepositoryImpl implements TempTaskRepositoryCustom {
+public class DashBoardRepositoryImpl implements DashBoardRepositoryCustom {
 
     private final JPAQueryFactory queryFactory;
 
@@ -131,6 +132,19 @@ public class TempTaskRepositoryImpl implements TempTaskRepositoryCustom {
         String dateStr = date.toString();
 
         return new DailyTaskDTO(dayChar, tasks, completed, dateStr);
+    }
+
+    @Override
+    public List<SearchTaskResponse> getSearchTasks(String query) {
+
+        QTask task = QTask.task;
+
+        List<Task> tasks = queryFactory.select(task)
+                .from(task)
+                .where(task.title.containsIgnoreCase(query))
+                .fetch();
+
+        return tasks.stream().map(SearchTaskResponse::from).toList();
     }
 
 }

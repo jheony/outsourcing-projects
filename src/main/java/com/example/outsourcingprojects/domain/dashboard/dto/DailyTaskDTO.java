@@ -1,4 +1,4 @@
-package com.example.outsourcingprojects.domain.task.tempDto;
+package com.example.outsourcingprojects.domain.dashboard.dto;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
