@@ -32,6 +32,11 @@ public class DataLoader implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
+
+        if (taskRepository.count() >= 100) {
+            System.out.println("Tasks already exceed 100. CSV loading skipped.");
+            return;
+        }
         System.out.println("Loading tasks from CSV 1000 times...");
 
         for (int i = 0; i < 1000; i++) {
