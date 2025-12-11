@@ -69,9 +69,9 @@ public class UserController {
 
     // 추가 가능한 사용자 조회
     @GetMapping("/available")
-    public GlobalResponse<AbleUsersListResponse> getAddableUsersHandler(@RequestParam(required = false) Long teamId, HttpServletRequest userToken) {
-        Long userId = (Long) userToken.getAttribute("userId");
-        AbleUsersListResponse addableUsers = userService.findAddableUsers(teamId, userId);
+    public GlobalResponse<AbleUsersListResponse> getAddableUsersHandler(@RequestParam(required = false) Long teamId) {
+
+        AbleUsersListResponse addableUsers = userService.findAddableUsers(teamId);
         return GlobalResponse.success("추가 가능한 사용자 목록 조회 성공", addableUsers);
     }
 

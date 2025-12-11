@@ -122,7 +122,7 @@ public class UserService {
 
     // 추가 가능한 사용자 조회
     @Transactional
-    public AbleUsersListResponse findAddableUsers(Long teamId, Long userId) {
+    public AbleUsersListResponse findAddableUsers(Long teamId) {
 
         userRepository.findByIdAndDeletedAtIsNull(teamId)
                 .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
