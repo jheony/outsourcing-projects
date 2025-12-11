@@ -1,7 +1,7 @@
 package com.example.outsourcingprojects.domain.user.repository;
 
 import com.example.outsourcingprojects.common.entity.User;
-import com.example.outsourcingprojects.domain.user.dto.response.SearchUserResponse;
+import com.example.outsourcingprojects.domain.search.dto.SearchUserResponse;
 
 import java.util.List;
 
