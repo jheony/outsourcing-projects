@@ -54,8 +54,13 @@ public class TeamController {
         return GlobalResponse.success("팀 정보가 수정되었습니다.", responseDto);
     }
 
-    // 팀 멤버 추가
 
     // 팀 삭제
-    //@DeleteMapping("/{id}")
+    @DeleteMapping("/{id}")
+    public GlobalResponse<Void>  deleteTeamHandler(@PathVariable Long id) {
+        teamService.deleteTeam(id);
+        return GlobalResponse.success("팀이 삭제되었습니다.", null);
+    }
+
+    // 팀 멤버 추가
 }

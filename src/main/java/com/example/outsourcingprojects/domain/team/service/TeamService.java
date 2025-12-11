@@ -2,6 +2,8 @@ package com.example.outsourcingprojects.domain.team.service;
 
 import com.example.outsourcingprojects.common.entity.Team;
 import com.example.outsourcingprojects.common.entity.User;
+import com.example.outsourcingprojects.common.exception.CustomException;
+import com.example.outsourcingprojects.common.exception.ErrorCode;
 import com.example.outsourcingprojects.domain.team.dto.request.CreateTeamRequestDto;
 import com.example.outsourcingprojects.domain.team.dto.request.UpdateTeamRequestDto;
 import com.example.outsourcingprojects.domain.team.dto.response.CreateTeamResponseDto;
@@ -31,7 +33,7 @@ public class TeamService {
     public CreateTeamResponseDto createTeam(CreateTeamRequestDto requestDto) {
         // 팀 이름 중복 검사
         if (teamRepository.existsByName(requestDto.getName())) {
-            throw new IllegalArgumentException("존재하는 팀 이름입니다.");
+            throw new CustomException(ErrorCode.DUPLICATE_TEAM_NAME);
         }
 
         // 정적 팩토리 메서드로 팀 생성
@@ -77,7 +79,7 @@ public class TeamService {
     public List<TeamMemberResponseDto> getTeamMembers(Long teamId) {
         // id에 해당하는 팀 존재여부 및 삭제여부 확인
         teamRepository.findByIdAndDeletedAtIsNull(teamId)
-                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 팀입니다."));
+                .orElseThrow(() -> new CustomException(ErrorCode.TEAM_NOT_FOUND));
 
         List<User> users = userRepository.getUsersByTeam(teamId);
 
@@ -89,8 +91,9 @@ public class TeamService {
     // 팀 수정
     @Transactional
     public TeamResponseDto updateTeam(Long id, UpdateTeamRequestDto requestDto) {
+        // id에 해당하는 팀 존재여부 및 삭제여부 확인
         Team team = teamRepository.findByIdAndDeletedAtIsNull(id)
-                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 팀입니다."));
+                .orElseThrow(() -> new CustomException(ErrorCode.TEAM_NOT_FOUND));
 
         team.update(requestDto.getName(), requestDto.getDescription());
         List<User> users = userRepository.getUsersByTeam(team.getId());
@@ -98,5 +101,21 @@ public class TeamService {
                 .map(TeamMemberResponseDto::from)
                 .toList();
         return TeamResponseDto.of(team, members);
+    }
+
+    // 팀 삭제
+    @Transactional
+    public void deleteTeam(Long id) {
+        // id에 해당하는 팀 존재여부 및 삭제여부 확인
+        Team team = teamRepository.findByIdAndDeletedAtIsNull(id)
+                .orElseThrow(() -> new CustomException(ErrorCode.TEAM_NOT_FOUND));
+
+        // 팀에 멤버 존재여부 확인
+        List<User> members = userRepository.getUsersByTeam(id);
+        if(!members.isEmpty()) {
+            throw new CustomException(ErrorCode.TEAM_HAS_MEMBERS);
+        }
+        // SOFT DELETE 실행(실제 행 삭제X)
+        team.delete();
     }
 }
