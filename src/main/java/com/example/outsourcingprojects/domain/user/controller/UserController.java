@@ -1,5 +1,6 @@
 package com.example.outsourcingprojects.domain.user.controller;
 
+import com.example.outsourcingprojects.common.aop.Loggable;
 import com.example.outsourcingprojects.common.util.response.GlobalResponse;
 import com.example.outsourcingprojects.domain.user.dto.response.SignUpResponse;
 import com.example.outsourcingprojects.domain.user.dto.response.UserInfoResponse;
@@ -23,6 +24,7 @@ public class UserController {
     private final UserService userService;
 
     //회원가입
+    @Loggable
     @PostMapping
     public GlobalResponse<SignUpResponse> signUp(@Valid @RequestBody SignUpRequest request) {
         SignUpResponse userResponse = userService.signUpUser(request);
