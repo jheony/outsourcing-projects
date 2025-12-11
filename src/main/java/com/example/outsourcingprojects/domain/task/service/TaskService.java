@@ -2,6 +2,8 @@ package com.example.outsourcingprojects.domain.task.service;
 
 import com.example.outsourcingprojects.common.entity.Task;
 import com.example.outsourcingprojects.common.entity.User;
+import com.example.outsourcingprojects.common.model.PriorityType;
+import com.example.outsourcingprojects.common.model.TaskStatusType;
 import com.example.outsourcingprojects.common.util.dto.PageDataDTO;
 import com.example.outsourcingprojects.domain.task.dto.CreateTaskRequestDto;
 import com.example.outsourcingprojects.domain.task.dto.CreateTaskResponseDto;
@@ -38,13 +40,14 @@ public class TaskService {
                     throw new IllegalArgumentException("담당자를 찾을 수 없습니다.");
                 });
         // TODO 이넘 타입 요청 및 응답 객체 수정. / deletedat 안나오게.
-
+        PriorityType priorityType = PriorityType.valueOf(request.getPriority());
+        TaskStatusType statusType = TaskStatusType.valueOf(request.getStatus());
         // Task 인스턴스 생성
         Task task = new Task(
                 request.getTitle(),
                 request.getDescription(),
-                request.getPriority(),
-                request.getStatus(),
+                priorityType.getPriorityNum(),
+                statusType.getStatusNum(),
                 assignee,
                 request.getDueDate() != null ? request.getDueDate().toLocalDateTime() : null
         );
@@ -53,10 +56,10 @@ public class TaskService {
         Task savedTask = taskRepository.save(task);
 
         // Entity -> Response DTO 변환 후 반환
-        return response(savedTask);
+        return CreateTaskResponseDto.fromEntity(savedTask);
     }
 
-    private CreateTaskResponseDto response(Task task) {
+    private CreateTaskResponseDto response(Task task) throws Exception {
         //메서드 명은 소문자로 시작해야 합니다. ok
         // 이 메서드는 정적 팩토리 메서드의 역할을 하고 있는것 같은데
         // 정적 팩토리 메서드에 대해서 공부해보시고 CreateTaskResponseDto에서 작성하고 활용하시면 더 좋을 것 같습니다.
@@ -65,8 +68,8 @@ public class TaskService {
                 task.getAssignee() != null ? task.getAssignee().getId() : null,
                 task.getTitle(),
                 task.getDescription(),
-                task.getPriority().name(),
-                task.getStatus().name(),
+                PriorityType.toType(task.getPriority()).name(),
+                TaskStatusType.toType(task.getStatus()).name(),
                 task.getDueDate() != null ? task.getDueDate().atOffset(ZoneOffset.UTC) : null,
                 task.getCreatedAt().atOffset(ZoneOffset.UTC),
                 task.getUpdatedAt().atOffset(ZoneOffset.UTC)
@@ -89,7 +92,7 @@ public class TaskService {
         //상단에 task를 통해 객체를 생성하는 Response라는 메서드를 작성해주셨는데
         //활용하지않고 계시네요
         //활용하여 작성하시면 조금 더 보기 편할 것 같습니다. ok
-        Page<CreateTaskResponseDto> responseDtoPage = taskPage.map(this::response);
+        Page<CreateTaskResponseDto> responseDtoPage = taskPage.map( CreateTaskResponseDto::fromEntity);
 
         return PageDataDTO.of(responseDtoPage);
     }
@@ -103,7 +106,7 @@ public class TaskService {
                     return new IllegalArgumentException("작업을 찾을 수 없습니다");
                 });
 
-        return response(task);
+        return CreateTaskResponseDto.fromEntity(task);
 
 
     }
@@ -117,16 +120,19 @@ public class TaskService {
         if (!task.getAssignee().getId().equals(userId)) {
             throw new IllegalArgumentException("작업을 수정할 수 없습니다");
         }
+        // 타입 생성
+        PriorityType priorityType = PriorityType.valueOf(requestDto.getPriority());
+
 
         task.update(
                 requestDto.getTitle(),
                 requestDto.getDescription(),
-                requestDto.getStatus(),
+                priorityType.getPriorityNum(),
                 requestDto.getDueDate() != null ? requestDto.getDueDate().toLocalDateTime() : null
         );
 
 
-        return response(task);
+        return CreateTaskResponseDto.fromEntity(task);
 
 
     }

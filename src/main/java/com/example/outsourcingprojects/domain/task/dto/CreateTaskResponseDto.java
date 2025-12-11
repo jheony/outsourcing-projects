@@ -1,6 +1,8 @@
 package com.example.outsourcingprojects.domain.task.dto;
 
 import com.example.outsourcingprojects.common.entity.Task;
+import com.example.outsourcingprojects.common.model.PriorityType;
+import com.example.outsourcingprojects.common.model.TaskStatusType;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -47,17 +49,21 @@ public class CreateTaskResponseDto {
      **/
 
     public static CreateTaskResponseDto fromEntity(Task task) {
-        return new CreateTaskResponseDto(
-                task.getId(),
-                task.getAssignee().getId(),
-                task.getTitle(),
-                task.getDescription(),
-                task.getPriority().name(),
-                task.getStatus().name(),
-                task.getDueDate() != null ? task.getDueDate().atOffset(ZoneOffset.UTC) : null,
-                task.getCreatedAt().atOffset(ZoneOffset.UTC),
-                task.getUpdatedAt().atOffset(ZoneOffset.UTC)
-        );
+        try {
+            return new CreateTaskResponseDto(
+                    task.getId(),
+                    task.getAssignee().getId(),
+                    task.getTitle(),
+                    task.getDescription(),
+                    PriorityType.toType(task.getPriority()).name(),
+                    TaskStatusType.toType(task.getStatus()).name(),
+                    task.getDueDate() != null ? task.getDueDate().atOffset(ZoneOffset.UTC) : null,
+                    task.getCreatedAt().atOffset(ZoneOffset.UTC),
+                    task.getUpdatedAt().atOffset(ZoneOffset.UTC)
+            );
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 }
 

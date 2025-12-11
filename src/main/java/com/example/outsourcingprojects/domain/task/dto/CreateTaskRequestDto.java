@@ -21,9 +21,9 @@ public class CreateTaskRequestDto {
 
     private String description;
 
-    private PriorityType priority;
+    private String priority;
 
-    private TaskStatusType status;
+    private String status;
 
     @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
     private OffsetDateTime dueDate;
