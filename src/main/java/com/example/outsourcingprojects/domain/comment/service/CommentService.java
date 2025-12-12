@@ -14,17 +14,6 @@ import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-import com.example.outsourcingprojects.common.entity.Comment;
-import com.example.outsourcingprojects.common.entity.Task;
-import com.example.outsourcingprojects.domain.comment.controller.createCommentRequest;
-import com.example.outsourcingprojects.domain.comment.repository.CommentRepository;
-import com.example.outsourcingprojects.domain.task.repository.TaskRepository;
-import jakarta.transaction.Transactional;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
-
-@Service
-@RequiredArgsConstructor
 public class CommentService {
 
     private final CommentRepository commentRepository;
