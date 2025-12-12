@@ -128,7 +128,7 @@ public class TeamService {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
         // 이미 팀 멤버인지 여부확인
-        boolean isTeamMember = teamMemberRepository.findByTeamIdAndUserIdAndDeletedAtIsNull(id, userId);
+        boolean isTeamMember = teamMemberRepository.existsByTeamIdAndUserIdAndDeletedAtIsNull(id, userId);
         if (isTeamMember){
             throw new CustomException(ErrorCode.ALREADY_TEAM_MEMBER);
         }

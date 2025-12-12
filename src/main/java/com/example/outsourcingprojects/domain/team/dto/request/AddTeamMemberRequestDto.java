@@ -7,5 +7,5 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class AddTeamMemberRequestDto {
 
-    private Long memberId;
+    private Long userId;
 }

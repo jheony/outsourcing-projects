@@ -64,9 +64,9 @@ public class TeamController {
     }
 
     // 팀 멤버 추가
-    @PostMapping("/{teamId}/ members")
+    @PostMapping("/{teamId}/members")
     public GlobalResponse<TeamResponseDto> addTeamMemberHandler(@PathVariable Long teamId, @Valid @RequestBody AddTeamMemberRequestDto request)  {
-        TeamResponseDto responseDto = teamService.addTeamMember(teamId, request.getMemberId());
+        TeamResponseDto responseDto = teamService.addTeamMember(teamId, request.getUserId());
         return GlobalResponse.success("팀 멤버가 추가되었습니다.", responseDto);
     }
 }
