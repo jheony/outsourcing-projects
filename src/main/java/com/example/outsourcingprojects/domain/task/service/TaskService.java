@@ -1,5 +1,7 @@
 package com.example.outsourcingprojects.domain.task.service;
 
+
+import com.example.outsourcingprojects.common.entity.Comment;
 import com.example.outsourcingprojects.common.entity.Task;
 import com.example.outsourcingprojects.common.entity.User;
 import com.example.outsourcingprojects.common.exception.CustomException;
@@ -7,6 +9,7 @@ import com.example.outsourcingprojects.common.exception.ErrorCode;
 import com.example.outsourcingprojects.common.model.PriorityType;
 import com.example.outsourcingprojects.common.model.TaskStatusType;
 import com.example.outsourcingprojects.common.util.dto.PageDataDTO;
+import com.example.outsourcingprojects.domain.comment.repository.CommentRepository;
 import com.example.outsourcingprojects.domain.task.dto.*;
 import com.example.outsourcingprojects.domain.task.repository.TaskRepository;
 import com.example.outsourcingprojects.domain.user.repository.UserRepository;
@@ -19,6 +22,8 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 
 @Service
 @RequiredArgsConstructor
@@ -27,6 +32,7 @@ public class TaskService {
     //사용하지 않는 어노테이션은 제거해주세요. ok
     private final TaskRepository taskRepository;
     private final UserRepository userRepository;
+    private final CommentRepository commentRepository;
 
     // 1. 작업 생성
     @Transactional
@@ -90,7 +96,7 @@ public class TaskService {
         //활용하여 작성하시면 조금 더 보기 편할 것 같습니다. ok
         // 목록조회
         Page<Task> taskPage = taskRepository.findAll(pageable);
-        Page<TaskListResponseDto> responseDtoPage = taskPage.map(TaskListResponseDto ::from);
+        Page<TaskListResponseDto> responseDtoPage = taskPage.map(TaskListResponseDto::from);
 
         return PageDataDTO.of(responseDtoPage);
     }
@@ -156,7 +162,7 @@ public class TaskService {
             log.error("삭제 권한이 없습니다. taskId: {}, userId: {}, assigneeId: {}", taskId, userId, task.getAssignee().getId());
             throw new IllegalArgumentException("삭제 권한이 없습니다.");
         }
-        taskRepository.delete(task);
+        task.delete();
     }
 
     // 6. 작업 상태 변경
