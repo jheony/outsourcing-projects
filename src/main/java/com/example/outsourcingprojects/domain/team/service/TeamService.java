@@ -1,6 +1,7 @@
 package com.example.outsourcingprojects.domain.team.service;
 
 import com.example.outsourcingprojects.common.entity.Team;
+import com.example.outsourcingprojects.common.entity.TeamMember;
 import com.example.outsourcingprojects.common.entity.User;
 import com.example.outsourcingprojects.common.exception.CustomException;
 import com.example.outsourcingprojects.common.exception.ErrorCode;
@@ -111,10 +112,34 @@ public class TeamService {
 
         // 팀에 멤버 존재여부 확인
         List<User> members = userRepository.getUsersByTeam(id);
-        if(!members.isEmpty()) {
+        if (!members.isEmpty()) {
             throw new CustomException(ErrorCode.TEAM_HAS_MEMBERS);
         }
         // SOFT DELETE 실행(실제 행 삭제X)
         team.delete();
+    }
+
+    @Transactional
+    public TeamResponseDto addTeamMember(Long id, Long userId) {
+        // 팀 존재여부확인
+        Team team = teamRepository.findByIdAndDeletedAtIsNull(id)
+                .orElseThrow(() -> new CustomException(ErrorCode.TEAM_NOT_FOUND));
+        // 사용자 존재여부 확인
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
+        // 이미 팀 멤버인지 여부확인
+        boolean isTeamMember = teamMemberRepository.existsByTeamIdAndUserIdAndDeletedAtIsNull(id, userId);
+        if (isTeamMember) {
+            throw new CustomException(ErrorCode.ALREADY_TEAM_MEMBER);
+        }
+
+        TeamMember teamMember = TeamMember.from(team, user);
+        teamMemberRepository.save(teamMember);
+
+        List<User> users = userRepository.getUsersByTeam(team.getId());
+        List<TeamMemberResponseDto> members = users.stream()
+                .map(TeamMemberResponseDto::from)
+                .toList();
+        return TeamResponseDto.of(team, members);
     }
 }
