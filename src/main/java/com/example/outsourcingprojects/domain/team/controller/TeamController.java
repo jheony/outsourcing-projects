@@ -73,6 +73,6 @@ public class TeamController {
     @DeleteMapping("/{teamId}/members/{userId}")
     public GlobalResponse<Void> removeTemaMemberHandler(@PathVariable Long teamId, @PathVariable Long userId) {
         teamService.removeTeamMember(teamId, userId);
-        return
+        return GlobalResponse.success("팀 멤버가 제거되었습니다.", null);
     }
 }

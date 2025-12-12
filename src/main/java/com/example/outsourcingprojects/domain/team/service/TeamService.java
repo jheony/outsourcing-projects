@@ -29,7 +29,12 @@ public class TeamService {
     //아직 작성이 되지 않았는지 모르겠지만 사용하지 않는 Repository가 존재합니다. 확인해주세요.
     private final TeamMemberRepository teamMemberRepository;
 
-    // 팀 생성
+    /**
+     * 팀 생성
+     *
+     * @param requestDto
+     * @return 생성된 팀 정보
+     */
     @Transactional
     public CreateTeamResponseDto createTeam(CreateTeamRequestDto requestDto) {
         // 팀 이름 중복 검사
@@ -39,71 +44,95 @@ public class TeamService {
 
         // 정적 팩토리 메서드로 팀 생성
         Team team = Team.of(requestDto.getName(), requestDto.getDescription());
-        // 저장
+        // 저장 및 반환
         Team savedTeam = teamRepository.save(team);
 
         return CreateTeamResponseDto.from(savedTeam);
     }
 
-    // 팀 목록 조회
+    /**
+     * 팀 목록 조회
+     *
+     * @return DeletedAt이 null(삭제되지않은 팀)인 팀의 목록
+     */
     @Transactional(readOnly = true)
     public List<TeamResponseDto> getAllTeams() {
         // 삭제되지 않은 팀으로 필터링 후 반환
         return teamRepository.findAll().stream()
                 .filter(team -> team.getDeletedAt() == null)
                 .map(team -> {
-                    List<User> users = userRepository.getUsersByTeam(team.getId()); // 각 팀에 속한 유저 조회
+                    List<User> users = userRepository.getUsersByTeam(team.getId()); // 해당 팀에 속한 유저들 조회
                     List<TeamMemberResponseDto> members = users.stream()    // 유저리스트를 TeamMemberResponseDto로
                             .map(TeamMemberResponseDto::from)
                             .collect(Collectors.toList());
-                    return TeamResponseDto.of(team, members);
+                    return TeamResponseDto.of(team, members); // 엔티티와 리스트를 합쳐 DTO 생성
                 })
-                .collect(Collectors.toList());
+                .collect(Collectors.toList()); // 최종 수집 리스트
     }
 
-    // 팀 상세 조회
+    /**
+     * 팀 상세 조회
+     *
+     * @param id 조회할 팀 ID
+     * @return 팀 상세 정보
+     */
     @Transactional(readOnly = true)
     public TeamResponseDto getTeamById(Long id) {
         // id에 해당하는 팀 존재여부 및 삭제여부 확인
         Team team = teamRepository.findByIdAndDeletedAtIsNull(id)
                 .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 팀입니다."));
-        List<User> users = userRepository.getUsersByTeam(team.getId());
-        List<TeamMemberResponseDto> members = users.stream()
+        List<User> users = userRepository.getUsersByTeam(team.getId()); // 해당하는 팀의 유저 조회
+        List<TeamMemberResponseDto> members = users.stream() // user리스트 -> TeamMemberResponseDto
                 .map(TeamMemberResponseDto::from)
                 .toList();
         return TeamResponseDto.of(team, members);
     }
 
-    // 특정 팀의 멤버 조회
+    /**
+     * 특정 팀의 멤버 조회
+     *
+     * @param teamId 팀 ID
+     * @return 팀 멤버 목록
+     */
     @Transactional(readOnly = true)
     public List<TeamMemberResponseDto> getTeamMembers(Long teamId) {
         // id에 해당하는 팀 존재여부 및 삭제여부 확인
         teamRepository.findByIdAndDeletedAtIsNull(teamId)
                 .orElseThrow(() -> new CustomException(ErrorCode.TEAM_NOT_FOUND));
 
-        List<User> users = userRepository.getUsersByTeam(teamId);
+        List<User> users = userRepository.getUsersByTeam(teamId); // 해당하는 팀의 유저 조회
 
-        return users.stream()
+        return users.stream()   // user리스트 -> TeamMemberResponseDto
                 .map(TeamMemberResponseDto::from)
                 .toList();
     }
 
-    // 팀 수정
+    /**
+     * 팀 수정
+     *
+     * @param id         수정할 팀
+     * @param requestDto 수정할 팀
+     * @return 수정된 팀
+     */
     @Transactional
     public TeamResponseDto updateTeam(Long id, UpdateTeamRequestDto requestDto) {
         // id에 해당하는 팀 존재여부 및 삭제여부 확인
         Team team = teamRepository.findByIdAndDeletedAtIsNull(id)
                 .orElseThrow(() -> new CustomException(ErrorCode.TEAM_NOT_FOUND));
 
-        team.update(requestDto.getName(), requestDto.getDescription());
-        List<User> users = userRepository.getUsersByTeam(team.getId());
-        List<TeamMemberResponseDto> members = users.stream()
+        team.update(requestDto.getName(), requestDto.getDescription()); // 팀 정보 업데이트
+        List<User> users = userRepository.getUsersByTeam(team.getId()); // 업데이트된 팀의 멤버 조회
+        List<TeamMemberResponseDto> members = users.stream() // User 리스트 -> DTO로 변환
                 .map(TeamMemberResponseDto::from)
                 .toList();
         return TeamResponseDto.of(team, members);
     }
 
-    // 팀 삭제
+    /**
+     * 팀 삭제
+     *
+     * @param id 삭제할 팀
+     */
     @Transactional
     public void deleteTeam(Long id) {
         // id에 해당하는 팀 존재여부 및 삭제여부 확인
@@ -119,7 +148,13 @@ public class TeamService {
         team.delete();
     }
 
-    // 팀 멤버 추가
+    /**
+     * 팀 멤버 추가
+     *
+     * @param id     멤버 추가할 팀 ID
+     * @param userId 팀에 넣을 멤버 ID
+     * @return 새로운 팀 정보
+     */
     @Transactional
     public TeamResponseDto addTeamMember(Long id, Long userId) {
         // 팀 존재여부확인
@@ -144,14 +179,21 @@ public class TeamService {
         return TeamResponseDto.of(team, members);
     }
 
-    // 팀 멤버 제거
+    /**
+     * 팀 멤버 제거
+     *
+     * @param teamId 제거할 멤버가 있는 팀ID
+     * @param userId 제거할 멤버ID
+     */
     @Transactional
     public void removeTeamMember(Long teamId, Long userId) {
         // 팀 존재 여부 확인
         Team team = teamRepository.findByIdAndDeletedAtIsNull(teamId)
                 .orElseThrow(() -> new CustomException(ErrorCode.TEAM_NOT_FOUND));
         // 팀 멤버 존재 확인
-        TeamMember teamMember = teamRepository.findByTeamIdAndUserIdAndDeletedAtIsNull(teamId, userId);
+        TeamMember teamMember = teamMemberRepository.findByTeamIdAndUserIdAndDeletedAtIsNull(teamId, userId)
+                .orElseThrow(() -> new CustomException(ErrorCode.TEAM_MEMBER_NOT_FOUND));
 
+        teamMember.delete();
     }
 }
