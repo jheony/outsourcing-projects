@@ -1,60 +1,77 @@
 package com.example.outsourcingprojects.domain.user.controller;
 
 import com.example.outsourcingprojects.common.util.response.GlobalResponse;
-import com.example.outsourcingprojects.domain.user.dto.response.SignUpResponse;
-import com.example.outsourcingprojects.domain.user.dto.response.UserInfoResponse;
-import com.example.outsourcingprojects.domain.user.dto.response.UserListResponse;
+import com.example.outsourcingprojects.domain.user.dto.response.*;
 import com.example.outsourcingprojects.domain.user.dto.request.UpdateRequest;
-import com.example.outsourcingprojects.domain.user.dto.response.UpdateResponse;
 import com.example.outsourcingprojects.domain.user.service.UserService;
 import com.example.outsourcingprojects.domain.user.dto.request.SignUpRequest;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
+@Slf4j
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/users")
-@Slf4j
 public class UserController {
-    //사용하지 않는 어노테이션이 남아있습니다. 확인하고 제거해주세요.
-    //Controller의 메서드명의 끝에 Handler를 붙여주기로 약속했습니다. 확인하고 수정해주세요.
+
     private final UserService userService;
 
     //회원가입
     @PostMapping
-    public GlobalResponse<SignUpResponse> signUp(@Valid @RequestBody SignUpRequest request) {
+    public GlobalResponse<SignUpResponse> signUpHandler(@Valid @RequestBody SignUpRequest request) {
+
         SignUpResponse userResponse = userService.signUpUser(request);
         return GlobalResponse.success("회원가입이 완료되었습니다", userResponse);
     }
 
     // 사용자 정보 조회
     @GetMapping("/{id}")
-    public GlobalResponse<UserInfoResponse> getUserInfo(@PathVariable Long id) {
-        UserInfoResponse userInfoResponse = userService.info(id);
-        return GlobalResponse.success("[사용자" + id + "의 정보 조회가 완료 되었습니다]", userInfoResponse);
+    public GlobalResponse<UserInfoResponse> getUserInfoHandler(@PathVariable Long id, HttpServletRequest userToken) {
+
+        Long userId = (Long) userToken.getAttribute("userId");
+        UserInfoResponse userInfoResponse = userService.info(id, userId);
+        return GlobalResponse.success("[사용자의 정보 조회가 완료 되었습니다]", userInfoResponse);
     }
 
     // 사용자 목록 조회
     @GetMapping
-    public GlobalResponse<UserListResponse> getUsersInfo() {
-        UserListResponse allUsersInfo = userService.usersInfo();
-        return GlobalResponse.success("사용자 목록 조회 성공", allUsersInfo);
+    public GlobalResponse<UserListResponse> getUsersInfoHandler(HttpServletRequest userToken) {
 
+        Long userId = (Long) userToken.getAttribute("userId");
+        UserListResponse allUsersInfo = userService.usersInfo(userId);
+        return GlobalResponse.success("사용자 목록 조회 성공", allUsersInfo);
     }
 
     // 사용자 정보 수정
     @PutMapping("{id}")
-    public GlobalResponse<UpdateResponse> updateUser(@PathVariable Long id, @Valid @RequestBody UpdateRequest request) {
-        UpdateResponse updateUserResponse = userService.update(id, request);
+    public GlobalResponse<UpdateResponse> updateUserHandler(@PathVariable Long id, HttpServletRequest userToken,
+                                                            @Valid @RequestBody UpdateRequest request) {
+
+        Long userId = (Long) userToken.getAttribute("userId");
+
+        UpdateResponse updateUserResponse = userService.update(userId,id, request);
         return GlobalResponse.success("사용자 정보가 수정되었습니다.", updateUserResponse);
     }
 
     // 회원 탈퇴
+    @DeleteMapping("{id}")
+    public GlobalResponse<Void> deleteHandler(@PathVariable Long id, HttpServletRequest userToken) {
 
+        Long userId = (Long) userToken.getAttribute("userId");
+        userService.softDelete(id, userId);
+        return GlobalResponse.success("회원 탈퇴가 완료되었습니다.",null);
+    }
 
     // 추가 가능한 사용자 조회
+    @GetMapping("/available")
+    public GlobalResponse<AbleUsersListResponse> getAddableUsersHandler(@RequestParam(required = false) Long teamId, HttpServletRequest userToken) {
+        Long userId = (Long) userToken.getAttribute("userId");
+        AbleUsersListResponse addableUsers = userService.findAddableUsers(teamId, userId);
+        return GlobalResponse.success("추가 가능한 사용자 목록 조회 성공", addableUsers);
+    }
 
 }
 
