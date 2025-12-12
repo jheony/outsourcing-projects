@@ -29,12 +29,7 @@ public class TeamService {
     //아직 작성이 되지 않았는지 모르겠지만 사용하지 않는 Repository가 존재합니다. 확인해주세요.
     private final TeamMemberRepository teamMemberRepository;
 
-    /**
-     * 팀 생성
-     *
-     * @param requestDto
-     * @return 생성된 팀 정보
-     */
+    // 팀 생성
     @Transactional
     public CreateTeamResponseDto createTeam(CreateTeamRequestDto requestDto) {
         // 팀 이름 중복 검사
@@ -50,11 +45,7 @@ public class TeamService {
         return CreateTeamResponseDto.from(savedTeam);
     }
 
-    /**
-     * 팀 목록 조회
-     *
-     * @return DeletedAt이 null(삭제되지않은 팀)인 팀의 목록
-     */
+    // 팀 목록 조회
     @Transactional(readOnly = true)
     public List<TeamResponseDto> getAllTeams() {
         // 삭제되지 않은 팀으로 필터링 후 반환
@@ -70,12 +61,7 @@ public class TeamService {
                 .collect(Collectors.toList()); // 최종 수집 리스트
     }
 
-    /**
-     * 팀 상세 조회
-     *
-     * @param id 조회할 팀 ID
-     * @return 팀 상세 정보
-     */
+    // 팀 상세 조회
     @Transactional(readOnly = true)
     public TeamResponseDto getTeamById(Long id) {
         // id에 해당하는 팀 존재여부 및 삭제여부 확인
@@ -88,12 +74,7 @@ public class TeamService {
         return TeamResponseDto.of(team, members);
     }
 
-    /**
-     * 특정 팀의 멤버 조회
-     *
-     * @param teamId 팀 ID
-     * @return 팀 멤버 목록
-     */
+    // 특정 팀의 멤버 조회
     @Transactional(readOnly = true)
     public List<TeamMemberResponseDto> getTeamMembers(Long teamId) {
         // id에 해당하는 팀 존재여부 및 삭제여부 확인
@@ -107,13 +88,7 @@ public class TeamService {
                 .toList();
     }
 
-    /**
-     * 팀 수정
-     *
-     * @param id         수정할 팀
-     * @param requestDto 수정할 팀
-     * @return 수정된 팀
-     */
+    // 팀 수정
     @Transactional
     public TeamResponseDto updateTeam(Long id, UpdateTeamRequestDto requestDto) {
         // id에 해당하는 팀 존재여부 및 삭제여부 확인
@@ -128,11 +103,7 @@ public class TeamService {
         return TeamResponseDto.of(team, members);
     }
 
-    /**
-     * 팀 삭제
-     *
-     * @param id 삭제할 팀
-     */
+    // 팀 삭제
     @Transactional
     public void deleteTeam(Long id) {
         // id에 해당하는 팀 존재여부 및 삭제여부 확인
@@ -148,13 +119,7 @@ public class TeamService {
         team.delete();
     }
 
-    /**
-     * 팀 멤버 추가
-     *
-     * @param id     멤버 추가할 팀 ID
-     * @param userId 팀에 넣을 멤버 ID
-     * @return 새로운 팀 정보
-     */
+    // 팀 멤버 추가
     @Transactional
     public TeamResponseDto addTeamMember(Long id, Long userId) {
         // 팀 존재여부확인
@@ -179,12 +144,7 @@ public class TeamService {
         return TeamResponseDto.of(team, members);
     }
 
-    /**
-     * 팀 멤버 제거
-     *
-     * @param teamId 제거할 멤버가 있는 팀ID
-     * @param userId 제거할 멤버ID
-     */
+    // 팀 멤버 제거
     @Transactional
     public void removeTeamMember(Long teamId, Long userId) {
         // 팀 존재 여부 확인
