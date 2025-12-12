@@ -53,11 +53,15 @@ public class Task extends BaseEntity {
 
 
     // 작업 수정 메서드
-    public void update(String title, String description, Long status, LocalDateTime dueDate) {
+    public void update(String title, String description, Long status, long statusNum, LocalDateTime dueDate) {
         this.title = title;
         this.description = description;
         this.status = status;
         this.dueDate = dueDate;
+    }
+
+    public void updateStatus(long statusNum) {
+        this.status = statusNum;
     }
 }
 
