@@ -1,6 +1,6 @@
 package com.example.outsourcingprojects.domain.task.controller;
 
-import com.example.outsourcingprojects.common.aop.Loggable;
+import com.example.outsourcingprojects.domain.activitylog.aop.Loggable;
 import com.example.outsourcingprojects.domain.task.dto.CreateTaskRequestDto;
 import com.example.outsourcingprojects.domain.task.dto.CreateTaskResponseDto;
 import com.example.outsourcingprojects.domain.task.service.TaskService;

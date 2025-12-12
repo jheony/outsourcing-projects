@@ -1,6 +1,5 @@
 package com.example.outsourcingprojects.domain.auth.controller;
 
-import com.example.outsourcingprojects.common.aop.Loggable;
 import com.example.outsourcingprojects.common.util.response.GlobalResponse;
 import com.example.outsourcingprojects.domain.auth.dto.request.LoginRequest;
 import com.example.outsourcingprojects.domain.auth.dto.response.LoginResponse;
@@ -21,7 +20,6 @@ public class AuthController {
 
     private final AuthService authService;
 
-    @Loggable
     @PostMapping("/login")
     public ResponseEntity<GlobalResponse<LoginResponse>> loginHandler(@Valid @RequestBody LoginRequest request) {
 

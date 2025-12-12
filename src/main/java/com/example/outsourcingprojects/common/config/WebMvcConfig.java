@@ -1,7 +1,7 @@
 package com.example.outsourcingprojects.common.config;
 
-import com.example.outsourcingprojects.common.aop.ActivityLoggingAspect;
 import com.example.outsourcingprojects.common.filter.HttpServletWrappingFilter;
+import com.example.outsourcingprojects.domain.activitylog.aop.ActivityLoggingAspect;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -11,7 +11,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 public class WebMvcConfig implements WebMvcConfigurer {
 
     @Bean
-    public ActivityLoggingAspect activityLoggingAccept() {
+    public ActivityLoggingAspect activityLoggingAspect() {
         return new ActivityLoggingAspect();
     }
 
