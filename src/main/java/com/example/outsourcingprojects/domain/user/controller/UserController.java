@@ -13,6 +13,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @Slf4j
 @RestController
 @RequiredArgsConstructor
@@ -69,9 +71,10 @@ public class UserController {
 
     // 추가 가능한 사용자 조회
     @GetMapping("/available")
-    public GlobalResponse<AbleUsersListResponse> getAddableUsersHandler(@RequestParam(required = false) Long teamId) {
+    public GlobalResponse<List<AbleUserSummaryResponse>> getAddableUsersHandler(@RequestParam(required = false) Long teamId, HttpServletRequest userToken) {
 
-        AbleUsersListResponse addableUsers = userService.findAddableUsers(teamId);
+        Long userId = (Long) userToken.getAttribute("userId");
+        List<AbleUserSummaryResponse> addableUsers = userService.findAddableUsers(teamId, userId);
         return GlobalResponse.success("추가 가능한 사용자 목록 조회 성공", addableUsers);
     }
 
