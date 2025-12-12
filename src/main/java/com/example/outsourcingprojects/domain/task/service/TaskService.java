@@ -5,10 +5,7 @@ import com.example.outsourcingprojects.common.entity.User;
 import com.example.outsourcingprojects.common.model.PriorityType;
 import com.example.outsourcingprojects.common.model.TaskStatusType;
 import com.example.outsourcingprojects.common.util.dto.PageDataDTO;
-import com.example.outsourcingprojects.domain.task.dto.CreateTaskRequestDto;
-import com.example.outsourcingprojects.domain.task.dto.CreateTaskResponseDto;
-import com.example.outsourcingprojects.domain.task.dto.UpdateTaskRequest;
-import com.example.outsourcingprojects.domain.task.dto.UpdateTaskResponse;
+import com.example.outsourcingprojects.domain.task.dto.*;
 import com.example.outsourcingprojects.domain.task.repository.TaskRepository;
 import com.example.outsourcingprojects.domain.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -79,7 +76,7 @@ public class TaskService {
 
     // 2. 전체 작업(목록) 조회
     @Transactional(readOnly = true)
-    public PageDataDTO<CreateTaskResponseDto> getAllTasks(int page, int size, String status, String search, Long assigneeId) {
+    public PageDataDTO<TaskListResponseDto> getAllTasks(int page, int size, String status, String search, Long assigneeId) {
         //상단의 @Transactional과 같은 어노테이션인데 임포트문이 이곳에 추가적으로 붙어있네요.
         //제거해주시기 바랍니다. ok
         //Pageable 인스턴스화
@@ -90,7 +87,7 @@ public class TaskService {
         //활용하여 작성하시면 조금 더 보기 편할 것 같습니다. ok
         // 목록조회
         Page<Task> taskPage = taskRepository.findAll(pageable);
-        Page<CreateTaskResponseDto> responseDtoPage = taskPage.map(CreateTaskResponseDto::from);
+        Page<TaskListResponseDto > responseDtoPage = taskPage.map(TaskListResponseDto ::from);
 
         return PageDataDTO.of(responseDtoPage);
     }

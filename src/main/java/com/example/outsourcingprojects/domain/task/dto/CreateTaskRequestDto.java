@@ -22,7 +22,6 @@ public class CreateTaskRequestDto {
 
     private String priority;
 
-    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
     private LocalDateTime dueDate;
 
 

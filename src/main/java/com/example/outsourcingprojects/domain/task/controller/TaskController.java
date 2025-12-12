@@ -2,10 +2,7 @@ package com.example.outsourcingprojects.domain.task.controller;
 
 import com.example.outsourcingprojects.common.util.dto.PageDataDTO;
 import com.example.outsourcingprojects.common.util.response.GlobalResponse;
-import com.example.outsourcingprojects.domain.task.dto.CreateTaskRequestDto;
-import com.example.outsourcingprojects.domain.task.dto.CreateTaskResponseDto;
-import com.example.outsourcingprojects.domain.task.dto.UpdateTaskRequest;
-import com.example.outsourcingprojects.domain.task.dto.UpdateTaskResponse;
+import com.example.outsourcingprojects.domain.task.dto.*;
 import com.example.outsourcingprojects.domain.task.service.TaskService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -30,13 +27,13 @@ public class TaskController {
 
     // 작업 전체 조회
     @GetMapping
-    public GlobalResponse<PageDataDTO<CreateTaskResponseDto>> getAllTasksHandler(
+    public GlobalResponse<PageDataDTO<TaskListResponseDto>> getAllTasksHandler(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size,
             @RequestParam(required = false) String status,
             @RequestParam(required = false) String search,
             @RequestParam(required = false) Long assigneeId) {
-        PageDataDTO<CreateTaskResponseDto> tasks = taskService.getAllTasks(page, size, status, search, assigneeId);
+        PageDataDTO<TaskListResponseDto> tasks = taskService.getAllTasks(page, size, status, search, assigneeId);
         return GlobalResponse.success("작업 목록 조회 성공", tasks);
     }
 
