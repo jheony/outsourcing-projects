@@ -19,8 +19,6 @@ public class TimeTraceAop {
     public Object trace(ProceedingJoinPoint joinPoint, TrackTime trackTime) throws Throwable {
 
         long start = System.currentTimeMillis();
-        log.info("시작 시간: {}", joinPoint.getSignature());
-
         try {
             return joinPoint.proceed();
 

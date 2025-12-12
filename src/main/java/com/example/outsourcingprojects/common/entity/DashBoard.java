@@ -1,9 +1,15 @@
 package com.example.outsourcingprojects.common.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
+@NoArgsConstructor
+@Getter
 @Entity
-@Table(name = "dashboard")
+@Table(name = "dashboards")
 public class DashBoard {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long Id;
 }

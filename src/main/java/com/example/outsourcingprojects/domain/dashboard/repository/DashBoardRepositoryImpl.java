@@ -1,12 +1,13 @@
 package com.example.outsourcingprojects.domain.dashboard.repository;
 
 import com.example.outsourcingprojects.common.entity.QTask;
-import com.example.outsourcingprojects.common.entity.QUser;
 import com.example.outsourcingprojects.common.entity.Task;
 import com.example.outsourcingprojects.common.model.TaskStatusType;
-import com.example.outsourcingprojects.domain.search.dto.SearchTaskResponse;
 import com.example.outsourcingprojects.domain.dashboard.dto.DailyTaskDTO;
+import com.example.outsourcingprojects.domain.search.dto.SearchTaskResponse;
 import com.querydsl.core.Tuple;
+import com.querydsl.core.types.dsl.Expressions;
+import com.querydsl.core.types.dsl.NumberExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -108,10 +109,16 @@ public class DashBoardRepositoryImpl implements DashBoardRepositoryCustom {
         LocalDateTime startOfDay = date.atStartOfDay();
         LocalDateTime endOfDay = date.atTime(LocalTime.MAX);
 
+        NumberExpression<Long> completedExpr =
+                Expressions.numberTemplate(Long.class,
+                        "sum(case when {0} = {1} then 1 else 0 end)",
+                        task.status, TaskStatusType.DONE.getStatusNum()
+                );
+
         Tuple result = queryFactory
                 .select(
                         task.id.count(),
-                        task.status.when(TaskStatusType.DONE.getStatusNum()).then(1).otherwise(0).sumLong()
+                        completedExpr
                 )
                 .from(task)
                 .where(task.assignee.id.eq(userId)
@@ -120,7 +127,7 @@ public class DashBoardRepositoryImpl implements DashBoardRepositoryCustom {
                 .fetchOne();
 
         Long tasks = result != null ? result.get(task.id.count()) : 0L;
-        Long completed = result != null ? result.get(task.status.when(TaskStatusType.DONE.getStatusNum()).then(1).otherwise(0).sumLong()) : 0L;
+        Long completed = result != null ? result.get(completedExpr) : 0L;
 
         String[] korDays = {"일", "월", "화", "수", "목", "금", "토"};
         int dayIndex = date.getDayOfWeek().getValue();
