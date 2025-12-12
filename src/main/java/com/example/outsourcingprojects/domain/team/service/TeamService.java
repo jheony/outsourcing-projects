@@ -119,6 +119,7 @@ public class TeamService {
         team.delete();
     }
 
+    // 팀 멤버 추가
     @Transactional
     public TeamResponseDto addTeamMember(Long id, Long userId) {
         // 팀 존재여부확인
@@ -141,5 +142,16 @@ public class TeamService {
                 .map(TeamMemberResponseDto::from)
                 .toList();
         return TeamResponseDto.of(team, members);
+    }
+
+    // 팀 멤버 제거
+    @Transactional
+    public void removeTeamMember(Long teamId, Long userId) {
+        // 팀 존재 여부 확인
+        Team team = teamRepository.findByIdAndDeletedAtIsNull(teamId)
+                .orElseThrow(() -> new CustomException(ErrorCode.TEAM_NOT_FOUND));
+        // 팀 멤버 존재 확인
+        TeamMember teamMember = teamRepository.findByTeamIdAndUserIdAndDeletedAtIsNull(teamId, userId);
+
     }
 }

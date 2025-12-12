@@ -69,4 +69,10 @@ public class TeamController {
         TeamResponseDto responseDto = teamService.addTeamMember(teamId, request.getUserId());
         return GlobalResponse.success("팀 멤버가 추가되었습니다.", responseDto);
     }
+
+    @DeleteMapping("/{teamId}/members/{userId}")
+    public GlobalResponse<Void> removeTemaMemberHandler(@PathVariable Long teamId, @PathVariable Long userId) {
+        teamService.removeTeamMember(teamId, userId);
+        return
+    }
 }
