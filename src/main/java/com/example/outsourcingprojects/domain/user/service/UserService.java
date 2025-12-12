@@ -4,6 +4,7 @@ import com.example.outsourcingprojects.common.entity.User;
 import com.example.outsourcingprojects.common.exception.CustomException;
 import com.example.outsourcingprojects.common.exception.ErrorCode;
 import com.example.outsourcingprojects.common.util.PasswordEncoder;
+import com.example.outsourcingprojects.domain.user.dto.response.VerifyPasswordResponse;
 import com.example.outsourcingprojects.domain.user.dto.request.SignUpRequest;
 import com.example.outsourcingprojects.domain.user.dto.request.UpdateRequest;
 import com.example.outsourcingprojects.domain.user.dto.response.*;
@@ -13,8 +14,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-
-import static com.example.outsourcingprojects.common.entity.QUser.user;
 
 @RequiredArgsConstructor
 @Service
@@ -28,10 +27,7 @@ public class UserService {
     public SignUpResponse signUpUser(SignUpRequest request) {
 
         if (userRepository.existsByEmail(request.getEmail())) {
-            throw new CustomException(ErrorCode.ALREADY_TEAM_MEMBER);
-        }
-        if (userRepository.existsByName(request.getName())) {
-            throw new IllegalArgumentException("이미 존재하는 사용자명 입니다.");
+            throw new CustomException(ErrorCode.USER_NAME_ALREADY_EXISTS);
         }
 
         User user = new User(
@@ -49,15 +45,15 @@ public class UserService {
 
     // 사용자 정보 조회
     @Transactional
-    public UserInfoResponse info(Long id, Long userId) {
-        if(userRepository.findByIdAndDeletedAtIsNull(userId).equals(userId)){
-            throw new IllegalArgumentException("인증이 필요합니다.");
+    public UserInfoResponse info(Long targetId, Long userId) {
+
+        User target = userRepository.findById(targetId)
+                .orElseThrow(() -> new IllegalArgumentException("유저가 존재하지 않습니다."));
+
+        if (!userId.equals(target.getId())) {
+            throw new IllegalArgumentException("권한이 없습니다.");
         }
-
-        User user = userRepository.findByIdAndDeletedAtIsNull(id)
-                .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을 수 없습니다."));
-
-        return UserInfoResponse.from(user);
+        return UserInfoResponse.from(target);
     }
 
     // 사용자 목록 조회
@@ -65,7 +61,7 @@ public class UserService {
     public UserListResponse usersInfo(Long userId) {
 
         userRepository.findById(userId)
-                .orElseThrow(()-> new IllegalArgumentException("사용자 정보를 찾을 수 없습니다."));
+                .orElseThrow(() -> new IllegalArgumentException("사용자 정보를 찾을 수 없습니다."));
 
         List<User> users = userRepository.findAllByDeletedAtIsNull();
 
@@ -79,29 +75,28 @@ public class UserService {
 
     // 사용자 정보 수정
     @Transactional
-    public UpdateResponse update(Long userId, Long targetId, UpdateRequest request) {
+    public UpdateResponse update(Long loginUserId, Long targetId, UpdateRequest request) {
 
-        if(userRepository.findByIdAndDeletedAtIsNull(userId).equals(userId)){
-            throw new IllegalArgumentException("인증이 필요합니다.");
+        if (!loginUserId.equals(targetId)) {
+            throw new CustomException(ErrorCode.ALREADY_TEAM_MEMBER);
         }
 
-        User targetUser = userRepository.findById(targetId)
+        User targetUser = userRepository.findByIdAndDeletedAtIsNull(targetId)
                 .orElseThrow(() -> new IllegalArgumentException("존재하지 않은 유저 입니다."));
 
-        if (targetUser.getName().equals(request.getName())) {
-            throw new IllegalArgumentException("기존의 " + request.getName() + " 과 동일합니다.");
+        if (request.getName() != null && request.getName().equals(targetUser.getName())) {
+            throw new IllegalArgumentException("기존 이름과 동일합니다.");
         }
-        if (targetUser.getEmail().equals(request.getEmail())) {
-            throw new IllegalArgumentException("기존의 " + request.getEmail() + " 과 동일합니다.");
+        if (request.getEmail() != null && request.getEmail().equals(targetUser.getEmail())) {
+            throw new IllegalArgumentException("기존 이메일과 동일합니다.");
         }
-        if (passwordEncoder.matches(request.getPassword(), targetUser.getPassword())) {
-            throw new IllegalArgumentException("비밀번호가 변경되지 않았습니다.");
+        if (request.getPassword() != null && passwordEncoder.matches(targetUser.getPassword(), request.getPassword())) {
+            throw new IllegalArgumentException("기존 비밀번호와 동일합니다.");
         }
 
         targetUser.update(
                 request.getName(),
-                request.getEmail(),
-                passwordEncoder.encode(request.getPassword())
+                request.getEmail()
         );
 
         return UpdateResponse.from(targetUser);
@@ -127,23 +122,40 @@ public class UserService {
 
     // 추가 가능한 사용자 조회
     @Transactional
-    public AbleUsersListResponse findAddableUsers(Long teamId, Long userId) {
+    public AbleUsersListResponse findAddableUsers(Long teamId) {
 
-        userRepository.findById(userId)
-                .orElseThrow(()-> new IllegalArgumentException("사용자 정보를 찾을 수 없습니다."));
+        userRepository.findByIdAndDeletedAtIsNull(teamId)
+                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
 
         List<User> users;
-        if(teamId != null) {
+        if (teamId != null) {
             users = userRepository.findUsersNotInTeam(teamId);
         } else {
             users = userRepository.findAllByDeletedAtIsNull();
         }
 
-        List<AbleUserSummaryResponse> ableUserUsers = users.stream()
+        List<AbleUserSummaryResponse> ableUserUsers = users
+                .stream()
                 .map(AbleUserSummaryResponse::from)
                 .toList();
 
         return AbleUsersListResponse.from(ableUserUsers);
+    }
+
+
+    //비밀번호 확인
+    @Transactional
+    public VerifyPasswordResponse verifyPassword(Long userId, String inputPassword) {
+
+        // 1. 유저 조회
+        User user = userRepository.findByIdAndDeletedAtIsNull(userId)
+                .orElseThrow(() -> new IllegalArgumentException("유저를 찾을 수 없습니다."));
+
+        // 2. 입력 비밀번호 vs 저장된 비밀번호 비교
+        boolean match = passwordEncoder.matches(inputPassword, user.getPassword());
+
+        // 3. 결과 반환
+        return new VerifyPasswordResponse(match);
     }
 
 }
