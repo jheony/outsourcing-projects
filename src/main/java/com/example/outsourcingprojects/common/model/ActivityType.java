@@ -7,7 +7,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public enum ActivityType {
 
-    TASK_CREATED(101L, "TASK", "팀이 생성", "POST"),
+    TASK_CREATED(101L, "TASK", "작업 생성", "POST"),
     TASK_UPDATED(102L, "TASK", "작업 수정", "PUT"),
     TASK_DELETED(103L, "TASK", "작업 삭제", "DELETE"),
     TASK_STATUS_CHANGED(104L, "TASK", "작업 상태 변경", "PATCH"),
