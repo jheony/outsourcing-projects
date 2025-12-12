@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatus;
 @RequiredArgsConstructor
 public enum ErrorCode {
 
+
     // 400 Bad Request
     INVALID_EMAIL_FORMAT(HttpStatus.BAD_REQUEST, "올바른 이메일 형식이 아닙니다."),
     REQUIRED_FIELD_MISSING(HttpStatus.BAD_REQUEST, "필수 입력 값이 누락되었습니다."),

@@ -6,8 +6,9 @@ import com.example.outsourcingprojects.common.model.TaskStatusType;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import java.time.OffsetDateTime;
-import java.time.ZoneOffset;
+
+import java.time.LocalDateTime;
+
 //필요없는 import문은 반드시 제거해주세요. ok
 
 @Getter
@@ -30,11 +31,11 @@ public class CreateTaskResponseDto {
     private final String status; // 예시: "TODO", "IN_PROGRESS", "DONE"
 
     @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
-    private final  OffsetDateTime dueDate;
+    private final LocalDateTime dueDate;
     @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
-    private final  OffsetDateTime createdAt;
+    private final LocalDateTime createdAt;
     @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
-    private final OffsetDateTime updatedAt;
+    private final LocalDateTime updatedAt;
 
 
     //정적 팩터리 메서드를 활용하도록 연습해봐요 ok
@@ -47,23 +48,19 @@ public class CreateTaskResponseDto {
      * 간단히 말하면, 클래스 내부에 정의된 정적 메서드를 통해 객체를 생성하는 방식입니다.
      * new 키워드를 직접 사용하는 대신, 메서드를 통해 객체를 반환받습니다.
      **/
+    public static CreateTaskResponseDto from(Task task) {
+        return new CreateTaskResponseDto(
+                task.getId(),
+                task.getAssignee().getId(),
+                task.getTitle(),
+                task.getDescription(),
+                PriorityType.toType(task.getPriority()).name(),
+                TaskStatusType.toType(task.getStatus()).name(),
+                task.getDueDate(),
+                task.getCreatedAt(),
+                task.getUpdatedAt()
+        );
 
-    public static CreateTaskResponseDto fromEntity(Task task) {
-        try {
-            return new CreateTaskResponseDto(
-                    task.getId(),
-                    task.getAssignee().getId(),
-                    task.getTitle(),
-                    task.getDescription(),
-                    PriorityType.toType(task.getPriority()).name(),
-                    TaskStatusType.toType(task.getStatus()).name(),
-                    task.getDueDate() != null ? task.getDueDate().atOffset(ZoneOffset.UTC) : null,
-                    task.getCreatedAt().atOffset(ZoneOffset.UTC),
-                    task.getUpdatedAt().atOffset(ZoneOffset.UTC)
-            );
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
     }
 }
 

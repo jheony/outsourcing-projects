@@ -7,6 +7,8 @@ import com.example.outsourcingprojects.common.model.TaskStatusType;
 import com.example.outsourcingprojects.common.util.dto.PageDataDTO;
 import com.example.outsourcingprojects.domain.task.dto.CreateTaskRequestDto;
 import com.example.outsourcingprojects.domain.task.dto.CreateTaskResponseDto;
+import com.example.outsourcingprojects.domain.task.dto.UpdateTaskRequest;
+import com.example.outsourcingprojects.domain.task.dto.UpdateTaskResponse;
 import com.example.outsourcingprojects.domain.task.repository.TaskRepository;
 import com.example.outsourcingprojects.domain.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -18,7 +20,6 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.ZoneOffset;
 
 
 @Service
@@ -41,7 +42,7 @@ public class TaskService {
                 });
         // TODO 이넘 타입 요청 및 응답 객체 수정. / deletedat 안나오게.
         PriorityType priorityType = PriorityType.valueOf(request.getPriority());
-        TaskStatusType statusType = TaskStatusType.valueOf(request.getStatus());
+        TaskStatusType statusType = TaskStatusType.toType(10L);
         // Task 인스턴스 생성
         Task task = new Task(
                 request.getTitle(),
@@ -49,14 +50,14 @@ public class TaskService {
                 priorityType.getPriorityNum(),
                 statusType.getStatusNum(),
                 assignee,
-                request.getDueDate() != null ? request.getDueDate().toLocalDateTime() : null
+                request.getDueDate()
         );
 
         // DB 저장
         Task savedTask = taskRepository.save(task);
 
         // Entity -> Response DTO 변환 후 반환
-        return CreateTaskResponseDto.fromEntity(savedTask);
+        return CreateTaskResponseDto.from(savedTask);
     }
 
     private CreateTaskResponseDto response(Task task) throws Exception {
@@ -65,21 +66,21 @@ public class TaskService {
         // 정적 팩토리 메서드에 대해서 공부해보시고 CreateTaskResponseDto에서 작성하고 활용하시면 더 좋을 것 같습니다.
         return new CreateTaskResponseDto(
                 task.getId(),
-                task.getAssignee() != null ? task.getAssignee().getId() : null,
+                task.getAssignee().getId(),
                 task.getTitle(),
                 task.getDescription(),
                 PriorityType.toType(task.getPriority()).name(),
                 TaskStatusType.toType(task.getStatus()).name(),
-                task.getDueDate() != null ? task.getDueDate().atOffset(ZoneOffset.UTC) : null,
-                task.getCreatedAt().atOffset(ZoneOffset.UTC),
-                task.getUpdatedAt().atOffset(ZoneOffset.UTC)
+                task.getDueDate(),
+                task.getCreatedAt(),
+                task.getUpdatedAt()
 
         );
     }
 
     // 2. 전체 작업(목록) 조회
     @Transactional(readOnly = true)
-    public PageDataDTO<CreateTaskResponseDto> getAllTasks(int page, int size) {
+    public PageDataDTO<CreateTaskResponseDto> getAllTasks(int page, int size,String status, String search, Long assigneeId) {
         //상단의 @Transactional과 같은 어노테이션인데 임포트문이 이곳에 추가적으로 붙어있네요.
         //제거해주시기 바랍니다. ok
         //Pageable 인스턴스화
@@ -92,7 +93,7 @@ public class TaskService {
         //상단에 task를 통해 객체를 생성하는 Response라는 메서드를 작성해주셨는데
         //활용하지않고 계시네요
         //활용하여 작성하시면 조금 더 보기 편할 것 같습니다. ok
-        Page<CreateTaskResponseDto> responseDtoPage = taskPage.map( CreateTaskResponseDto::fromEntity);
+        Page<CreateTaskResponseDto> responseDtoPage = taskPage.map( CreateTaskResponseDto::from);
 
         return PageDataDTO.of(responseDtoPage);
     }
@@ -106,16 +107,16 @@ public class TaskService {
                     return new IllegalArgumentException("작업을 찾을 수 없습니다");
                 });
 
-        return CreateTaskResponseDto.fromEntity(task);
+        return CreateTaskResponseDto.from(task);
 
 
     }
 
     // 4. 작업 수정
     @Transactional
-    public CreateTaskResponseDto updateTask(Long taskId, CreateTaskRequestDto requestDto, Long userId) {
+    public UpdateTaskResponse updateTask(Long taskId, UpdateTaskRequest requestDto, Long userId) {
         Task task = taskRepository.findById(taskId)
-                .orElseThrow(() -> new IllegalArgumentException("작업을 찾을 수 없습니다"));
+                .orElseThrow(() -> new IllegalArgumentException("작업이 찾을 수 없습니다."));
 
         if (!task.getAssignee().getId().equals(userId)) {
             throw new IllegalArgumentException("작업을 수정할 수 없습니다");
@@ -128,11 +129,11 @@ public class TaskService {
                 requestDto.getTitle(),
                 requestDto.getDescription(),
                 priorityType.getPriorityNum(),
-                requestDto.getDueDate() != null ? requestDto.getDueDate().toLocalDateTime() : null
+                requestDto.getDueDate()
         );
 
 
-        return CreateTaskResponseDto.fromEntity(task);
+        return UpdateTaskResponse.from(task);
 
 
     }
