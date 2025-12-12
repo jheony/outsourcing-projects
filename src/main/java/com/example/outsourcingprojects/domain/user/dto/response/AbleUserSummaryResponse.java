@@ -10,29 +10,29 @@ import java.time.LocalDateTime;
 @RequiredArgsConstructor
 public class AbleUserSummaryResponse {
 
-        private final Long id;
-        private final String username;
-        private final String email;
-        private final String name;
-        private final String role;
-        private final LocalDateTime createdAt;
+    private final Long id;
+    private final String username;
+    private final String email;
+    private final String name;
+    private final String role;
+    private final LocalDateTime createdAt;
 
-        public static AbleUserSummaryResponse from(User user) {
-            return new AbleUserSummaryResponse(
-                    user.getId(),
-                    user.getUsername(),
-                    user.getEmail(),
-                    user.getName(),
-                    roleToString(user.getRole()),
-                    user.getCreatedAt()
-            );
-        }
+    public static AbleUserSummaryResponse from(User user) {
+        return new AbleUserSummaryResponse(
+                user.getId(),
+                user.getUsername(),
+                user.getEmail(),
+                user.getName(),
+                roleToString(user.getRole()),
+                user.getCreatedAt()
+        );
+    }
 
-        public static String roleToString(Long roleNum) {
-            if (roleNum == 20L) return "USER";
-            if (roleNum == 10L) return "ADMIN";
-            return "UNKNOWN";
-        }
+    public static String roleToString(Long roleNum) {
+        if (roleNum == 20L) return "USER";
+        if (roleNum == 10L) return "ADMIN";
+        return "UNKNOWN";
+    }
 
 
 }
