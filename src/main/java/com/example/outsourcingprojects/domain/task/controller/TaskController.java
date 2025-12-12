@@ -1,52 +1,64 @@
 package com.example.outsourcingprojects.domain.task.controller;
 
-import com.example.outsourcingprojects.domain.task.dto.CreateTaskRequestDto;
-import com.example.outsourcingprojects.domain.task.dto.CreateTaskResponseDto;
+import com.example.outsourcingprojects.common.util.dto.PageDataDTO;
+import com.example.outsourcingprojects.common.util.response.GlobalResponse;
+import com.example.outsourcingprojects.domain.task.dto.*;
 import com.example.outsourcingprojects.domain.task.service.TaskService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/tasks")
 public class TaskController {
-    //Controller에서 사용하는 메서드는 서비스의 메서드명과 곂치지 않도록 Handler를 붙여주기로 약속했습니다.
+    //Controller에서 사용하는 메서드는 서비스의 메서드명과 곂치지 않도록 Handler를 붙여주기로 약속했습니다. ok
     private final TaskService taskService;
+    //TODO ResposneEntity  대신 GrobalResponse 로 바꿔서 , return GrobalResponse.success로 (다른팀원 controller 참고)
 
     // 작업 생성
     @PostMapping
-    public ResponseEntity<CreateTaskResponseDto> createTask(
+    public GlobalResponse<CreateTaskResponseDto> createTaskHandler(
             @RequestBody CreateTaskRequestDto request
     ) {
         CreateTaskResponseDto response = taskService.createTask(request);
-        return new ResponseEntity<>(response, HttpStatus.CREATED);
+        return GlobalResponse.success("작업이 생성되었습니다.", response);
     }
 
     // 작업 전체 조회
     @GetMapping
-    public ResponseEntity<List<CreateTaskResponseDto>> getAllTasks() {
-        List<CreateTaskResponseDto> tasks = taskService.getAllTasks();
-        return ResponseEntity.ok(tasks);
+    public GlobalResponse<PageDataDTO<TaskListResponseDto>> getAllTasksHandler(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(required = false) String status,
+            @RequestParam(required = false) String search,
+            @RequestParam(required = false) Long assigneeId) {
+        PageDataDTO<TaskListResponseDto> tasks = taskService.getAllTasks(page, size, status, search, assigneeId);
+        return GlobalResponse.success("작업 목록 조회 성공", tasks);
     }
 
     // 특정 작업 조회
     @GetMapping("/{taskId}")
-    public ResponseEntity<CreateTaskResponseDto> getTaskById(@PathVariable Long taskId) {
+    public GlobalResponse<CreateTaskResponseDto> getTaskByIdHandler(@PathVariable Long taskId) {
         CreateTaskResponseDto task = taskService.getTaskById(taskId);
-        return ResponseEntity.ok(task);
+        return GlobalResponse.success("작업 조회 성공", task);
     }
 
     // 작업 수정
     @PutMapping("/{taskId}")
-    public ResponseEntity<CreateTaskResponseDto> updateTask(
-            @PathVariable Long taskId, @RequestBody CreateTaskRequestDto request, @RequestParam Long userId) {
-        CreateTaskResponseDto response = taskService.updateTask(taskId, request, userId);
-        return ResponseEntity.ok(response);
+    public GlobalResponse<UpdateTaskResponse> updateTaskHandler(
+            @PathVariable Long taskId, @RequestBody UpdateTaskRequest request,@RequestParam Long userId) {
+        UpdateTaskResponse response = taskService.updateTask(taskId, request, userId);
+        return GlobalResponse.success("작업이 수정되었습니다.", response);
 
+    }
+
+    // 작업 삭제
+    @DeleteMapping("/{taskId}")
+    public GlobalResponse<Void> deleteTaskHandler(
+            @PathVariable Long taskId, @RequestParam Long userId) {
+        taskService.deleteTask(taskId, userId);
+        return GlobalResponse.success("작업이 삭제되었습니다.", null);
     }
 
 

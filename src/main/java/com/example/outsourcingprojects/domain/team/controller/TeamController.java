@@ -1,6 +1,7 @@
 package com.example.outsourcingprojects.domain.team.controller;
 
 import com.example.outsourcingprojects.common.util.response.GlobalResponse;
+import com.example.outsourcingprojects.domain.team.dto.request.AddTeamMemberRequestDto;
 import com.example.outsourcingprojects.domain.team.dto.request.CreateTeamRequestDto;
 import com.example.outsourcingprojects.domain.team.dto.request.UpdateTeamRequestDto;
 import com.example.outsourcingprojects.domain.team.dto.response.CreateTeamResponseDto;
@@ -57,10 +58,21 @@ public class TeamController {
 
     // 팀 삭제
     @DeleteMapping("/{id}")
-    public GlobalResponse<Void>  deleteTeamHandler(@PathVariable Long id) {
+    public GlobalResponse<Void> deleteTeamHandler(@PathVariable Long id) {
         teamService.deleteTeam(id);
         return GlobalResponse.success("팀이 삭제되었습니다.", null);
     }
 
     // 팀 멤버 추가
+    @PostMapping("/{teamId}/members")
+    public GlobalResponse<TeamResponseDto> addTeamMemberHandler(@PathVariable Long teamId, @Valid @RequestBody AddTeamMemberRequestDto request) {
+        TeamResponseDto responseDto = teamService.addTeamMember(teamId, request.getUserId());
+        return GlobalResponse.success("팀 멤버가 추가되었습니다.", responseDto);
+    }
+
+    @DeleteMapping("/{teamId}/members/{userId}")
+    public GlobalResponse<Void> removeTemaMemberHandler(@PathVariable Long teamId, @PathVariable Long userId) {
+        teamService.removeTeamMember(teamId, userId);
+        return GlobalResponse.success("팀 멤버가 제거되었습니다.", null);
+    }
 }

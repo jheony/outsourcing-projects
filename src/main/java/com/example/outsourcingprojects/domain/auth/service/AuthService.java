@@ -25,7 +25,7 @@ public class AuthService {
         String username = request.getUsername();
         String password = request.getPassword();
 
-        User user = userRepository.findByUsername(username).orElseThrow(
+        User user = userRepository.findByUsernameAndDeletedAtIsNull(username).orElseThrow(
                 () -> new IllegalStateException("등록된 사용자가 없습니다.")
         );
 
@@ -40,5 +40,4 @@ public class AuthService {
 
         return new LoginResponse(token);
     }
-
 }

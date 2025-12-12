@@ -12,9 +12,9 @@ public class SearchTaskResponse {
     private final Long id;
     private final String title;
     private final String description;
-    private final TaskStatusType status;
+    private final String status;
 
     public static SearchTaskResponse from(Task task) {
-        return new SearchTaskResponse(task.getId(), task.getTitle(), task.getDescription(), TaskStatusType.toType(task.getStatus()));
+        return new SearchTaskResponse(task.getId(), task.getTitle(), task.getDescription(), TaskStatusType.toType(task.getStatus()).name());
     }
 }

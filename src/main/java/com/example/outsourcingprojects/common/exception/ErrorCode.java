@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatus;
 @RequiredArgsConstructor
 public enum ErrorCode {
 
+
     // 400 Bad Request
     INVALID_EMAIL_FORMAT(HttpStatus.BAD_REQUEST, "올바른 이메일 형식이 아닙니다."),
     REQUIRED_FIELD_MISSING(HttpStatus.BAD_REQUEST, "필수 입력 값이 누락되었습니다."),
@@ -19,7 +20,9 @@ public enum ErrorCode {
 
     // 401 Unauthorized
     INVALID_CREDENTIALS(HttpStatus.UNAUTHORIZED, "이메일 또는 비밀번호가 일치하지 않습니다."),
+    NO_PERMISSION(HttpStatus.UNAUTHORIZED, "비밀번호가 올바르지 않습니다."),
     LOGIN_REQUIRED(HttpStatus.UNAUTHORIZED, "로그인이 필요한 서비스입니다."),
+
 
     // 403 Forbidden
     NO_DELETE_PERMISSION(HttpStatus.FORBIDDEN, "삭제 권한이 없습니다."),
@@ -28,6 +31,7 @@ public enum ErrorCode {
     NO_COMMENT_DELETE_PERMISSION(HttpStatus.FORBIDDEN, "댓글을 삭제할 권한이 없습니다."),
     NO_COMMENT_UPDATE_PERMISSION(HttpStatus.FORBIDDEN, "댓글을 수정할 권한이 없습니다."),
     NO_TASK_DELETE_PERMISSION(HttpStatus.FORBIDDEN, "작업을 삭제할 권한이 없습니다."),
+    NO_READ_PERMISSION(HttpStatus.FORBIDDEN, "권한이 없습니다."),
 
     // 404 Not Found
     TASK_NOT_FOUND(HttpStatus.NOT_FOUND, "작업을 찾을 수 없습니다."),
@@ -40,10 +44,13 @@ public enum ErrorCode {
 
     // 409 Conflict
     TEAM_HAS_MEMBERS(HttpStatus.CONFLICT, "팀에 멤버가 존재하여 삭제할 수 없습니다."),
-    ALREADY_TEAM_MEMBER(HttpStatus.CONFLICT, "이미 팀에 속한 멤버입니다."),
-    DUPLICATE_TEAM_NAME(HttpStatus.CONFLICT, "이미 존재하는 팀 이름입니다."),
-    USER_NAME_ALREADY_EXISTS(HttpStatus.CONFLICT, "이미 존재하는 사용자명입니다."),
-;
+    ALREADY_TEAM_MEMBER(HttpStatus.CONFLICT, "이미 팀에 속한 멤버 입니다."),
+    DUPLICATE_TEAM_NAME(HttpStatus.CONFLICT, "이미 존재하는 팀 이름 입니다."),
+    USER_NAME_ALREADY_EXISTS(HttpStatus.CONFLICT, "이미 존재하는 사용자명 입니다."),
+    DUPLICATE_USER_NAME(HttpStatus.CONFLICT, "이미 사용 중인 이름 입니다."),
+    DUPLICATE_USER_EMAIL(HttpStatus.CONFLICT, "이미 사용 중인 이메일 입니다."),
+    DUPLICATE_USER_PASSWORD(HttpStatus.CONFLICT, "이미 사용 중인 비밀번호 입니다.")
+    ;
     private final HttpStatus status;
     private final String message;
 }

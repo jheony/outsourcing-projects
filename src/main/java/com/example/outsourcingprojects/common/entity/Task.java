@@ -1,6 +1,5 @@
 package com.example.outsourcingprojects.common.entity;
 
-
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.AccessLevel;
@@ -40,8 +39,8 @@ public class Task extends BaseEntity {
     private LocalDateTime dueDate;
 
     // 생
-    public Task(String title, String description, long priority, long status, User assignee, LocalDateTime dueDate) {
-        //필요없어요 Why? 상단의 @NoArgsConstructor를 통해서 이 생성자의 역할을 대신 하고 있습니다.
+    public Task(String title, String description, Long priority, Long status, User assignee, LocalDateTime dueDate) {
+
         this.title = title;
         this.description = description;
         this.priority = priority;
@@ -50,34 +49,6 @@ public class Task extends BaseEntity {
         this.dueDate = dueDate;
     }
 
-    // getter
-    public Long getId() {
-        return id;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public long getPriority() {
-        return priority;
-    }
-
-    public long getStatus() {
-        return status;
-    }
-
-    public User getAssignee() {
-        return assignee;
-    }
-
-    public LocalDateTime getDueDate() {
-        return dueDate;
-    }
 
     // 작업 수정 메서드
     public void update(String title, String description, Long status, LocalDateTime dueDate) {
