@@ -9,6 +9,7 @@ import com.example.outsourcingprojects.domain.search.dto.SearchUserResponse;
 import com.example.outsourcingprojects.domain.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -20,6 +21,7 @@ public class SearchService {
     private final UserRepository userRepository;
     private final TeamRepository teamRepository;
 
+    @Transactional(readOnly = true)
     public SearchResponse search(String query) {
 
         List<SearchUserResponse> users = userRepository.getSearchUsers(query);

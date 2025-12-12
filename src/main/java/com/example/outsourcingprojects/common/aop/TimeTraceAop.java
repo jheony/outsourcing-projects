@@ -15,8 +15,8 @@ public class TimeTraceAop {
 
     private final AtomicLong totalExecutionTime = new AtomicLong(0);
 
-    @Around("@annotation(com.example.outsourcingprojects.common.aop.TrackTime)")
-    public Object execute(ProceedingJoinPoint joinPoint) throws Throwable {
+    @Around("@annotation(trackTime)")
+    public Object trace(ProceedingJoinPoint joinPoint, TrackTime trackTime) throws Throwable {
 
         long start = System.currentTimeMillis();
         log.info("시작 시간: {}", joinPoint.getSignature());
@@ -28,11 +28,8 @@ public class TimeTraceAop {
             long end = System.currentTimeMillis();
             long elapsed = end - start;
 
-            // 총 실행시간 누적
-            long accumulated = totalExecutionTime.addAndGet(elapsed);
-
-            log.info("종료시간: {} ({}ms)", joinPoint.getSignature(), elapsed);
-            log.info("총 실행 시간 = {}ms", accumulated);
+            log.info("작업 메서드: {}", joinPoint.getSignature());
+            log.info("실행 소요 시간: {}ms)", elapsed);
         }
     }
 }

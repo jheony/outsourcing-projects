@@ -1,5 +1,6 @@
 package com.example.outsourcingprojects.domain.dashboard.service;
 
+import com.example.outsourcingprojects.common.aop.TrackTime;
 import com.example.outsourcingprojects.common.entity.QTask;
 import com.example.outsourcingprojects.common.entity.Task;
 import com.example.outsourcingprojects.common.model.TaskStatusType;
@@ -12,6 +13,7 @@ import com.querydsl.core.Tuple;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -24,6 +26,8 @@ public class DashBoardService {
 
     private final DashBoardRepository dashBoardRepository;
 
+    @TrackTime
+    @Transactional(readOnly = true)
     public GetTaskSummaryResponse getTaskSummaries(Long userId) {
 
         Page<Task> upcomingTasks = dashBoardRepository.findAllByAssigneeIdAndStatus(userId, TaskStatusType.TODO.getStatusNum());
@@ -38,6 +42,8 @@ public class DashBoardService {
 
     }
 
+    @TrackTime
+    @Transactional(readOnly = true)
     public DashBoardDTO getDashBoard(Long userId) {
         List<Tuple> statusTask = dashBoardRepository.countTasksByStatus();
 
@@ -82,7 +88,8 @@ public class DashBoardService {
         return new DashBoardDTO(totalTasks, completedTasks, inProgressTasks, todoTasks, overdueTasks, teamProgress, myTasksToday, completionRate);
     }
 
-
+    @TrackTime
+    @Transactional(readOnly = true)
     public List<DailyTaskDTO> getWeeklyTasks(Long userId) {
         List<DailyTaskDTO> result = new ArrayList<>();
 
