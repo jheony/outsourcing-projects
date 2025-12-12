@@ -21,7 +21,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 
-
 @Service
 @RequiredArgsConstructor
 @Slf4j
@@ -37,7 +36,7 @@ public class TaskService {
         // 담당자 조회
         User assignee = userRepository.findById(request.getAssigneeId())
                 .orElseThrow(() -> {
-                    log.error("담당자를 찾을 수 없습니다." + request.getAssigneeId());
+                    log.error("담당자를 찾을 수 없습니다.assignId: {}", request.getAssigneeId());
                     throw new IllegalArgumentException("담당자를 찾을 수 없습니다.");
                 });
         // TODO 이넘 타입 요청 및 응답 객체 수정. / deletedat 안나오게.
@@ -80,20 +79,18 @@ public class TaskService {
 
     // 2. 전체 작업(목록) 조회
     @Transactional(readOnly = true)
-    public PageDataDTO<CreateTaskResponseDto> getAllTasks(int page, int size,String status, String search, Long assigneeId) {
+    public PageDataDTO<CreateTaskResponseDto> getAllTasks(int page, int size, String status, String search, Long assigneeId) {
         //상단의 @Transactional과 같은 어노테이션인데 임포트문이 이곳에 추가적으로 붙어있네요.
         //제거해주시기 바랍니다. ok
         //Pageable 인스턴스화
         Pageable pageable = PageRequest.of(page, size, Sort.by("createdAt").descending());
 
-        Page<Task> taskPage = taskRepository.findAll(pageable);
-//        List<CreateTaskResponseDto> responseDto = new ArrayList<>();
-
-
         //상단에 task를 통해 객체를 생성하는 Response라는 메서드를 작성해주셨는데
         //활용하지않고 계시네요
         //활용하여 작성하시면 조금 더 보기 편할 것 같습니다. ok
-        Page<CreateTaskResponseDto> responseDtoPage = taskPage.map( CreateTaskResponseDto::from);
+        // 목록조회
+        Page<Task> taskPage = taskRepository.findAll(pageable);
+        Page<CreateTaskResponseDto> responseDtoPage = taskPage.map(CreateTaskResponseDto::from);
 
         return PageDataDTO.of(responseDtoPage);
     }
@@ -116,14 +113,20 @@ public class TaskService {
     @Transactional
     public UpdateTaskResponse updateTask(Long taskId, UpdateTaskRequest requestDto, Long userId) {
         Task task = taskRepository.findById(taskId)
-                .orElseThrow(() -> new IllegalArgumentException("작업이 찾을 수 없습니다."));
+                .orElseThrow(() -> {
+                    log.error("작업을 찾을 수 없습니다. taskId: {}", taskId);
+                    return new IllegalArgumentException("작업이 찾을 수 없습니다.");
+                });
 
+        // 수정
         if (!task.getAssignee().getId().equals(userId)) {
-            throw new IllegalArgumentException("작업을 수정할 수 없습니다");
+            log.error("수정 권한이 없습니다. taskId: {}, userId: {}, assigneeId: {}",
+                    taskId, userId, task.getAssignee().getId());
+            throw new IllegalArgumentException("수정 권한이 없습니다.");
         }
+
         // 타입 생성
         PriorityType priorityType = PriorityType.valueOf(requestDto.getPriority());
-
 
         task.update(
                 requestDto.getTitle(),
@@ -142,10 +145,14 @@ public class TaskService {
     @Transactional
     public void deleteTask(Long taskId, Long userId) {
         Task task = taskRepository.findById(taskId)
-                .orElseThrow(() -> new IllegalArgumentException("작업을 찾을 수 없습니다"));
+                .orElseThrow(() -> {
+                    log.error("작업을 찾을 수 없습니다. taskId: {}", taskId);
+                    return new IllegalArgumentException("작업을 찾을 수 없습니다.");
+                });
 
         if (!task.getAssignee().getId().equals(userId)) {
-            throw new IllegalArgumentException("작업을 삭제할 수 없습니다");
+            log.error("삭제 권한이 없습니다. taskId: {}, userId: {}, assigneeId: {}", taskId, userId, task.getAssignee().getId());
+            throw new IllegalArgumentException("삭제 권한이 없습니다.");
         }
         taskRepository.delete(task);
     }
