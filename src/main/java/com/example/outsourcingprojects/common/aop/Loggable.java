@@ -1,4 +1,4 @@
-package com.example.outsourcingprojects.domain.activitylog.aop;
+package com.example.outsourcingprojects.common.aop;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

@@ -1,6 +1,5 @@
 package com.example.outsourcingprojects.domain.team.controller;
 
-import com.example.outsourcingprojects.domain.activitylog.aop.Loggable;
 import com.example.outsourcingprojects.common.util.response.GlobalResponse;
 import com.example.outsourcingprojects.domain.team.dto.request.CreateTeamRequestDto;
 import com.example.outsourcingprojects.domain.team.dto.request.UpdateTeamRequestDto;
@@ -21,7 +20,6 @@ public class TeamController {
     private final TeamService teamService;
 
     // 팀 생성
-    @Loggable
     @PostMapping
     public GlobalResponse<CreateTeamResponseDto> createTeamHandler(@Valid @RequestBody CreateTeamRequestDto request) {
         CreateTeamResponseDto responseDto = teamService.createTeam(request);

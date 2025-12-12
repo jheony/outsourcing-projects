@@ -1,6 +1,5 @@
 package com.example.outsourcingprojects.domain.task.controller;
 
-import com.example.outsourcingprojects.domain.activitylog.aop.Loggable;
 import com.example.outsourcingprojects.domain.task.dto.CreateTaskRequestDto;
 import com.example.outsourcingprojects.domain.task.dto.CreateTaskResponseDto;
 import com.example.outsourcingprojects.domain.task.service.TaskService;
@@ -19,7 +18,6 @@ public class TaskController {
     private final TaskService taskService;
 
     // 작업 생성
-    @Loggable
     @PostMapping
     public ResponseEntity<CreateTaskResponseDto> createTask(
             @RequestBody CreateTaskRequestDto request
@@ -43,7 +41,6 @@ public class TaskController {
     }
 
     // 작업 수정
-    @Loggable
     @PutMapping("/{taskId}")
     public ResponseEntity<CreateTaskResponseDto> updateTask(
             @PathVariable Long taskId, @RequestBody CreateTaskRequestDto request, @RequestParam Long userId) {

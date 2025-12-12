@@ -1,4 +1,4 @@
-package com.example.outsourcingprojects.domain.activitylog.aop;
+package com.example.outsourcingprojects.common.aop;
 
 import com.example.outsourcingprojects.common.entity.ActivityLog;
 import com.example.outsourcingprojects.common.entity.User;
@@ -28,7 +28,7 @@ public class ActivityLoggingAspect {
     @Autowired
     private UserRepository userRepository;
 
-    @Pointcut("@annotation(com.example.outsourcingprojects.domain.activitylog.aop.Loggable)")
+    @Pointcut("@annotation(com.example.outsourcingprojects.common.aop.Loggable)")
     public void ActivityLoggingPointcut() {
     }
 
