@@ -21,11 +21,11 @@ public class UpdateTaskResponse {
     private final String status;
     private final String priority;
     private final Long assigneeId;
-    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
+
     private final LocalDateTime createdAt;
-    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
+
     private final LocalDateTime updateAt;
-    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
+
     private final LocalDateTime dueDate;
 
     //        "timestamp":"2024-01-10T00:00:00.000Z"
@@ -42,7 +42,7 @@ public class UpdateTaskResponse {
                 task.getCreatedAt(),
                 task.getUpdatedAt(),
                 task.getDueDate()
-                
+
         );
     }
 }

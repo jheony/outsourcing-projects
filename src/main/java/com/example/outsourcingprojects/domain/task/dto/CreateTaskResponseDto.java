@@ -3,7 +3,6 @@ package com.example.outsourcingprojects.domain.task.dto;
 import com.example.outsourcingprojects.common.entity.Task;
 import com.example.outsourcingprojects.common.model.PriorityType;
 import com.example.outsourcingprojects.common.model.TaskStatusType;
-import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
@@ -30,11 +29,11 @@ public class CreateTaskResponseDto {
 
     private final String status; // 예시: "TODO", "IN_PROGRESS", "DONE"
 
-    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
+
     private final LocalDateTime dueDate;
-    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
+
     private final LocalDateTime createdAt;
-    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
+
     private final LocalDateTime updatedAt;
 
 
@@ -60,6 +59,7 @@ public class CreateTaskResponseDto {
                 task.getCreatedAt(),
                 task.getUpdatedAt()
         );
+
 
     }
 }
