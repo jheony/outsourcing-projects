@@ -155,6 +155,16 @@ public class TaskService {
     }
 }
 
+//    // 6. 작업 상태 변경
+//    @Transactional
+//    public StatusUpdateResponseDto statusUpdateTask(Long taskId, Long userId) {
+//        Task task = taskRepository.findById(taskId)
+//                .orElseThrow(() -> {
+//                log.error("작업 상태가 변경되었습니다. taskId: {}\", taskId")}
+//    }
+//
+//}
+
 
 
 
