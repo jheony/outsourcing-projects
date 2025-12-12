@@ -10,12 +10,10 @@ import com.example.outsourcingprojects.domain.user.dto.request.SignUpRequest;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@Slf4j
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/users")
