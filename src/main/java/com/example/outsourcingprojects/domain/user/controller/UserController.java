@@ -2,6 +2,8 @@ package com.example.outsourcingprojects.domain.user.controller;
 
 import com.example.outsourcingprojects.common.aop.Loggable;
 import com.example.outsourcingprojects.common.util.response.GlobalResponse;
+import com.example.outsourcingprojects.domain.user.dto.response.VerifyPasswordResponse;
+import com.example.outsourcingprojects.domain.user.dto.request.VerifyPasswordRequest;
 import com.example.outsourcingprojects.domain.user.dto.response.*;
 import com.example.outsourcingprojects.domain.user.dto.request.UpdateRequest;
 import com.example.outsourcingprojects.domain.user.service.UserService;
@@ -54,7 +56,7 @@ public class UserController {
 
         Long userId = (Long) userToken.getAttribute("userId");
 
-        UpdateResponse updateUserResponse = userService.update(userId,id, request);
+        UpdateResponse updateUserResponse = userService.update(userId, id, request);
         return GlobalResponse.success("사용자 정보가 수정되었습니다.", updateUserResponse);
     }
 
@@ -64,16 +66,29 @@ public class UserController {
 
         Long userId = (Long) userToken.getAttribute("userId");
         userService.softDelete(id, userId);
-        return GlobalResponse.success("회원 탈퇴가 완료되었습니다.",null);
+        return GlobalResponse.success("회원 탈퇴가 완료되었습니다.", null);
     }
 
     // 추가 가능한 사용자 조회
     @GetMapping("/available")
-    public GlobalResponse<AbleUsersListResponse> getAddableUsersHandler(@RequestParam(required = false) Long teamId, HttpServletRequest userToken) {
-        Long userId = (Long) userToken.getAttribute("userId");
-        AbleUsersListResponse addableUsers = userService.findAddableUsers(teamId, userId);
+    public GlobalResponse<AbleUsersListResponse> getAddableUsersHandler(@RequestParam(required = false) Long teamId) {
+
+        AbleUsersListResponse addableUsers = userService.findAddableUsers(teamId);
         return GlobalResponse.success("추가 가능한 사용자 목록 조회 성공", addableUsers);
     }
 
+    //비밀번호 확인
+    @PostMapping("/verify-password")
+    public GlobalResponse<VerifyPasswordResponse> verifyPassword(HttpServletRequest userToken, @RequestBody VerifyPasswordRequest request) {
+
+        Long userId = (Long) userToken.getAttribute("userId");
+        VerifyPasswordResponse response = userService.verifyPassword(userId, request.getPassword());
+
+        if (response.isValid()) {
+            return GlobalResponse.success("비밀번호가 확인되었습니다", response);
+        } else {
+            return GlobalResponse.fail("비밀번호가 올바르지 않습니다", response);
+        }
+    }
 }
 
