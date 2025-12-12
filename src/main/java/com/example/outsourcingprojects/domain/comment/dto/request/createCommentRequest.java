@@ -1,4 +1,4 @@
-package com.example.outsourcingprojects.domain.comment.controller;
+package com.example.outsourcingprojects.domain.comment.dto.request;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -9,6 +9,4 @@ public class createCommentRequest {
 
     private final String content;
     private final Long parentId;
-
-
 }

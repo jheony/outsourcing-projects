@@ -1,8 +1,9 @@
 package com.example.outsourcingprojects.domain.comment.service;
 
+import com.example.outsourcingprojects.common.entity.Comment;
 import com.example.outsourcingprojects.common.entity.Task;
 import com.example.outsourcingprojects.common.entity.User;
-import com.example.outsourcingprojects.common.util.response.GlobalResponse;
+import com.example.outsourcingprojects.domain.comment.dto.UserDto;
 import com.example.outsourcingprojects.domain.comment.dto.request.createCommentRequest;
 import com.example.outsourcingprojects.domain.comment.dto.response.createCommentResponse;
 import com.example.outsourcingprojects.domain.comment.repository.CommentRepository;
@@ -22,25 +23,30 @@ public class CommentService {
 
     //댓글 생성
     @Transactional
-    public GlobalResponse<createCommentResponse> createComment(Long taskId, Long userId, createCommentRequest request) {
+    public createCommentResponse createComment(Long taskId, Long userId, createCommentRequest commentRequest) {
 
-        //유저정보 가져오기
         User userinfo = userRepository.findByIdAndDeletedAtIsNull(userId)
-                .orElseThrow(() -> new IllegalArgumentException("에러에러"));
-        //게시물PK 가져오기
-        Task task = TaskRepository.findById((taskId))
-                .orElseThrow(() -> new IllegalArgumentException("에러에러"));
+                .orElseThrow(() -> new IllegalArgumentException("유저 없음"));
+        Task taskInfo = TaskRepository.findById((taskId))
+                .orElseThrow(() -> new IllegalArgumentException("게시글 없음"));
 
-        if (request.getParentId() != null) {
-
+        Comment parentId = null;
+        if (commentRequest.getParentId() != null) {
+            parentId = commentRepository.findByIdAndDeletedAtIsNull(commentRequest.getParentId())
+                    .orElseThrow(() -> new IllegalArgumentException("부모 댓글 없음"));
         }
+
+        UserDto.from(userinfo);
+        Comment comment = new Comment(userinfo, taskInfo, parentId, commentRequest.getContent());
+        Comment savedComment = commentRepository.save(comment);
+
+        return createCommentResponse.from(savedComment);
     }
 
-
     //댓글 조회
-
 
     //댓글 수정
 
     //댓글 삭제
+
 }
