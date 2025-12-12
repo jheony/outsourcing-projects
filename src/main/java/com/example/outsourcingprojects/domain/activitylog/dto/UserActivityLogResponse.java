@@ -7,7 +7,8 @@ import lombok.RequiredArgsConstructor;
 @Getter
 @RequiredArgsConstructor
 public class UserActivityLogResponse {
-    private final Long userId;
+
+    private final Long id;
     private final String username;
     private final String name;
 
