@@ -122,24 +122,24 @@ public class UserService {
 
     // 추가 가능한 사용자 조회
     @Transactional
-    public AbleUsersListResponse findAddableUsers(Long teamId) {
+    public List<AbleUserSummaryResponse> findAddableUsers(Long teamId, Long userId) {
 
-        userRepository.findByIdAndDeletedAtIsNull(teamId)
+        User user =userRepository.findByIdAndDeletedAtIsNull(userId)
                 .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
 
         List<User> users;
-        if (teamId != null) {
+        if (user != null) {
             users = userRepository.findUsersNotInTeam(teamId);
         } else {
             users = userRepository.findAllByDeletedAtIsNull();
         }
 
-        List<AbleUserSummaryResponse> ableUserUsers = users
+        List<AbleUserSummaryResponse> ableUsers = users
                 .stream()
                 .map(AbleUserSummaryResponse::from)
                 .toList();
 
-        return AbleUsersListResponse.from(ableUserUsers);
+        return ableUsers;
     }
 
 
