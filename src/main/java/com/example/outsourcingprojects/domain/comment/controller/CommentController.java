@@ -12,6 +12,17 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/tasks/")
+import com.example.outsourcingprojects.common.util.response.GlobalResponse;
+import com.example.outsourcingprojects.domain.comment.dto.request.createCommentRequest;
+import com.example.outsourcingprojects.domain.comment.dto.response.createCommentResponse;
+import com.example.outsourcingprojects.domain.comment.service.CommentService;
+import jakarta.servlet.http.HttpServletRequest;
+import lombok.RequiredArgsConstructor;
+import org.springframework.web.bind.annotation.*;
+
+@RestController
+@RequiredArgsConstructor
+@RequestMapping("/api/tasks/")
 public class CommentController {
 
     private final CommentService commentService;
@@ -28,6 +39,28 @@ public class CommentController {
 
     //댓글 조회
 
+
+    //댓글 수정
+
+    //댓글 삭제
+
+
+
+    private final CommentService commentService;
+
+    //댓글 생성
+    @GetMapping("/{taskId}/comments")
+    public GlobalResponse<createCommentResponse> createCommentHandler(
+            HttpServletRequest userToken,
+            @PathVariable Long taskId,
+            @RequestBody createCommentRequest request
+    ) {
+        Long userId = (Long) userToken.getAttribute("userId");
+        commentService.createComment(taskId,userId,request);
+    }
+
+
+    //댓글 조회
 
     //댓글 수정
 
