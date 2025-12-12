@@ -17,4 +17,6 @@ public interface UserRepository extends JpaRepository<User, Long>,UserRepository
     List<User> findAllByDeletedAtIsNull();
 
     List<User> findUsersNotInTeam(Long teamId);
+
+    Optional<User> findByUsernameAndDeletedAtIsNull(String username);
 }
