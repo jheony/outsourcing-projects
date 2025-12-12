@@ -112,7 +112,7 @@ public class TeamService {
 
         // 팀에 멤버 존재여부 확인
         List<User> members = userRepository.getUsersByTeam(id);
-        if(!members.isEmpty()) {
+        if (!members.isEmpty()) {
             throw new CustomException(ErrorCode.TEAM_HAS_MEMBERS);
         }
         // SOFT DELETE 실행(실제 행 삭제X)
@@ -129,7 +129,7 @@ public class TeamService {
                 .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
         // 이미 팀 멤버인지 여부확인
         boolean isTeamMember = teamMemberRepository.existsByTeamIdAndUserIdAndDeletedAtIsNull(id, userId);
-        if (isTeamMember){
+        if (isTeamMember) {
             throw new CustomException(ErrorCode.ALREADY_TEAM_MEMBER);
         }
 
