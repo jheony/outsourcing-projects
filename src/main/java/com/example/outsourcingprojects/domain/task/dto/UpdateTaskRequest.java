@@ -1,20 +1,12 @@
 package com.example.outsourcingprojects.domain.task.dto;
 
-
 import com.fasterxml.jackson.annotation.JsonFormat;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
-
-@AllArgsConstructor
-@NoArgsConstructor
 @Getter
-public class CreateTaskRequestDto {
-
-    private Long assigneeId;
+public class UpdateTaskRequest {
 
     private String title;
 
@@ -22,7 +14,10 @@ public class CreateTaskRequestDto {
 
     private String priority;
 
+    private String status;
+
+    private Long assigneeId;
+
     private LocalDateTime dueDate;
-
-
 }
+

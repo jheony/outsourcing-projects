@@ -1,5 +1,7 @@
 package com.example.outsourcingprojects.common.model;
 
+import com.example.outsourcingprojects.common.exception.CustomException;
+import com.example.outsourcingprojects.common.exception.ErrorCode;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
@@ -13,8 +15,8 @@ public enum PriorityType {
 
     private final long priorityNum;
 
-    public static PriorityType toType(Long value) throws Exception {
-        if (value == null) throw new Exception();
+    public static PriorityType toType(Long value) {
+        if (value == null) throw new CustomException(ErrorCode.TYPE_NOT_FOUND);
 
         for (PriorityType type : PriorityType.values()) {
             if (type.getPriorityNum() == value) {
@@ -22,6 +24,6 @@ public enum PriorityType {
             }
         }
 
-        throw new Exception();
+        throw new CustomException(ErrorCode.TYPE_NOT_FOUND);
     }
 }
