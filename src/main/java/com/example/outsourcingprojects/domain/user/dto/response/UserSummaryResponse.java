@@ -11,7 +11,6 @@ import java.time.LocalDateTime;
 @RequiredArgsConstructor
 public class UserSummaryResponse {
 
-    //해당 응답을 정적 팩터리 메서드로 관리해주세요.
     private final Long id;
     private final String username;
     private final String email;

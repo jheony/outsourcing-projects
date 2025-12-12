@@ -42,8 +42,9 @@ public enum ErrorCode {
     // 409 Conflict
     TEAM_HAS_MEMBERS(HttpStatus.CONFLICT, "팀에 멤버가 존재하여 삭제할 수 없습니다."),
     ALREADY_TEAM_MEMBER(HttpStatus.CONFLICT, "이미 팀에 속한 멤버입니다."),
-    DUPLICATE_TEAM_NAME(HttpStatus.CONFLICT, "이미 존재하는 팀 이름입니다.");
-
+    DUPLICATE_TEAM_NAME(HttpStatus.CONFLICT, "이미 존재하는 팀 이름입니다."),
+    USER_NAME_ALREADY_EXISTS(HttpStatus.CONFLICT, "이미 존재하는 사용자명입니다."),
+;
     private final HttpStatus status;
     private final String message;
 }
