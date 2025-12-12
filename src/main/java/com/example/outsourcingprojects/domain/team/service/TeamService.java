@@ -39,7 +39,7 @@ public class TeamService {
 
         // 정적 팩토리 메서드로 팀 생성
         Team team = Team.of(requestDto.getName(), requestDto.getDescription());
-        // 저장
+        // 저장 및 반환
         Team savedTeam = teamRepository.save(team);
 
         return CreateTeamResponseDto.from(savedTeam);
@@ -52,13 +52,13 @@ public class TeamService {
         return teamRepository.findAll().stream()
                 .filter(team -> team.getDeletedAt() == null)
                 .map(team -> {
-                    List<User> users = userRepository.getUsersByTeam(team.getId()); // 각 팀에 속한 유저 조회
+                    List<User> users = userRepository.getUsersByTeam(team.getId()); // 해당 팀에 속한 유저들 조회
                     List<TeamMemberResponseDto> members = users.stream()    // 유저리스트를 TeamMemberResponseDto로
                             .map(TeamMemberResponseDto::from)
                             .collect(Collectors.toList());
-                    return TeamResponseDto.of(team, members);
+                    return TeamResponseDto.of(team, members); // 엔티티와 리스트를 합쳐 DTO 생성
                 })
-                .collect(Collectors.toList());
+                .collect(Collectors.toList()); // 최종 수집 리스트
     }
 
     // 팀 상세 조회
@@ -67,8 +67,8 @@ public class TeamService {
         // id에 해당하는 팀 존재여부 및 삭제여부 확인
         Team team = teamRepository.findByIdAndDeletedAtIsNull(id)
                 .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 팀입니다."));
-        List<User> users = userRepository.getUsersByTeam(team.getId());
-        List<TeamMemberResponseDto> members = users.stream()
+        List<User> users = userRepository.getUsersByTeam(team.getId()); // 해당하는 팀의 유저 조회
+        List<TeamMemberResponseDto> members = users.stream() // user리스트 -> TeamMemberResponseDto
                 .map(TeamMemberResponseDto::from)
                 .toList();
         return TeamResponseDto.of(team, members);
@@ -81,9 +81,9 @@ public class TeamService {
         teamRepository.findByIdAndDeletedAtIsNull(teamId)
                 .orElseThrow(() -> new CustomException(ErrorCode.TEAM_NOT_FOUND));
 
-        List<User> users = userRepository.getUsersByTeam(teamId);
+        List<User> users = userRepository.getUsersByTeam(teamId); // 해당하는 팀의 유저 조회
 
-        return users.stream()
+        return users.stream()   // user리스트 -> TeamMemberResponseDto
                 .map(TeamMemberResponseDto::from)
                 .toList();
     }
@@ -95,9 +95,9 @@ public class TeamService {
         Team team = teamRepository.findByIdAndDeletedAtIsNull(id)
                 .orElseThrow(() -> new CustomException(ErrorCode.TEAM_NOT_FOUND));
 
-        team.update(requestDto.getName(), requestDto.getDescription());
-        List<User> users = userRepository.getUsersByTeam(team.getId());
-        List<TeamMemberResponseDto> members = users.stream()
+        team.update(requestDto.getName(), requestDto.getDescription()); // 팀 정보 업데이트
+        List<User> users = userRepository.getUsersByTeam(team.getId()); // 업데이트된 팀의 멤버 조회
+        List<TeamMemberResponseDto> members = users.stream() // User 리스트 -> DTO로 변환
                 .map(TeamMemberResponseDto::from)
                 .toList();
         return TeamResponseDto.of(team, members);
@@ -119,6 +119,7 @@ public class TeamService {
         team.delete();
     }
 
+    // 팀 멤버 추가
     @Transactional
     public TeamResponseDto addTeamMember(Long id, Long userId) {
         // 팀 존재여부확인
@@ -141,5 +142,18 @@ public class TeamService {
                 .map(TeamMemberResponseDto::from)
                 .toList();
         return TeamResponseDto.of(team, members);
+    }
+
+    // 팀 멤버 제거
+    @Transactional
+    public void removeTeamMember(Long teamId, Long userId) {
+        // 팀 존재 여부 확인
+        Team team = teamRepository.findByIdAndDeletedAtIsNull(teamId)
+                .orElseThrow(() -> new CustomException(ErrorCode.TEAM_NOT_FOUND));
+        // 팀 멤버 존재 확인
+        TeamMember teamMember = teamMemberRepository.findByTeamIdAndUserIdAndDeletedAtIsNull(teamId, userId)
+                .orElseThrow(() -> new CustomException(ErrorCode.TEAM_MEMBER_NOT_FOUND));
+
+        teamMember.delete();
     }
 }
