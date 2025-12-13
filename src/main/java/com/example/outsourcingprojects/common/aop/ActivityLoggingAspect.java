@@ -10,7 +10,9 @@ import com.example.outsourcingprojects.domain.activitylog.repository.ActivityLog
 import com.example.outsourcingprojects.domain.task.dto.CreateTaskResponseDto;
 import com.example.outsourcingprojects.domain.task.repository.TaskRepository;
 import com.example.outsourcingprojects.domain.user.repository.UserRepository;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.HttpServletRequest;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.AfterReturning;
@@ -18,20 +20,26 @@ import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
+import org.springframework.web.util.ContentCachingRequestWrapper;
+import org.springframework.web.util.WebUtils;
 
 import java.time.LocalDateTime;
 
 @Slf4j
 @Aspect
+@Component
+@RequiredArgsConstructor
 public class ActivityLoggingAspect {
+
+    private final ObjectMapper objectMapper;
+
     @Autowired
     private ActivityLogRepository activityLogRepository;
-
     @Autowired
     private UserRepository userRepository;
-
     @Autowired
     private TaskRepository taskRepository;
 
@@ -39,16 +47,18 @@ public class ActivityLoggingAspect {
     public void ActivityLoggingPointcut() {
     }
 
-    @AfterReturning(value = "ActivityLoggingPointcut()", returning = "retVal")
-    public Object ActivityLoggingAdvice(Object retVal) {
+    @AfterReturning(value = "ActivityLoggingPointcut()", returning = "returnValue")
+    public Object ActivityLoggingAdvice(Object returnValue) {
 
         HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
-        String requestURI = request.getRequestURI();
+        ContentCachingRequestWrapper requestWrapper = WebUtils.getNativeRequest(request, ContentCachingRequestWrapper.class);
 
-        Long userId = (Long) request.getAttribute("userId");
+        String requestURI = requestWrapper.getRequestURI();
+
+        Long userId = (Long) requestWrapper.getAttribute("userId");
         User user = userRepository.findById(userId).orElseThrow(() -> new IllegalStateException("사용자 없음"));
 
-        GlobalResponse result = (GlobalResponse) retVal;
+        GlobalResponse result = (GlobalResponse) returnValue;
 
         String[] msg = result.getMessage().split(" ");
         String target = msg[0].substring(0, 2);
@@ -57,7 +67,7 @@ public class ActivityLoggingAspect {
 
         LocalDateTime timestamp = result.getTimestamp();
 
-        String method = request.getMethod();
+        String method = requestWrapper.getMethod();
         String[] uri = requestURI.split("/");
         int uriLen = uri.length;
 
@@ -100,17 +110,50 @@ public class ActivityLoggingAspect {
 
         activityLogRepository.save(activityLog);
 
-        log.info("AOP 성공~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
-        return retVal;
+        return returnValue;
     }
 
-    //실행 시간, 호출자, 메서드명, 입력 파라미터, 실행 결과, 예외 발생 여부
     @Around(value = "ActivityLoggingPointcut()")
-    public Object ActivityLoggingAdvice(ProceedingJoinPoint joinPoint) throws Throwable {
+    public Object InfoLoggingAdvice(ProceedingJoinPoint joinPoint) throws Throwable {
 
-        Object result = joinPoint.proceed();
+        HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
+        ContentCachingRequestWrapper requestWrapper = WebUtils.getNativeRequest(request, ContentCachingRequestWrapper.class);
 
-        return result;
+        String username = requestWrapper.getAttribute("username").toString();
+        String inputParam = requestWrapper.getContentAsString();
 
+        boolean isException = false;
+
+        Long startTime = System.currentTimeMillis();
+        Long runTime = null;
+        String resultStr = null;
+
+        try {
+            GlobalResponse result = (GlobalResponse) joinPoint.proceed();
+            Object resultData = result.getData();
+            resultStr = objectMapper.writeValueAsString(resultData);
+
+            return result;
+
+        } catch (Throwable throwable) {
+
+            isException = true;
+            log.info("실행 예외 발생: {}", throwable.getMessage());
+
+            throw throwable;
+        } finally {
+            Long endTime = System.currentTimeMillis();
+            runTime = endTime - startTime;
+
+            log.info("""
+                            실행 시간: {}
+                            호출자: {}
+                            메서드명: {}
+                            입력 파라미터: {}
+                            실행 결과: {}
+                            실행 예외 발생 여부: {}
+                            """
+                    , runTime, username, joinPoint.getSignature().getName(), inputParam, resultStr, isException);
+        }
     }
 }
