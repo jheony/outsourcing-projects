@@ -2,6 +2,7 @@ package com.example.outsourcingprojects.domain.team.service;
 
 import com.example.outsourcingprojects.common.entity.Team;
 import com.example.outsourcingprojects.domain.team.dto.request.CreateTeamRequestDto;
+import com.example.outsourcingprojects.domain.team.dto.request.UpdateTeamRequestDto;
 import com.example.outsourcingprojects.domain.team.dto.response.CreateTeamResponseDto;
 import com.example.outsourcingprojects.domain.team.dto.response.TeamMemberResponseDto;
 import com.example.outsourcingprojects.domain.team.dto.response.TeamResponseDto;
@@ -131,6 +132,25 @@ class TeamServiceTest {
     @DisplayName("팀 수정 성공")
     void updateTeam() {
 
+        // given
+        Team testTeam = Team.of("테스트팀", "테스트 설명");
+        ReflectionTestUtils.setField(testTeam, "id", 1L);
+
+        UpdateTeamRequestDto request = new UpdateTeamRequestDto();
+        ReflectionTestUtils.setField(request, "name", "팀수정 테스트");
+        ReflectionTestUtils.setField(request, "description", "수정테스트 설명입니다.");
+
+        when(teamRepository.findByIdAndDeletedAtIsNull(1L)).thenReturn(Optional.of(testTeam));
+        when(userRepository.getUsersByTeam(1L)).thenReturn(new ArrayList<>());
+
+        // when
+        TeamResponseDto result = teamService.updateTeam(1L, request);
+
+        // then
+        assertThat(result.getName()).isEqualTo("팀수정 테스트");
+        assertThat(result.getDescription()).isEqualTo("수정테스트 설명입니다.");
     }
+
+
 
     }
