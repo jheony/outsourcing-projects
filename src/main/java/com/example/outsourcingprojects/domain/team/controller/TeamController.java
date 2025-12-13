@@ -8,6 +8,8 @@ import com.example.outsourcingprojects.domain.team.dto.response.CreateTeamRespon
 import com.example.outsourcingprojects.domain.team.dto.response.TeamMemberResponseDto;
 import com.example.outsourcingprojects.domain.team.dto.response.TeamResponseDto;
 import com.example.outsourcingprojects.domain.team.service.TeamService;
+import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -50,8 +52,12 @@ public class TeamController {
 
     // 팀 수정
     @PutMapping("/{id}")
-    public GlobalResponse<TeamResponseDto> updateTeamHandler(@PathVariable Long id, @Valid @RequestBody UpdateTeamRequestDto request) {
-        TeamResponseDto responseDto = teamService.updateTeam(id, request);
+    public GlobalResponse<TeamResponseDto> updateTeamHandler(
+            @PathVariable Long id,
+            @Valid @RequestBody UpdateTeamRequestDto request,
+            HttpServletRequest userToken) {
+        String userRole = (String) userToken.getAttribute("role");
+        TeamResponseDto responseDto = teamService.updateTeam(id, request, userRole);
         return GlobalResponse.success("팀 정보가 수정되었습니다.", responseDto);
     }
 
@@ -70,9 +76,14 @@ public class TeamController {
         return GlobalResponse.success("팀 멤버가 추가되었습니다.", responseDto);
     }
 
+    // 팀 멤버 제거
     @DeleteMapping("/{teamId}/members/{userId}")
-    public GlobalResponse<Void> removeTemaMemberHandler(@PathVariable Long teamId, @PathVariable Long userId) {
-        teamService.removeTeamMember(teamId, userId);
+    public GlobalResponse<Void> removeTeamMemberHandler(
+            @PathVariable Long teamId,
+            @PathVariable Long userId,
+            HttpServletRequest userToken) {
+        String userRole = (String) userToken.getAttribute("role");
+        teamService.removeTeamMember(teamId, userId, userRole);
         return GlobalResponse.success("팀 멤버가 제거되었습니다.", null);
     }
 }

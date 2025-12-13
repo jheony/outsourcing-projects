@@ -144,7 +144,7 @@ class TeamServiceTest {
         when(userRepository.getUsersByTeam(1L)).thenReturn(new ArrayList<>());
 
         // when
-        TeamResponseDto result = teamService.updateTeam(1L, request);
+        TeamResponseDto result = teamService.updateTeam(1L, request, "ADMIN");
 
         // then
         assertThat(result.getName()).isEqualTo("팀수정 테스트");

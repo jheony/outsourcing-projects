@@ -89,7 +89,11 @@ public class TeamService {
 
     // 팀 수정
     @Transactional
-    public TeamResponseDto updateTeam(Long id, UpdateTeamRequestDto requestDto) {
+    public TeamResponseDto updateTeam(Long id, UpdateTeamRequestDto requestDto, String  userRole) {
+        System.out.println("🔥 userRole = [" + userRole + "]");
+        if (!"ADMIN".equals(userRole)) {
+            throw new CustomException(ErrorCode.NO_UPDATE_PERMISSION);
+        }
         // id에 해당하는 팀 존재여부 및 삭제여부 확인
         Team team = teamRepository.findByIdAndDeletedAtIsNull(id)
                 .orElseThrow(() -> new CustomException(ErrorCode.TEAM_NOT_FOUND));
@@ -145,7 +149,10 @@ public class TeamService {
 
     // 팀 멤버 제거
     @Transactional
-    public void removeTeamMember(Long teamId, Long userId) {
+    public void removeTeamMember(Long teamId, Long userId, String userRole) {
+        if (!"ADMIN".equals(userRole)) {
+            throw new CustomException(ErrorCode.NO_REMOVE_PERMISSION);
+        }
         // 팀 존재 여부 확인
         Team team = teamRepository.findByIdAndDeletedAtIsNull(teamId)
                 .orElseThrow(() -> new CustomException(ErrorCode.TEAM_NOT_FOUND));

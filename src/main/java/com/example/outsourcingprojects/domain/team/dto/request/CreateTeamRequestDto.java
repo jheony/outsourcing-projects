@@ -7,7 +7,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Getter
-@NoArgsConstructor
 @AllArgsConstructor
 public class CreateTeamRequestDto {
 
@@ -17,4 +16,8 @@ public class CreateTeamRequestDto {
 
     @Size(max = 255, message = "255자를 초과할 수 없습니다.")
     private String description;
+
+    public CreateTeamRequestDto() {
+
+    }
 }
