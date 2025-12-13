@@ -32,29 +32,29 @@ public class TaskService {
 
     // 2. 전체 작업(목록) 조회
     @Transactional(readOnly = true)
-    public PageDataDTO<TaskListResponseDto> getAllTasks(String status, String query, Long assigneeId, Pageable pageable) {
+    public PageDataDTO<TaskDTO> getAllTasks(String status, String query, Long assigneeId, Pageable pageable) {
 
         Long statusNum = TaskStatusType.valueOf(status).getStatusNum();
 
         // 목록조회
         Page<Task> taskPage = taskRepository.getAllTaskWithCondition(statusNum, query, assigneeId, pageable);
-        Page<TaskListResponseDto> responseDtoPage = taskPage.map(TaskListResponseDto::from);
+        Page<TaskDTO> responseDtoPage = taskPage.map(TaskDTO::from);
 
         return PageDataDTO.of(responseDtoPage);
     }
 
     // 3. 작업 상세 조회
     @Transactional(readOnly = true)
-    public TaskResponse getTask(Long taskId) {
+    public TaskDTO getTask(Long taskId) {
 
         Task task = taskRepository.findByIdAndDeletedAtIsNull(taskId)
                 .orElseThrow(() -> new CustomException(TASK_NOT_FOUND));
 
-        return TaskResponse.from(task);
+        return TaskDTO.from(task);
     }
 
     @Transactional
-    public CreateTaskResponseDto createTask(CreateTaskRequestDto request, Long userId) {
+    public CreateTaskResponse createTask(CreateTaskRequest request, Long userId) {
         User assignee;
         if (request.getAssigneeId() == null) {
             assignee = userRepository.findById(userId).orElseThrow(
@@ -87,7 +87,7 @@ public class TaskService {
         Task savedTask = taskRepository.save(task);
 
         // Entity -> Response DTO 변환 후 반환
-        return CreateTaskResponseDto.from(savedTask);
+        return CreateTaskResponse.from(savedTask);
     }
 
     // 4. 작업 수정
@@ -141,7 +141,7 @@ public class TaskService {
 
     // 6. 작업 상태 변경
     @Transactional
-    public StatusUpdateResponseDto statusUpdateTask(Long id, StatusUpdateRequestDto requestDto) {
+    public StatusUpdateResponse statusUpdateTask(Long id, StatusUpdateRequest requestDto) {
         // 작업 조회
         Task task = taskRepository.findById(id)
                 .orElseThrow(() -> new CustomException(TASK_NOT_FOUND));
@@ -160,7 +160,7 @@ public class TaskService {
         // 상태 변경
         task.updateStatus(newStatus.getStatusNum());
 
-        return StatusUpdateResponseDto.from(task);
+        return StatusUpdateResponse.from(task);
     }
 
 }

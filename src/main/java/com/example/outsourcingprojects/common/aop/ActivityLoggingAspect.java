@@ -7,7 +7,7 @@ import com.example.outsourcingprojects.common.model.ActivityType;
 import com.example.outsourcingprojects.common.model.TaskStatusType;
 import com.example.outsourcingprojects.common.util.response.GlobalResponse;
 import com.example.outsourcingprojects.domain.activitylog.repository.ActivityLogRepository;
-import com.example.outsourcingprojects.domain.task.dto.CreateTaskResponseDto;
+import com.example.outsourcingprojects.domain.task.dto.CreateTaskResponse;
 import com.example.outsourcingprojects.domain.task.repository.TaskRepository;
 import com.example.outsourcingprojects.domain.user.repository.UserRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -78,7 +78,7 @@ public class ActivityLoggingAspect {
 
         // 작업 생성 시 작업 아이디 가져오기
         if (method.equals("POST") && target.equals("작업")) {
-            CreateTaskResponseDto responseDto = (CreateTaskResponseDto) result.getData();
+            CreateTaskResponse responseDto = (CreateTaskResponse) result.getData();
             taskId = responseDto.getId();
         }
 

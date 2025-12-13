@@ -1,6 +1,8 @@
 package com.example.outsourcingprojects.domain.auth.service;
 
 import com.example.outsourcingprojects.common.entity.User;
+import com.example.outsourcingprojects.common.exception.CustomException;
+import com.example.outsourcingprojects.common.exception.ErrorCode;
 import com.example.outsourcingprojects.common.model.UserRoleType;
 import com.example.outsourcingprojects.common.util.JwtUtil;
 import com.example.outsourcingprojects.common.util.PasswordEncoder;
@@ -26,11 +28,11 @@ public class AuthService {
         String password = request.getPassword();
 
         User user = userRepository.findByUsernameAndDeletedAtIsNull(username).orElseThrow(
-                () -> new IllegalStateException("등록된 사용자가 없습니다.")
+                () -> new CustomException(ErrorCode.USER_NOT_FOUND)
         );
 
         if (!passwordEncoder.matches(password, user.getPassword())) {
-            throw new IllegalStateException("비밀번호가 일치하지 않습니다.");
+            throw new CustomException(ErrorCode.NO_PERMISSION);
         }
 
         String token = jwtUtil.generateToken(

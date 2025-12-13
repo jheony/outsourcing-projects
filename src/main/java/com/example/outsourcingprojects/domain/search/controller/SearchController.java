@@ -15,9 +15,8 @@ public class SearchController {
     private final SearchService searchService;
 
     @GetMapping("/api/search")
-    public GlobalResponse<SearchResponse> searchHandler(
-            @RequestParam String query
-    ) {
+    public GlobalResponse<SearchResponse> searchHandler(@RequestParam String query) {
+
         SearchResponse result = searchService.search(query);
 
         return GlobalResponse.success("검색 성공", result);

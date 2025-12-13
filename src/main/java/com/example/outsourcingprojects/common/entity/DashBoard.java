@@ -12,18 +12,25 @@ public class DashBoard {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     @Column
     private Long totalTasks;
+
     @Column
     private Long completedTasks;
+
     @Column
     private Long inProgressTasks;
+
     @Column
     private Long todoTasks;
+
     @Column
     private Long overdueTasks;
+
     @Column
     private Double teamProgress;
+
     @Column
     private Double completionRate;
 

@@ -15,10 +15,4 @@ public class ErrorResponse {
         this.code = errorCode.name();
         this.message = errorCode.getMessage();
     }
-
-    public ErrorResponse(HttpStatusCode statusCode, String message) {
-        this.status = statusCode.value();
-        this.code = statusCode.toString();
-        this.message = message;
-    }
 }

@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class StatusUpdateRequestDto {
+public class StatusUpdateRequest {
 
     private String status;
 }

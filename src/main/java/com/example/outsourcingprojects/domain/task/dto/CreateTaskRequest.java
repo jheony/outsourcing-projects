@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
-public class CreateTaskRequestDto {
+public class CreateTaskRequest {
 
     private Long assigneeId;
     private String title;

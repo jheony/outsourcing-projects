@@ -1,6 +1,5 @@
 package com.example.outsourcingprojects.common.entity;
 
-import com.example.outsourcingprojects.domain.team.dto.response.TeamMemberResponseDto;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -28,7 +27,7 @@ public class TeamMember extends BaseEntity {
         this.team = team;
         this.user = user;
     }
-    //팀을 만들때 사용해주면 편리합니다.
+
     public static TeamMember from(Team team, User user) {
         return new TeamMember(team, user);
     }
