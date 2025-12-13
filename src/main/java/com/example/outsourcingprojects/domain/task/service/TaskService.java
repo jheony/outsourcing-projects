@@ -1,7 +1,6 @@
 package com.example.outsourcingprojects.domain.task.service;
 
 
-import com.example.outsourcingprojects.common.entity.Comment;
 import com.example.outsourcingprojects.common.entity.Task;
 import com.example.outsourcingprojects.common.entity.User;
 import com.example.outsourcingprojects.common.exception.CustomException;
@@ -16,13 +15,9 @@ import com.example.outsourcingprojects.domain.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
 
 
 @Service
@@ -85,17 +80,12 @@ public class TaskService {
 
     // 2. 전체 작업(목록) 조회
     @Transactional(readOnly = true)
-    public PageDataDTO<TaskListResponseDto> getAllTasks(int page, int size, String status, String search, Long assigneeId) {
-        //상단의 @Transactional과 같은 어노테이션인데 임포트문이 이곳에 추가적으로 붙어있네요.
-        //제거해주시기 바랍니다. ok
-        //Pageable 인스턴스화
-        Pageable pageable = PageRequest.of(page, size, Sort.by("createdAt").descending());
+    public PageDataDTO<TaskListResponseDto> getAllTasks(String status, String query, Long assigneeId, Pageable pageable) {
 
-        //상단에 task를 통해 객체를 생성하는 Response라는 메서드를 작성해주셨는데
-        //활용하지않고 계시네요
-        //활용하여 작성하시면 조금 더 보기 편할 것 같습니다. ok
+        Long statusNum = TaskStatusType.valueOf(status).getStatusNum();
+
         // 목록조회
-        Page<Task> taskPage = taskRepository.findAll(pageable);
+        Page<Task> taskPage = taskRepository.getAllTaskWithCondition(statusNum, query, assigneeId, pageable);
         Page<TaskListResponseDto> responseDtoPage = taskPage.map(TaskListResponseDto::from);
 
         return PageDataDTO.of(responseDtoPage);

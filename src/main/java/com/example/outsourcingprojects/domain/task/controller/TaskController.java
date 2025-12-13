@@ -5,6 +5,8 @@ import com.example.outsourcingprojects.common.util.response.GlobalResponse;
 import com.example.outsourcingprojects.domain.task.dto.*;
 import com.example.outsourcingprojects.domain.task.service.TaskService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
 
 
@@ -12,7 +14,6 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 @RequestMapping("/api/tasks")
 public class TaskController {
-    //Controller에서 사용하는 메서드는 서비스의 메서드명과 곂치지 않도록 Handler를 붙여주기로 약속했습니다. ok
     private final TaskService taskService;
     //TODO ResposneEntity  대신 GrobalResponse 로 바꿔서 , return GrobalResponse.success로 (다른팀원 controller 참고)
 
@@ -25,16 +26,20 @@ public class TaskController {
         return GlobalResponse.success("작업이 생성되었습니다.", response);
     }
 
-    // 작업 전체 조회
+    // 전체 작업(목록) 조회
     @GetMapping
     public GlobalResponse<PageDataDTO<TaskListResponseDto>> getAllTasksHandler(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size,
+            @RequestParam(required = false) String query,
             @RequestParam(required = false) String status,
-            @RequestParam(required = false) String search,
-            @RequestParam(required = false) Long assigneeId) {
-        PageDataDTO<TaskListResponseDto> tasks = taskService.getAllTasks(page, size, status, search, assigneeId);
-        return GlobalResponse.success("작업 목록 조회 성공", tasks);
+            @RequestParam(required = false) Long assigneeId
+    ) {
+        Pageable pageable = PageRequest.of(page, size);
+
+        PageDataDTO<TaskListResponseDto> result = taskService.getAllTasks(status, query, assigneeId, pageable);
+
+        return GlobalResponse.success("작업 목록 조회 성공", result);
     }
 
     // 특정 작업 조회
