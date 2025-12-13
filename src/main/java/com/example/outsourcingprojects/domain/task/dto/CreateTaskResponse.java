@@ -8,37 +8,34 @@ import lombok.Getter;
 
 import java.time.LocalDateTime;
 
+//필요없는 import문은 반드시 제거해주세요. ok
+
 @Getter
 @AllArgsConstructor
-public class TaskResponse {
+public class CreateTaskResponse {
 
     private final Long id;
+    private final Long assigneeId;
     private final String title;
     private final String description;
-    private final String status;
     private final String priority;
-    private final Long assigneeId;
-    private final TaskAssigneeReponse assignee;
+    private final String status;
+    private final LocalDateTime dueDate;
     private final LocalDateTime createdAt;
     private final LocalDateTime updatedAt;
-    private final LocalDateTime dueDate;
 
-    public static TaskResponse from(Task task) {
-        return new TaskResponse(
+    public static CreateTaskResponse from(Task task) {
+
+        return new CreateTaskResponse(
                 task.getId(),
+                task.getAssignee().getId(),
                 task.getTitle(),
                 task.getDescription(),
-                TaskStatusType.toType(task.getStatus()).name(),
                 PriorityType.toType(task.getPriority()).name(),
-                task.getAssignee().getId(),
-                new TaskAssigneeReponse(
-                        task.getAssignee().getId(),
-                        task.getAssignee().getUsername(),
-                        task.getAssignee().getName()
-                ),
+                TaskStatusType.toType(task.getStatus()).name(),
+                task.getDueDate(),
                 task.getCreatedAt(),
-                task.getUpdatedAt(),
-                task.getDueDate()
+                task.getUpdatedAt()
         );
     }
 }

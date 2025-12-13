@@ -176,23 +176,6 @@ public class TaskRepositoryImpl implements TaskRepositoryCustom {
     }
 
     @Override
-    public Task getTaskById(Long taskId) {
-
-        QTask task = QTask.task;
-        QUser user = QUser.user;
-
-        return queryFactory
-                .selectFrom(task)
-                .join(task.assignee, user)
-                .fetchJoin()
-                .where(
-                        task.assignee.id.eq(taskId),
-                        task.deletedAt.isNull()
-                )
-                .fetchOne();
-    }
-
-    @Override
     public Page<Task> getAllTaskWithCondition(Long status, String query, Long assigneeId, Pageable pageable) {
 
         QTask task = QTask.task;
@@ -209,6 +192,8 @@ public class TaskRepositoryImpl implements TaskRepositoryCustom {
                         task.deletedAt.isNull()
                 )
                 .orderBy(task.createdAt.desc())
+                .limit(pageable.getPageSize())
+                .offset(pageable.getOffset())
                 .fetch();
 
         JPAQuery<Long> countQuery = queryFactory

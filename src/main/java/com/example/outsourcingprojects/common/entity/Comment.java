@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @Table(name = "comments")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Comment extends BaseEntity{
+public class Comment extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -35,6 +35,10 @@ public class Comment extends BaseEntity{
         this.task = task;
         this.comment = comment;
         this.content = content;
+    }
+
+    public void update(String content) {
+        if (content != null) this.content = content;
     }
 
 }

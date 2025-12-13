@@ -6,7 +6,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-
 @Entity
 @Table(name = "teams")
 @Getter
@@ -24,7 +23,6 @@ public class Team extends BaseEntity {
     @Column
     private String description;
 
-
     private Team(String name, String description) {
         this.name = name;
         this.description = description;
@@ -33,7 +31,6 @@ public class Team extends BaseEntity {
     public static Team of(String name, String description) {
         return new Team(name, description);
     }
-
 
     public void update(String name, String description) {
         if (name != null) {
