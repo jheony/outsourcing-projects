@@ -21,6 +21,8 @@ public class TeamRepositoryImpl implements TeamRepositoryCustom {
         List<Team> teams = queryFactory.select(team)
                 .from(team)
                 .where(team.name.containsIgnoreCase(query))
+                .orderBy(team.createdAt.desc())
+                .limit(100)
                 .fetch();
 
         return teams.stream().map(SearchTeamResponse::from).toList();
