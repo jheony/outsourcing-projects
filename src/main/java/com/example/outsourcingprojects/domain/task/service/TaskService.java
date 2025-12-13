@@ -131,11 +131,16 @@ public class TaskService {
         Task task = taskRepository.findByIdAndDeletedAtIsNull(id)
                 .orElseThrow(() -> new CustomException(TASK_NOT_FOUND));
 
+        TaskStatusType curStatus = TaskStatusType.toType(task.getStatus());
         TaskStatusType newStatus;
 
         try {
             newStatus = TaskStatusType.valueOf(requestDto.getStatus());
         } catch (CustomException e) {
+            throw new CustomException(INVALID_STATUS_VALUE);
+        }
+
+        if (curStatus.compareTo(newStatus) > 0) {
             throw new CustomException(INVALID_STATUS_VALUE);
         }
 
