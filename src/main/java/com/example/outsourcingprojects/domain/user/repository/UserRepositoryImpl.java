@@ -36,6 +36,7 @@ public class UserRepositoryImpl implements UserRepositoryCustom {
         List<User> users = queryFactory.select(user)
                 .from(user)
                 .where(user.name.containsIgnoreCase(query))
+                .limit(100)
                 .fetch();
 
         return users.stream().map(SearchUserResponse::from).toList();

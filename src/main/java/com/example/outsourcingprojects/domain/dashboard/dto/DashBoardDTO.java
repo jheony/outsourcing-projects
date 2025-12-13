@@ -1,5 +1,6 @@
 package com.example.outsourcingprojects.domain.dashboard.dto;
 
+import com.example.outsourcingprojects.common.entity.DashBoard;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
@@ -15,4 +16,15 @@ public class DashBoardDTO {
     private final Double teamProgress;
     private final Long myTasksToday;
     private final Double completionRate;
+
+    public static DashBoardDTO from(DashBoard dashBoard, Long myTasksToday) {
+        return new DashBoardDTO(dashBoard.getTotalTasks(),
+                dashBoard.getCompletedTasks(),
+                dashBoard.getInProgressTasks(),
+                dashBoard.getTodoTasks(),
+                dashBoard.getOverdueTasks(),
+                dashBoard.getTeamProgress(),
+                myTasksToday,
+                dashBoard.getCompletionRate());
+    }
 }

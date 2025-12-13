@@ -1,4 +1,4 @@
-package com.example.outsourcingprojects.domain.dashboard.repository;
+package com.example.outsourcingprojects.domain.task.repository;
 
 import com.example.outsourcingprojects.common.entity.QTask;
 import com.example.outsourcingprojects.common.entity.Task;
@@ -20,7 +20,7 @@ import java.time.LocalTime;
 import java.util.List;
 
 @RequiredArgsConstructor
-public class DashBoardRepositoryImpl implements DashBoardRepositoryCustom {
+public class TaskRepositoryImpl implements TaskRepositoryCustom {
 
     private final JPAQueryFactory queryFactory;
 
@@ -143,6 +143,7 @@ public class DashBoardRepositoryImpl implements DashBoardRepositoryCustom {
         List<Task> tasks = queryFactory
                 .selectFrom(task)
                 .where(task.title.containsIgnoreCase(query))
+                .limit(100)
                 .fetch();
 
         return tasks.stream().map(SearchTaskResponse::from).toList();

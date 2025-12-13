@@ -1,17 +1,20 @@
 package com.example.outsourcingprojects.domain.dashboard.service;
 
 import com.example.outsourcingprojects.common.aop.TrackTime;
+import com.example.outsourcingprojects.common.entity.DashBoard;
 import com.example.outsourcingprojects.common.entity.QTask;
 import com.example.outsourcingprojects.common.entity.Task;
 import com.example.outsourcingprojects.common.model.TaskStatusType;
-import com.example.outsourcingprojects.domain.dashboard.repository.DashBoardRepository;
 import com.example.outsourcingprojects.domain.dashboard.dto.DailyTaskDTO;
 import com.example.outsourcingprojects.domain.dashboard.dto.DashBoardDTO;
 import com.example.outsourcingprojects.domain.dashboard.dto.GetTaskSummaryResponse;
 import com.example.outsourcingprojects.domain.dashboard.dto.TaskSummaryDTO;
+import com.example.outsourcingprojects.domain.dashboard.repository.DashBoardRepository;
+import com.example.outsourcingprojects.domain.task.repository.TaskRepository;
 import com.querydsl.core.Tuple;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -24,15 +27,16 @@ import java.util.List;
 @RequiredArgsConstructor
 public class DashBoardService {
 
+    private final TaskRepository taskRepository;
     private final DashBoardRepository dashBoardRepository;
 
     @TrackTime
     @Transactional(readOnly = true)
     public GetTaskSummaryResponse getTaskSummaries(Long userId) {
 
-        Page<Task> upcomingTasks = dashBoardRepository.findAllByAssigneeIdAndStatus(userId, TaskStatusType.TODO.getStatusNum());
-        Page<Task> todayTasks = dashBoardRepository.findAllByAssigneeIdAndStatus(userId, TaskStatusType.IN_PROGRESS.getStatusNum());
-        Page<Task> overdueTasks = dashBoardRepository.findAllByAssigneeIdAndStatus(userId, TaskStatusType.DONE.getStatusNum());
+        Page<Task> upcomingTasks = taskRepository.findAllByAssigneeIdAndStatus(userId, TaskStatusType.TODO.getStatusNum());
+        Page<Task> todayTasks = taskRepository.findAllByAssigneeIdAndStatus(userId, TaskStatusType.IN_PROGRESS.getStatusNum());
+        Page<Task> overdueTasks = taskRepository.findAllByAssigneeIdAndStatus(userId, TaskStatusType.DONE.getStatusNum());
 
         List<TaskSummaryDTO> upcomingSummaryTasks = upcomingTasks.stream().map(TaskSummaryDTO::from).toList();
         List<TaskSummaryDTO> todaySummaryTasks = todayTasks.stream().map(TaskSummaryDTO::from).toList();
@@ -42,10 +46,11 @@ public class DashBoardService {
 
     }
 
+    @Scheduled(fixedRate = 5000)
     @TrackTime
-    @Transactional(readOnly = true)
-    public DashBoardDTO getDashBoard(Long userId) {
-        List<Tuple> statusTask = dashBoardRepository.countTasksByStatus();
+    @Transactional
+    public void refreshDashBoard() {
+        List<Tuple> statusTask = taskRepository.countTasksByStatus();
 
         //Todo(10L) > InProgress(20L) > Done(30L)
         Long todoTasks = 0L;
@@ -73,9 +78,7 @@ public class DashBoardService {
         }
         Long totalTasks = todoTasks + inProgressTasks + completedTasks;
 
-        Long overdueTasks = dashBoardRepository.countOverdueTask();
-
-        Long myTasksToday = dashBoardRepository.countMyTaskToday(userId);
+        Long overdueTasks = taskRepository.countOverdueTask();
 
         Double teamProgress = ((completedTasks.doubleValue() + inProgressTasks.doubleValue()) / totalTasks.doubleValue()) * 100.0;
         bd = new BigDecimal(teamProgress).setScale(2, RoundingMode.HALF_UP);
@@ -83,9 +86,12 @@ public class DashBoardService {
 
         Double completionRate = completedTasks.doubleValue() / totalTasks.doubleValue() * 100.0;
         bd = new BigDecimal(completionRate).setScale(2, RoundingMode.HALF_UP);
-        completionRate = bd.doubleValue();;
+        completionRate = bd.doubleValue();
+        ;
 
-        return new DashBoardDTO(totalTasks, completedTasks, inProgressTasks, todoTasks, overdueTasks, teamProgress, myTasksToday, completionRate);
+        DashBoard dashBoard = DashBoard.from(totalTasks, completedTasks, inProgressTasks, todoTasks, overdueTasks, teamProgress, completionRate);
+
+        dashBoardRepository.save(dashBoard);
     }
 
     @TrackTime
@@ -94,9 +100,18 @@ public class DashBoardService {
         List<DailyTaskDTO> result = new ArrayList<>();
 
         for (int i = 6; i >= 0; i--) {
-            result.add(dashBoardRepository.getDailyTask(i, userId));
+            result.add(taskRepository.getDailyTask(i, userId));
         }
 
         return result;
+    }
+
+    @TrackTime
+    @Transactional(readOnly = true)
+    public DashBoardDTO getDashBoard(Long userId) {
+        DashBoard dashBoard = dashBoardRepository.findLatestDashBoard();
+        Long todayMyTasks = taskRepository.countMyTaskToday(userId);
+
+        return DashBoardDTO.from(dashBoard, todayMyTasks);
     }
 }
