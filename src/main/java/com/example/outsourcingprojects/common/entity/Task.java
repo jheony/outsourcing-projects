@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Task extends BaseEntity {
-    // 속
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -38,7 +38,6 @@ public class Task extends BaseEntity {
     @Column
     private LocalDateTime dueDate;
 
-    // 생
     public Task(String title, String description, Long priority, Long status, User assignee, LocalDateTime dueDate) {
 
         this.title = title;
@@ -49,14 +48,14 @@ public class Task extends BaseEntity {
         this.dueDate = dueDate;
     }
 
-
-    // 작업 수정 메서드
-    public void update(String title, String description, Long status, LocalDateTime dueDate) {
+    public void update(String title, String description, Long status, long statusNum, LocalDateTime dueDate) {
         this.title = title;
         this.description = description;
         this.status = status;
         this.dueDate = dueDate;
     }
+
+    public void updateStatus(long statusNum) {
+        this.status = statusNum;
+    }
 }
-
-

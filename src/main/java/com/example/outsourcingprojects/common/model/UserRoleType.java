@@ -15,7 +15,7 @@ public enum UserRoleType {
 
     private final long roleNum;
 
-    public static UserRoleType toType(Long value) throws CustomException {
+    public static UserRoleType toType(Long value) {
         if (value == null) throw new CustomException(TYPE_NOT_FOUND);
 
         for (UserRoleType type : UserRoleType.values()) {
@@ -27,7 +27,7 @@ public enum UserRoleType {
         throw new CustomException(TYPE_NOT_FOUND);
     }
 
-    public static UserRoleType strToType(String value) throws CustomException {
+    public static UserRoleType strToType(String value) {
         if (value == null) throw new CustomException(TYPE_NOT_FOUND);
 
         for (UserRoleType type : UserRoleType.values()) {

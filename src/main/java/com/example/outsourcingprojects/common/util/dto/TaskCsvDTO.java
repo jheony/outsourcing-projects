@@ -7,7 +7,7 @@ import java.time.LocalDateTime;
 
 @Getter
 @Setter
-public class TaskCsvDto {
+public class TaskCsvDTO {
     private Long id;
     private Long assignee_id;
     private String title;

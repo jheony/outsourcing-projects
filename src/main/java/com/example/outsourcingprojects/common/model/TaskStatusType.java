@@ -1,7 +1,10 @@
 package com.example.outsourcingprojects.common.model;
 
+import com.example.outsourcingprojects.common.exception.CustomException;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+
+import static com.example.outsourcingprojects.common.exception.ErrorCode.TYPE_NOT_FOUND;
 
 @Getter
 @RequiredArgsConstructor
@@ -14,13 +17,13 @@ public enum TaskStatusType {
     private final long statusNum;
 
     public static TaskStatusType toType(Long value) {
-        if (value == null) return null;
+        if (value == null) throw new CustomException(TYPE_NOT_FOUND);
 
         for (TaskStatusType type : TaskStatusType.values()) {
             if (type.getStatusNum() == value) {
                 return type;
             }
         }
-        return null;
+        throw new CustomException(TYPE_NOT_FOUND);
     }
 }

@@ -30,7 +30,6 @@ public class DashBoardService {
     private final TaskRepository taskRepository;
     private final DashBoardRepository dashBoardRepository;
 
-    @TrackTime
     @Transactional(readOnly = true)
     public GetTaskSummaryResponse getTaskSummaries(Long userId) {
 
@@ -78,6 +77,7 @@ public class DashBoardService {
                 completedTasks = (count != null) ? count : 0L;
             }
         }
+
         Long totalTasks = todoTasks + inProgressTasks + completedTasks;
 
         Long overdueTasks = taskRepository.countOverdueTask();
@@ -99,6 +99,7 @@ public class DashBoardService {
     @TrackTime
     @Transactional(readOnly = true)
     public List<DailyTaskDTO> getWeeklyTasks(Long userId) {
+
         List<DailyTaskDTO> result = new ArrayList<>();
 
         for (int i = 6; i >= 0; i--) {
@@ -111,6 +112,7 @@ public class DashBoardService {
     @TrackTime
     @Transactional(readOnly = true)
     public DashBoardDTO getDashBoard(Long userId) {
+
         DashBoard dashBoard = dashBoardRepository.findLatestDashBoard();
         Long todayMyTasks = taskRepository.countMyTaskToday(userId);
 

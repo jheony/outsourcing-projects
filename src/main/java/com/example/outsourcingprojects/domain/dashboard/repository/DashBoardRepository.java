@@ -7,6 +7,7 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface DashBoardRepository extends JpaRepository<DashBoard, Long> {
+
     @Query("SELECT d FROM DashBoard d WHERE d.id = (SELECT MAX(d2.id) FROM DashBoard d2)")
     DashBoard findLatestDashBoard();
 

@@ -1,11 +1,10 @@
 package com.example.outsourcingprojects.domain.dashboard.controller;
 
-import com.example.outsourcingprojects.common.aop.TrackTime;
 import com.example.outsourcingprojects.common.util.response.GlobalResponse;
-import com.example.outsourcingprojects.domain.dashboard.service.DashBoardService;
 import com.example.outsourcingprojects.domain.dashboard.dto.DailyTaskDTO;
 import com.example.outsourcingprojects.domain.dashboard.dto.DashBoardDTO;
 import com.example.outsourcingprojects.domain.dashboard.dto.GetTaskSummaryResponse;
+import com.example.outsourcingprojects.domain.dashboard.service.DashBoardService;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,7 +18,6 @@ public class DashBoardController {
 
     private final DashBoardService dashBoardService;
 
-    //인증인가시, 코드수정
     @GetMapping("/api/dashboard/tasks")
     public GlobalResponse<GetTaskSummaryResponse> getSummaryTasksHandler(HttpServletRequest request) {
 
