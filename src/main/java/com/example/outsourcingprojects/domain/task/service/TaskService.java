@@ -64,7 +64,7 @@ public class TaskService {
     @Transactional(readOnly = true)
     public PageDataDTO<TaskDTO> getAllTasks(String status, String query, Long assigneeId, Pageable pageable) {
 
-        Long statusNum = TaskStatusType.valueOf(status).getStatusNum();
+        Long statusNum = status != null ? TaskStatusType.valueOf(status).getStatusNum() : null;
 
         Page<Task> taskPage = taskRepository.getAllTaskWithCondition(statusNum, query, assigneeId, pageable);
 
