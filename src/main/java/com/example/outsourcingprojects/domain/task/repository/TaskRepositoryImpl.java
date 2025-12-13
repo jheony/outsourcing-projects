@@ -143,6 +143,7 @@ public class TaskRepositoryImpl implements TaskRepositoryCustom {
         List<Task> tasks = queryFactory
                 .selectFrom(task)
                 .where(task.title.containsIgnoreCase(query))
+                .orderBy(task.createdAt.desc())
                 .limit(100)
                 .fetch();
 

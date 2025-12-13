@@ -46,7 +46,7 @@ public class DashBoardService {
 
     }
 
-    @Scheduled(fixedRate = 5000)
+    @Scheduled(fixedRate = 1000 * 60 * 10)
     @TrackTime
     @Transactional
     public void refreshDashBoard() {
