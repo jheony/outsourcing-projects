@@ -90,7 +90,6 @@ public class TeamService {
     // 팀 수정
     @Transactional
     public TeamResponseDto updateTeam(Long id, UpdateTeamRequestDto requestDto, String  userRole) {
-        System.out.println("🔥 userRole = [" + userRole + "]");
         if (!"ADMIN".equals(userRole)) {
             throw new CustomException(ErrorCode.NO_UPDATE_PERMISSION);
         }
