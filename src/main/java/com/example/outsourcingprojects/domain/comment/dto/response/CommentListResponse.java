@@ -17,14 +17,11 @@ public class CommentListResponse {
     private final int size;
     private final int number;
 
-    public static CommentListResponse from(Page<Comment> page) {
-        List<GetCommentResponse> responses = page.getContent()
-                .stream()
-                .map(GetCommentResponse::from)
-                .toList();
+    public static CommentListResponse from(List<GetCommentResponse> comments, Page<Comment> page) {
+
 
         return new CommentListResponse(
-                responses,
+                comments,
                 page.getTotalElements(),
                 page.getTotalPages(),
                 page.getSize(),

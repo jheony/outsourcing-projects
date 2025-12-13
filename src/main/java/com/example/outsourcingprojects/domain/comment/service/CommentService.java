@@ -20,6 +20,8 @@ import org.springframework.data.domain.Sort;
 import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -54,17 +56,51 @@ public class CommentService {
         return CreateCommentResponse.from(savedComment);
     }
 
+
+    //댓글 조회
     public CommentListResponse getComment(Long taskId, int page, int size, String sort) {
 
-        Sort sortOption = sort.equals("oldest")
+        Sort parentSort = sort.equals("oldest")
                 ? Sort.by(Sort.Direction.ASC, "createdAt")
                 : Sort.by(Sort.Direction.DESC, "createdAt");
 
-        Pageable pageable = PageRequest.of(page, size, sortOption);
-        Page<Comment> parents = commentRepository.findAllByTaskIdAndCommentIsNull(taskId, pageable);
-        List<Comment> children = commentRepository.findAllByTaskIdAndCommentIsNotNull(taskId);
+        Pageable pageable = PageRequest.of(page, size, parentSort);
 
-        return CommentListResponse.of(result, parents);
+        Page<Comment> parentsPage = commentRepository.findAllByTaskIdAndCommentIsNull(taskId, pageable);
+
+        List<Comment> parents = parentsPage.getContent();
+
+        List<Long> parentIds = parents.stream()
+                .map(Comment::getId)
+                .toList();
+
+        List<Comment> children = parentIds.isEmpty()
+                ? List.of()
+                : commentRepository.findAllByTaskIdAndComment_IdIn(
+                taskId,
+                parentIds,
+                Sort.by(Sort.Direction.ASC, "createdAt")
+        );
+
+        Map<Long, List<Comment>> childrenMap =
+                children.stream()
+                        .collect(Collectors.groupingBy(
+                                c -> c.getComment().getId(),
+                                LinkedHashMap::new,
+                                Collectors.toList()
+                        ));
+
+        List<Comment> ordered = new ArrayList<>();
+        for (Comment parent : parents) {
+            ordered.add(parent);
+            ordered.addAll(childrenMap.getOrDefault(parent.getId(), List.of()));
+        }
+
+        List<GetCommentResponse> result = ordered.stream()
+                .map(GetCommentResponse::from)
+                .toList();
+
+        return CommentListResponse.from(result, parentsPage);
     }
 
 //    public void update(Long taskId, Long  commentId, Long UpdateRequest request) {

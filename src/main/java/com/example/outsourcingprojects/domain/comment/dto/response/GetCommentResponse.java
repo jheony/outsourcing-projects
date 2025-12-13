@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Getter
 @RequiredArgsConstructor
@@ -20,16 +21,16 @@ public class GetCommentResponse {
     private final LocalDateTime createdAt;
     private final LocalDateTime updatedAt;
 
-    public static GetCommentResponse from(Comment comment) {
+    public static GetCommentResponse from(Comment parent) {
         return new GetCommentResponse(
-                comment.getId(),
-                comment.getContent(),
-                comment.getTask().getId(),
-                comment.getUser().getId(),
-                GetUserDto.from(comment.getUser()),
-                comment.getUser().getRole(),
-                comment.getCreatedAt(),
-                comment.getUpdatedAt()
+                parent.getId(),
+                parent.getContent(),
+                parent.getTask().getId(),
+                parent.getUser().getId(),
+                GetUserDto.from(parent.getUser()),
+                parent.getUser().getRole(),
+                parent.getCreatedAt(),
+                parent.getUpdatedAt()
         );
     }
 }
