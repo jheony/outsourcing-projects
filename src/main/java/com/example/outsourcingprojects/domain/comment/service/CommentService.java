@@ -3,6 +3,8 @@ package com.example.outsourcingprojects.domain.comment.service;
 import com.example.outsourcingprojects.common.entity.Comment;
 import com.example.outsourcingprojects.common.entity.Task;
 import com.example.outsourcingprojects.common.entity.User;
+import com.example.outsourcingprojects.common.exception.CustomException;
+import com.example.outsourcingprojects.common.exception.ErrorCode;
 import com.example.outsourcingprojects.domain.comment.dto.request.UpdateCommentRequest;
 import com.example.outsourcingprojects.domain.comment.dto.response.CommentListResponse;
 import com.example.outsourcingprojects.domain.comment.dto.response.UpdateCommentResponse;
@@ -40,22 +42,23 @@ public class CommentService {
     @Transactional
     public CreateCommentResponse create(Long taskId, Long userId, createCommentRequest commentRequest) {
 
-        User userinfo = userRepository.findByIdAndDeletedAtIsNull(userId)
-                .orElseThrow(() -> new IllegalArgumentException("유저 없음"));
-        Task taskInfo = taskRepository.findById((taskId))
-                .orElseThrow(() -> new IllegalArgumentException("게시글 없음"));
+            User userinfo = userRepository.findByIdAndDeletedAtIsNull(userId)
+                    .orElseThrow(() -> new CustomException(ErrorCode.LOGIN_REQUIRED));
 
-        Comment parentId = null;
-        if (commentRequest.getParentId() != null) {
-            parentId = commentRepository.findByIdAndDeletedAtIsNull(commentRequest.getParentId())
-                    .orElseThrow(() -> new IllegalArgumentException("부모 댓글 없음"));
-        }
+            Task taskInfo = taskRepository.findById((taskId))
+                    .orElseThrow(() -> new CustomException(ErrorCode.TASK_NOT_FOUND));
 
-        UserDto.from(userinfo);
-        Comment comment = new Comment(userinfo, taskInfo, parentId, commentRequest.getContent());
-        Comment savedComment = commentRepository.save(comment);
+            Comment parentId = null;
+            if (commentRequest.getParentId() != null) {
+                parentId = commentRepository.findByIdAndDeletedAtIsNull(commentRequest.getParentId())
+                        .orElseThrow(() -> new CustomException(ErrorCode.TASK_OR_PARENT_COMMENT_NOT_FOUND));
+            }
 
-        return CreateCommentResponse.from(savedComment);
+            UserDto.from(userinfo);
+            Comment comment = new Comment(userinfo, taskInfo, parentId, commentRequest.getContent());
+            Comment savedComment = commentRepository.save(comment);
+
+            return CreateCommentResponse.from(savedComment);
     }
 
 
@@ -63,14 +66,15 @@ public class CommentService {
     @Transactional
     public CommentListResponse getComment(Long taskId, int page, int size, String sort) {
 
+        taskRepository.findByIdAndDeletedAtIsNull(taskId)
+                .orElseThrow(() -> new CustomException(ErrorCode.TASK_NOT_FOUND));
+
         Sort parentSort = sort.equals("oldest")
                 ? Sort.by(Sort.Direction.ASC, "createdAt")
                 : Sort.by(Sort.Direction.DESC, "createdAt");
 
         Pageable pageable = PageRequest.of(page, size, parentSort);
-
         Page<Comment> parentsPage = commentRepository.findAllByTaskIdAndCommentIsNullAndDeletedAtIsNull(taskId, pageable);
-
         List<Comment> parents = parentsPage.getContent();
 
         List<Long> parentIds = parents.stream()
@@ -112,13 +116,13 @@ public class CommentService {
     public UpdateCommentResponse update(Long taskId, Long commentId, UpdateCommentRequest request) {
 
         taskRepository.findByIdAndDeletedAtIsNull(taskId)
-                .orElseThrow(() -> new IllegalArgumentException("게시글을 찾을 수 없습니다."));
+                .orElseThrow(() -> new CustomException(ErrorCode.TASK_NOT_FOUND));
 
         Comment findComment = commentRepository.findByIdAndDeletedAtIsNull(commentId)
-                .orElseThrow(() -> new IllegalArgumentException("댓글을 찾을 수 없습니다."));
+                .orElseThrow(() -> new CustomException(ErrorCode.COMMENT_NOT_FOUND));
 
         if (!findComment.getTask().getId().equals(taskId)) {
-            throw new IllegalArgumentException("댓글을 수정할 권한이 없습니다.");
+            throw new CustomException(ErrorCode.NO_COMMENT_UPDATE_PERMISSION);
         }
 
         findComment.update(request.getContent());
@@ -129,19 +133,18 @@ public class CommentService {
     //댓글 삭제
     @Transactional
     public void softDelete(Long userId, Long taskId, Long commentId) {
-        userRepository.findById(userId).orElseThrow(()->new IllegalArgumentException("권한이 없습니다."));
-//            throw new IllegalArgumentException("권한이 없습니다.");
-//        }
+
+        userRepository.findById(userId).orElseThrow(()->new CustomException(ErrorCode.NO_COMMENT_DELETE_PERMISSION));
 
         taskRepository.findByIdAndDeletedAtIsNull(taskId)
-                .orElseThrow(() -> new IllegalArgumentException("게시글을 찾을 수 없습니다."));
+                .orElseThrow(() -> new CustomException(ErrorCode.TASK_NOT_FOUND));
 
         Comment findComment = commentRepository.findByIdAndDeletedAtIsNull(commentId)
-                .orElseThrow(() -> new IllegalArgumentException("댓글을 찾을 수 없습니다."));
+                .orElseThrow(() -> new CustomException(ErrorCode.COMMENT_NOT_FOUND));
 
-        if (findComment.getDeletedAt() != null) {
-            throw new IllegalArgumentException("이미 삭제된 댓글 입니다.");
-        }
+//        if (findComment.getDeletedAt() != null) {
+//            throw new CustomException(ErrorCode.COMMENT_NOT_FOUND);
+//        }
 
         findComment.delete();
     }
