@@ -35,7 +35,10 @@ public class UserRepositoryImpl implements UserRepositoryCustom {
 
         List<User> users = queryFactory.select(user)
                 .from(user)
-                .where(user.name.containsIgnoreCase(query))
+                .where(
+                        user.name.containsIgnoreCase(query),
+                        user.deletedAt.isNull()
+                )
                 .orderBy(user.createdAt.desc())
                 .limit(100)
                 .fetch();

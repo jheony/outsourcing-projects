@@ -54,6 +54,7 @@ public class ActivityLogRepositoryImpl implements ActivityLogRepositoryCustom {
                 .selectFrom(activityLog)
                 .join(activityLog.user, user)
                 .fetchJoin()
+                .orderBy(activityLog.timestamp.desc())
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .fetch();
