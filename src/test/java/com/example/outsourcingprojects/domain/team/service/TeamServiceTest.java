@@ -3,6 +3,7 @@ package com.example.outsourcingprojects.domain.team.service;
 import com.example.outsourcingprojects.common.entity.Team;
 import com.example.outsourcingprojects.domain.team.dto.request.CreateTeamRequestDto;
 import com.example.outsourcingprojects.domain.team.dto.response.CreateTeamResponseDto;
+import com.example.outsourcingprojects.domain.team.dto.response.TeamMemberResponseDto;
 import com.example.outsourcingprojects.domain.team.dto.response.TeamResponseDto;
 import com.example.outsourcingprojects.domain.team.repository.TeamRepository;
 import com.example.outsourcingprojects.domain.teammember.repository.TeamMemberRepository;
@@ -68,7 +69,7 @@ class TeamServiceTest {
 
     // 팀 목록 조회 단위테스트 진행
     @Test
-    @DisplayName("팀 목록 조회")
+    @DisplayName("팀 목록 조회 성공")
     void getAllTeams() {
 
         // given
@@ -89,7 +90,7 @@ class TeamServiceTest {
 
     // 팀 상세 조회 단위테스트 진행
     @Test
-    @DisplayName("팀 상세 조회")
+    @DisplayName("팀 상세 조회 성공")
     void getTeamById() {
 
         // given
@@ -105,4 +106,31 @@ class TeamServiceTest {
         assertThat(result.getName()).isEqualTo("테스트팀");
     }
 
-}
+    // 팀 멤버 조회
+    @Test
+    @DisplayName("팀 멤버 조회 성공")
+    void getTeamMembers_success() {
+
+        // given
+        Team testTeam = Team.of("테스트팀", "테스트 설명");
+        ReflectionTestUtils.setField(testTeam, "id", 1L);
+        Long teamId = 1L;
+
+        when(teamRepository.findByIdAndDeletedAtIsNull(1L)).thenReturn(Optional.of(testTeam));
+        when(userRepository.getUsersByTeam(1L)).thenReturn(new ArrayList<>());
+
+        // when
+        List<TeamMemberResponseDto> result = teamService.getTeamMembers(teamId);
+
+        // then
+        assertThat(result).isNotNull();
+    }
+
+
+    @Test
+    @DisplayName("팀 수정 성공")
+    void updateTeam() {
+
+    }
+
+    }
