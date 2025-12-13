@@ -192,7 +192,7 @@ public class TaskRepositoryImpl implements TaskRepositoryCustom {
                         task.deletedAt.isNull()
                 )
                 .orderBy(task.createdAt.desc())
-                .limit(100L)
+                .limit(pageable.getPageSize())
                 .offset(pageable.getOffset())
                 .fetch();
 
