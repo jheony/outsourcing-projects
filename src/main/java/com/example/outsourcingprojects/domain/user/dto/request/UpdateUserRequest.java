@@ -8,7 +8,7 @@ import lombok.RequiredArgsConstructor;
 
 @Getter
 @RequiredArgsConstructor(access = lombok.AccessLevel.PROTECTED)
-public class UpdateRequest {
+public class UpdateUserRequest {
 
     @NotBlank(message = "이름은 필수 입력 값입니다.")
     @Size(min = 2, max = 50, message = "이름은 50자 이하로 입력해주세요.")
