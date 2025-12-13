@@ -3,14 +3,14 @@ package com.example.outsourcingprojects.domain.task.dto;
 import com.example.outsourcingprojects.common.entity.Task;
 import com.example.outsourcingprojects.common.model.PriorityType;
 import com.example.outsourcingprojects.common.model.TaskStatusType;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 
 import java.time.LocalDateTime;
 
 @Getter
-@RequiredArgsConstructor
-public class UpdateTaskResponse {
+@AllArgsConstructor
+public class TaskResponse {
 
     private final Long id;
     private final String title;
@@ -18,22 +18,27 @@ public class UpdateTaskResponse {
     private final String status;
     private final String priority;
     private final Long assigneeId;
+    private final TaskAssigneeReponse assignee;
     private final LocalDateTime createdAt;
-    private final LocalDateTime updateAt;
+    private final LocalDateTime updatedAt;
     private final LocalDateTime dueDate;
 
-    public static UpdateTaskResponse from(Task task) {
-        return new UpdateTaskResponse(
+    public static TaskResponse from(Task task) {
+        return new TaskResponse(
                 task.getId(),
                 task.getTitle(),
                 task.getDescription(),
                 TaskStatusType.toType(task.getStatus()).name(),
                 PriorityType.toType(task.getPriority()).name(),
                 task.getAssignee().getId(),
+                new TaskAssigneeReponse(
+                        task.getAssignee().getId(),
+                        task.getAssignee().getUsername(),
+                        task.getAssignee().getName()
+                ),
                 task.getCreatedAt(),
                 task.getUpdatedAt(),
                 task.getDueDate()
-
         );
     }
 }

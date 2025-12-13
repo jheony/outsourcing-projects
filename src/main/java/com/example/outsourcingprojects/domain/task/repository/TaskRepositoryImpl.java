@@ -1,20 +1,28 @@
 package com.example.outsourcingprojects.domain.task.repository;
 
 import com.example.outsourcingprojects.common.entity.QTask;
+import com.example.outsourcingprojects.common.entity.QUser;
 import com.example.outsourcingprojects.common.entity.Task;
 import com.example.outsourcingprojects.common.model.TaskStatusType;
 import com.example.outsourcingprojects.domain.dashboard.dto.DailyTaskDTO;
 import com.example.outsourcingprojects.domain.search.dto.SearchTaskResponse;
 import com.querydsl.core.Tuple;
+import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.core.types.dsl.NumberExpression;
+import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.support.PageableExecutionUtils;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
+
+import static com.example.outsourcingprojects.common.entity.QTask.task;
 
 @RequiredArgsConstructor
 public class TaskRepositoryImpl implements TaskRepositoryCustom {
@@ -156,11 +164,75 @@ public class TaskRepositoryImpl implements TaskRepositoryCustom {
 
         List<Task> tasks = queryFactory
                 .selectFrom(task)
-                .where(task.title.containsIgnoreCase(query))
+                .where(
+                        task.title.containsIgnoreCase(query),
+                        task.deletedAt.isNull()
+                )
                 .orderBy(task.createdAt.desc())
                 .limit(100)
                 .fetch();
 
         return tasks.stream().map(SearchTaskResponse::from).toList();
+    }
+
+    @Override
+    public Task getTaskById(Long taskId) {
+
+        QTask task = QTask.task;
+        QUser user = QUser.user;
+
+        return queryFactory
+                .selectFrom(task)
+                .join(task.assignee, user)
+                .fetchJoin()
+                .where(
+                        task.assignee.id.eq(taskId),
+                        task.deletedAt.isNull()
+                )
+                .fetchOne();
+    }
+
+    @Override
+    public Page<Task> getAllTaskWithCondition(Long status, String query, Long assigneeId, Pageable pageable) {
+
+        QTask task = QTask.task;
+        QUser user = QUser.user;
+
+        List<Task> tasks = queryFactory
+                .selectFrom(task)
+                .join(task.assignee, user)
+                .fetchJoin()
+                .where(
+                        queryEq(query),
+                        statusEq(status),
+                        assigneeIdEq(assigneeId),
+                        task.deletedAt.isNull()
+                )
+                .orderBy(task.createdAt.desc())
+                .fetch();
+
+        JPAQuery<Long> countQuery = queryFactory
+                .select(task.count())
+                .from(task)
+                .where(
+                        queryEq(query),
+                        statusEq(status),
+                        assigneeIdEq(assigneeId),
+                        task.deletedAt.isNull()
+                );
+
+        return PageableExecutionUtils.getPage(tasks, pageable, countQuery::fetchOne);
+    }
+
+    private BooleanExpression queryEq(String query) {
+        return query != null ? task.title.containsIgnoreCase(query) : null;
+    }
+
+    private BooleanExpression statusEq(Long status) {
+        return status != null ? task.status.eq(status) : null;
+    }
+
+    private BooleanExpression assigneeIdEq(Long assigneeId) {
+        return assigneeId != null ? task.assignee.id.eq(assigneeId) : null;
     }
 }
