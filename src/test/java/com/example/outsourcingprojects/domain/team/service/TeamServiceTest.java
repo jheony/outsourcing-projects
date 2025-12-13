@@ -16,7 +16,7 @@ import org.springframework.test.util.ReflectionTestUtils;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 
 @ExtendWith(MockitoExtension.class)
@@ -39,8 +39,6 @@ class TeamServiceTest {
     @DisplayName("팀 생성 성공")
     void createTeam_success() {
 
-        // 이거 맞는겨? 뭐여
-
         // given
         CreateTeamRequestDto request = new CreateTeamRequestDto();
         ReflectionTestUtils.setField(request, "name", "테스트팀");
@@ -59,5 +57,7 @@ class TeamServiceTest {
         assertThat(result).isNotNull();
         assertThat(result.getName()).isEqualTo("테스트팀");
         assertThat(result.getDescription()).isEqualTo("테스트 설명입니다.");
+
+        verify(teamRepository, times(1)).save(any(Team.class));
     }
 }
