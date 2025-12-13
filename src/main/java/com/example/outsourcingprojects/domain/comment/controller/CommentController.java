@@ -7,8 +7,6 @@ import com.example.outsourcingprojects.domain.comment.dto.response.CommentListRe
 import com.example.outsourcingprojects.domain.comment.dto.response.CreateCommentResponse;
 import com.example.outsourcingprojects.domain.comment.dto.response.UpdateCommentResponse;
 import com.example.outsourcingprojects.domain.comment.service.CommentService;
-import com.example.outsourcingprojects.domain.user.dto.request.VerifyPasswordRequest;
-import com.example.outsourcingprojects.domain.user.dto.response.VerifyPasswordResponse;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
