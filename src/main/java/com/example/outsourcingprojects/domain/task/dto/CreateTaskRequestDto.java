@@ -14,26 +14,9 @@ import java.time.LocalDateTime;
 public class CreateTaskRequestDto {
 
     private Long assigneeId;
-
     private String title;
-
     private String description;
-
-    private Long priority;
-
+    private String priority;
     private LocalDateTime dueDate;
-
-
-
-
-
-    public Long getPriority() {
-        return priority;
-    }
-
-    public void setPriority(Long priority) {
-        this.priority = priority;
-    }
-
 
 }
