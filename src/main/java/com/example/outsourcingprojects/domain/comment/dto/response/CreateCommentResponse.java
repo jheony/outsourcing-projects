@@ -1,7 +1,7 @@
 package com.example.outsourcingprojects.domain.comment.dto.response;
 
 import com.example.outsourcingprojects.common.entity.Comment;
-import com.example.outsourcingprojects.domain.comment.dto.UserDto;
+import com.example.outsourcingprojects.domain.comment.dto.userDto.UserDto;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
@@ -9,7 +9,7 @@ import java.time.LocalDateTime;
 
 @Getter
 @RequiredArgsConstructor
-public class createCommentResponse {
+public class CreateCommentResponse {
 
     private final Long id;
     private final Long taskId;
@@ -20,8 +20,8 @@ public class createCommentResponse {
     private final LocalDateTime createdAt;
     private final LocalDateTime updatedAt;
 
-    public static createCommentResponse from(Comment comment) {
-        return new createCommentResponse(
+    public static CreateCommentResponse from(Comment comment) {
+        return new CreateCommentResponse(
                 comment.getId(),
                 comment.getTask().getId(),
                 comment.getUser().getId(),
