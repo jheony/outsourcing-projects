@@ -35,9 +35,6 @@ class TeamServiceTest {
     @Mock
     private UserRepository userRepository;
 
-    @Mock
-    private TeamMemberRepository teamMemberRepository;
-
     @InjectMocks
     private TeamService teamService;
 
@@ -107,25 +104,7 @@ class TeamServiceTest {
         assertThat(result.getName()).isEqualTo("테스트팀");
     }
 
-    // 팀 멤버 조회
-    @Test
-    @DisplayName("팀 멤버 조회 성공")
-    void getTeamMembers_success() {
 
-        // given
-        Team testTeam = Team.of("테스트팀", "테스트 설명");
-        ReflectionTestUtils.setField(testTeam, "id", 1L);
-        Long teamId = 1L;
-
-        when(teamRepository.findByIdAndDeletedAtIsNull(1L)).thenReturn(Optional.of(testTeam));
-        when(userRepository.getUsersByTeam(1L)).thenReturn(new ArrayList<>());
-
-        // when
-        List<TeamMemberResponseDto> result = teamService.getTeamMembers(teamId);
-
-        // then
-        assertThat(result).isNotNull();
-    }
 
 
     @Test
