@@ -13,13 +13,13 @@ import com.example.outsourcingprojects.domain.dashboard.repository.DashBoardRepo
 import com.example.outsourcingprojects.domain.task.repository.TaskRepository;
 import com.querydsl.core.Tuple;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -34,9 +34,12 @@ public class DashBoardService {
     @Transactional(readOnly = true)
     public GetTaskSummaryResponse getTaskSummaries(Long userId) {
 
-        Page<Task> upcomingTasks = taskRepository.findAllByAssigneeIdAndStatus(userId, TaskStatusType.TODO.getStatusNum());
-        Page<Task> todayTasks = taskRepository.findAllByAssigneeIdAndStatus(userId, TaskStatusType.IN_PROGRESS.getStatusNum());
-        Page<Task> overdueTasks = taskRepository.findAllByAssigneeIdAndStatus(userId, TaskStatusType.DONE.getStatusNum());
+        LocalDate today = LocalDate.now();
+        LocalDate tomorrow = LocalDate.now().plusDays(1);
+
+        List<Task> upcomingTasks = taskRepository.findUpcomingTasks(userId, tomorrow);
+        List<Task> todayTasks = taskRepository.findTodayTasks(userId, today);
+        List<Task> overdueTasks = taskRepository.findOverdueTasks(userId, today);
 
         List<TaskSummaryDTO> upcomingSummaryTasks = upcomingTasks.stream().map(TaskSummaryDTO::from).toList();
         List<TaskSummaryDTO> todaySummaryTasks = todayTasks.stream().map(TaskSummaryDTO::from).toList();
@@ -46,8 +49,7 @@ public class DashBoardService {
 
     }
 
-    @Scheduled(fixedRate = 5000)
-    @TrackTime
+    @Scheduled(fixedRate = 1000 * 60 * 10)
     @Transactional
     public void refreshDashBoard() {
         List<Tuple> statusTask = taskRepository.countTasksByStatus();
