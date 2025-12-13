@@ -2,6 +2,7 @@ package com.example.outsourcingprojects.domain.comment.dto.response;
 
 import com.example.outsourcingprojects.common.entity.Comment;
 import com.example.outsourcingprojects.domain.comment.dto.userDto.GetUserDto;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
@@ -10,6 +11,7 @@ import java.util.List;
 
 @Getter
 @RequiredArgsConstructor
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class GetCommentResponse {
 
     private final Long id;
@@ -21,16 +23,16 @@ public class GetCommentResponse {
     private final LocalDateTime createdAt;
     private final LocalDateTime updatedAt;
 
-    public static GetCommentResponse from(Comment parent) {
+    public static GetCommentResponse from(Comment comment) {
         return new GetCommentResponse(
-                parent.getId(),
-                parent.getContent(),
-                parent.getTask().getId(),
-                parent.getUser().getId(),
-                GetUserDto.from(parent.getUser()),
-                parent.getUser().getRole(),
-                parent.getCreatedAt(),
-                parent.getUpdatedAt()
+                comment.getId(),
+                comment.getContent(),
+                comment.getTask().getId(),
+                comment.getUser().getId(),
+                GetUserDto.from(comment.getUser()),
+                comment.getComment() != null ? comment.getComment().getId() : null,
+                comment.getCreatedAt(),
+                comment.getUpdatedAt()
         );
     }
 }

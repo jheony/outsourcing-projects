@@ -85,7 +85,7 @@ public class CommentService {
         Map<Long, List<Comment>> childrenMap =
                 children.stream()
                         .collect(Collectors.groupingBy(
-                                c -> c.getComment().getId(),
+                                child -> child.getComment().getId(),
                                 LinkedHashMap::new,
                                 Collectors.toList()
                         ));
