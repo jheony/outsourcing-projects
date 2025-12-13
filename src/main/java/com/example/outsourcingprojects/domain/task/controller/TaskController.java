@@ -4,6 +4,7 @@ import com.example.outsourcingprojects.common.util.dto.PageDataDTO;
 import com.example.outsourcingprojects.common.util.response.GlobalResponse;
 import com.example.outsourcingprojects.domain.task.dto.*;
 import com.example.outsourcingprojects.domain.task.service.TaskService;
+import com.example.outsourcingprojects.domain.task.service.TempTaskService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/tasks")
 public class TaskController {
     private final TaskService taskService;
+    private final TempTaskService tempTaskService;
     //TODO ResposneEntity  대신 GrobalResponse 로 바꿔서 , return GrobalResponse.success로 (다른팀원 controller 참고)
 
     // 작업 생성
@@ -22,7 +24,7 @@ public class TaskController {
     public GlobalResponse<CreateTaskResponseDto> createTaskHandler(
             @RequestBody CreateTaskRequestDto request
     ) {
-        CreateTaskResponseDto response = taskService.createTask(request);
+        CreateTaskResponseDto response = tempTaskService.createTask(request);
         return GlobalResponse.success("작업이 생성되었습니다.", response);
     }
 
@@ -42,11 +44,13 @@ public class TaskController {
         return GlobalResponse.success("작업 목록 조회 성공", result);
     }
 
-    // 특정 작업 조회
+    // 작업 상세 조회
     @GetMapping("/{taskId}")
-    public GlobalResponse<CreateTaskResponseDto> getTaskByIdHandler(@PathVariable Long taskId) {
-        CreateTaskResponseDto task = taskService.getTaskById(taskId);
-        return GlobalResponse.success("작업 조회 성공", task);
+    public GlobalResponse<TaskResponse> getTaskHandler(@PathVariable Long taskId) {
+
+        TaskResponse result = taskService.getTask(taskId);
+
+        return GlobalResponse.success("작업 조회 성공", result);
     }
 
     // 작업 수정
@@ -66,13 +70,13 @@ public class TaskController {
         return GlobalResponse.success("작업이 삭제되었습니다.", null);
     }
 
-    // 작업 상태 변경
+    //    // 작업 상태 변경
     @PatchMapping("/{taskId}/status")
     public GlobalResponse<StatusUpdateResponseDto> updateTaskStatusHandler(
             @PathVariable Long taskId,
             @RequestBody StatusUpdateRequestDto requestDto
     ) {
-        StatusUpdateResponseDto response = taskService.statusUpdateTask(taskId, requestDto);
+        StatusUpdateResponseDto response = tempTaskService.statusUpdateTask(taskId, requestDto);
         return GlobalResponse.success("작업 상태가 변경되었습니다.", response);
     }
 
