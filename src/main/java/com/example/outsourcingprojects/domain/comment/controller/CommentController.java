@@ -7,6 +7,8 @@ import com.example.outsourcingprojects.domain.comment.dto.response.CommentListRe
 import com.example.outsourcingprojects.domain.comment.dto.response.CreateCommentResponse;
 import com.example.outsourcingprojects.domain.comment.dto.response.UpdateCommentResponse;
 import com.example.outsourcingprojects.domain.comment.service.CommentService;
+import com.example.outsourcingprojects.domain.user.dto.request.VerifyPasswordRequest;
+import com.example.outsourcingprojects.domain.user.dto.response.VerifyPasswordResponse;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -17,6 +19,7 @@ import org.springframework.web.bind.annotation.*;
 public class CommentController {
 
     private final CommentService commentService;
+
 
     //댓글 생성
     @PostMapping("/{taskId}/comments")
@@ -30,6 +33,7 @@ public class CommentController {
         return GlobalResponse.success("댓글이 작성되었습니다.", createComment);
     }
 
+
     //댓글 조회
     @GetMapping("/{taskId}/comments")
     public GlobalResponse<CommentListResponse> getCommentHandler(
@@ -42,6 +46,7 @@ public class CommentController {
         return GlobalResponse.success("댓글 목록을 조회했습니다.", response);
     }
 
+
     //댓글 수정
     @PutMapping("/{taskId}/comments/{commentId}")
     public GlobalResponse<UpdateCommentResponse> updateHandler(@PathVariable Long taskId,
@@ -51,6 +56,15 @@ public class CommentController {
         return GlobalResponse.success("댓글이 수정되었습니다.", response);
     }
 
-    //댓글 삭제
 
+    //댓글 삭제
+    @DeleteMapping("/{taskId}/comments/{commentId}")
+    public GlobalResponse<Void> deleteHandler(@PathVariable Long taskId,
+                                              @PathVariable Long commentId,
+                                              HttpServletRequest userToken) {
+
+        Long userId = (Long) userToken.getAttribute("userId");
+        commentService.softDelete(userId, taskId, commentId);
+        return GlobalResponse.success("댓글이 삭제되었습니다.", null);
+    }
 }

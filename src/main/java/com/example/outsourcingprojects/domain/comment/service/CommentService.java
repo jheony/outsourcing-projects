@@ -35,6 +35,7 @@ public class CommentService {
     private final UserRepository userRepository;
     private final TaskRepository taskRepository;
 
+
     //댓글 생성
     @Transactional
     public CreateCommentResponse create(Long taskId, Long userId, createCommentRequest commentRequest) {
@@ -59,6 +60,7 @@ public class CommentService {
 
 
     //댓글 조회
+    @Transactional
     public CommentListResponse getComment(Long taskId, int page, int size, String sort) {
 
         Sort parentSort = sort.equals("oldest")
@@ -67,7 +69,7 @@ public class CommentService {
 
         Pageable pageable = PageRequest.of(page, size, parentSort);
 
-        Page<Comment> parentsPage = commentRepository.findAllByTaskIdAndCommentIsNull(taskId, pageable);
+        Page<Comment> parentsPage = commentRepository.findAllByTaskIdAndCommentIsNullAndDeletedAtIsNull(taskId, pageable);
 
         List<Comment> parents = parentsPage.getContent();
 
@@ -77,7 +79,7 @@ public class CommentService {
 
         List<Comment> children = parentIds.isEmpty()
                 ? List.of()
-                : commentRepository.findAllByTaskIdAndComment_IdIn(
+                : commentRepository.findAllByTaskIdAndComment_IdInAndDeletedAtIsNull(
                 taskId,
                 parentIds,
                 Sort.by(Sort.Direction.ASC, "createdAt")
@@ -104,13 +106,14 @@ public class CommentService {
         return CommentListResponse.from(result, parentsPage);
     }
 
+
+    //댓글 수정
     @Transactional
     public UpdateCommentResponse update(Long taskId, Long commentId, UpdateCommentRequest request) {
 
-        //엽력된 작업ID가 데이터 베이스에 있는 작업ID가 있는지 확인한다.
-        taskRepository.findById(taskId).orElseThrow(()-> new IllegalArgumentException("게시글을 찾을 수 없습니다."));
+        taskRepository.findByIdAndDeletedAtIsNull(taskId)
+                .orElseThrow(() -> new IllegalArgumentException("게시글을 찾을 수 없습니다."));
 
-        //입력된 댓글ID와 데이터베이스에 있는 본인댓글ID가 있는지 확인한다.
         Comment findComment = commentRepository.findByIdAndDeletedAtIsNull(commentId)
                 .orElseThrow(() -> new IllegalArgumentException("댓글을 찾을 수 없습니다."));
 
@@ -118,15 +121,30 @@ public class CommentService {
             throw new IllegalArgumentException("댓글을 수정할 권한이 없습니다.");
         }
 
-        //위 두 조건에 통과 하면 엔터티에 입력받은 댓글 내용을 업데이트 한다.
         findComment.update(request.getContent());
         return UpdateCommentResponse.from(findComment);
     }
 
 
-    //댓글 조회
-
-    //댓글 수정
-
     //댓글 삭제
+    @Transactional
+    public void softDelete(Long userId, Long taskId, Long commentId) {
+        userRepository.findById(userId).orElseThrow(()->new IllegalArgumentException("권한이 없습니다."));
+//            throw new IllegalArgumentException("권한이 없습니다.");
+//        }
+
+        taskRepository.findByIdAndDeletedAtIsNull(taskId)
+                .orElseThrow(() -> new IllegalArgumentException("게시글을 찾을 수 없습니다."));
+
+        Comment findComment = commentRepository.findByIdAndDeletedAtIsNull(commentId)
+                .orElseThrow(() -> new IllegalArgumentException("댓글을 찾을 수 없습니다."));
+
+        if (findComment.getDeletedAt() != null) {
+            throw new IllegalArgumentException("이미 삭제된 댓글 입니다.");
+        }
+
+        findComment.delete();
+    }
+
+
 }
