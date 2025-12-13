@@ -20,7 +20,10 @@ public class TeamRepositoryImpl implements TeamRepositoryCustom {
 
         List<Team> teams = queryFactory.select(team)
                 .from(team)
-                .where(team.name.containsIgnoreCase(query))
+                .where(
+                        team.name.containsIgnoreCase(query),
+                        team.deletedAt.isNull()
+                )
                 .orderBy(team.createdAt.desc())
                 .limit(100)
                 .fetch();
