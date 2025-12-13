@@ -4,7 +4,7 @@ import com.example.outsourcingprojects.common.util.response.GlobalResponse;
 import com.example.outsourcingprojects.domain.user.dto.response.VerifyPasswordResponse;
 import com.example.outsourcingprojects.domain.user.dto.request.VerifyPasswordRequest;
 import com.example.outsourcingprojects.domain.user.dto.response.*;
-import com.example.outsourcingprojects.domain.user.dto.request.UpdateRequest;
+import com.example.outsourcingprojects.domain.user.dto.request.UpdateUserRequest;
 import com.example.outsourcingprojects.domain.user.service.UserService;
 import com.example.outsourcingprojects.domain.user.dto.request.SignUpRequest;
 import jakarta.servlet.http.HttpServletRequest;
@@ -40,17 +40,17 @@ public class UserController {
 
     // 사용자 목록 조회
     @GetMapping
-    public GlobalResponse<UserListResponse> getUsersInfoHandler(HttpServletRequest userToken) {
+    public GlobalResponse<List<UserSummaryResponse>> getUsersInfoHandler(HttpServletRequest userToken) {
 
         Long userId = (Long) userToken.getAttribute("userId");
-        UserListResponse allUsersInfo = userService.usersInfo(userId);
+        List<UserSummaryResponse> allUsersInfo = userService.usersInfo(userId);
         return GlobalResponse.success("사용자 목록 조회 성공", allUsersInfo);
     }
 
     // 사용자 정보 수정
     @PutMapping("{id}")
     public GlobalResponse<UpdateResponse> updateUserHandler(@PathVariable Long id, HttpServletRequest userToken,
-                                                            @Valid @RequestBody UpdateRequest request) {
+                                                            @Valid @RequestBody UpdateUserRequest request) {
 
         Long userId = (Long) userToken.getAttribute("userId");
 
