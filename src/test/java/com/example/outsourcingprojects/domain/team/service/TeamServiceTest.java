@@ -33,10 +33,10 @@ class TeamServiceTest {
     private TeamRepository teamRepository;
 
     @Mock
-    private  UserRepository userRepository;
+    private UserRepository userRepository;
 
     @Mock
-    private  TeamMemberRepository teamMemberRepository;
+    private TeamMemberRepository teamMemberRepository;
 
     @InjectMocks
     private TeamService teamService;
@@ -152,5 +152,4 @@ class TeamServiceTest {
     }
 
 
-
-    }
+}
