@@ -21,4 +21,5 @@ public interface TaskRepository extends JpaRepository<Task, Long>, TaskRepositor
     @Modifying
     @Transactional
     <S extends Task> List<S> saveAll(Iterable<S> entities);
+
 }

@@ -3,7 +3,9 @@ package com.example.outsourcingprojects.domain.comment.service;
 import com.example.outsourcingprojects.common.entity.Comment;
 import com.example.outsourcingprojects.common.entity.Task;
 import com.example.outsourcingprojects.common.entity.User;
+import com.example.outsourcingprojects.domain.comment.dto.request.UpdateCommentRequest;
 import com.example.outsourcingprojects.domain.comment.dto.response.CommentListResponse;
+import com.example.outsourcingprojects.domain.comment.dto.response.UpdateCommentResponse;
 import com.example.outsourcingprojects.domain.comment.dto.userDto.UserDto;
 import com.example.outsourcingprojects.domain.comment.dto.response.GetCommentResponse;
 import com.example.outsourcingprojects.domain.comment.dto.request.createCommentRequest;
@@ -17,7 +19,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -32,7 +33,7 @@ public class CommentService {
 
     private final CommentRepository commentRepository;
     private final UserRepository userRepository;
-    private final TaskRepository TaskRepository;
+    private final TaskRepository taskRepository;
 
     //댓글 생성
     @Transactional
@@ -40,7 +41,7 @@ public class CommentService {
 
         User userinfo = userRepository.findByIdAndDeletedAtIsNull(userId)
                 .orElseThrow(() -> new IllegalArgumentException("유저 없음"));
-        Task taskInfo = TaskRepository.findById((taskId))
+        Task taskInfo = taskRepository.findById((taskId))
                 .orElseThrow(() -> new IllegalArgumentException("게시글 없음"));
 
         Comment parentId = null;
@@ -103,23 +104,29 @@ public class CommentService {
         return CommentListResponse.from(result, parentsPage);
     }
 
-//    public void update(Long taskId, Long  commentId, Long UpdateRequest request) {
-//
-//        //엽력된 작업ID가 데이터 베이스에 있는 작업ID와 동일한지 확인한다.
-//         if(commentRepository.findByIdAndDeletedAtIsNull(taskId)) {
-//             throw new IllegalArgumentException("타켓I가 없습니다.")
-//         });
-//        if(commentRepository.findByIdAndDeletedAtIsNull(taskId).equals(taskId)) {}
-//
-//        //입력된 댓글ID와 데이터베이스에 있는 본인댓글ID기 동일한지 확인한다.
-//
-//        //위 두 조건에 통과 하면 엔터티에 입력받은 댓글 내용을 업데이트 한다.
-//    }
+    @Transactional
+    public UpdateCommentResponse update(Long taskId, Long commentId, UpdateCommentRequest request) {
+
+        //엽력된 작업ID가 데이터 베이스에 있는 작업ID가 있는지 확인한다.
+        taskRepository.findById(taskId).orElseThrow(()-> new IllegalArgumentException("게시글을 찾을 수 없습니다."));
+
+        //입력된 댓글ID와 데이터베이스에 있는 본인댓글ID가 있는지 확인한다.
+        Comment findComment = commentRepository.findByIdAndDeletedAtIsNull(commentId)
+                .orElseThrow(() -> new IllegalArgumentException("댓글을 찾을 수 없습니다."));
+
+        if (!findComment.getTask().getId().equals(taskId)) {
+            throw new IllegalArgumentException("댓글을 수정할 권한이 없습니다.");
+        }
+
+        //위 두 조건에 통과 하면 엔터티에 입력받은 댓글 내용을 업데이트 한다.
+        findComment.update(request.getContent());
+        return UpdateCommentResponse.from(findComment);
+    }
+
 
     //댓글 조회
 
     //댓글 수정
 
     //댓글 삭제
-
 }
