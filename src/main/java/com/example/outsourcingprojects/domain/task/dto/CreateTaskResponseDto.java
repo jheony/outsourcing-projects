@@ -18,13 +18,14 @@ public class CreateTaskResponseDto {
     private final Long assigneeId;
     private final String title;
     private final String description;
-    private final String priority; // 예시: "HIGH", "MEDIUM", "LOW"
-    private final String status; // 예시: "TODO", "IN_PROGRESS", "DONE"
+    private final String priority;
+    private final String status;
     private final LocalDateTime dueDate;
     private final LocalDateTime createdAt;
     private final LocalDateTime updatedAt;
 
     public static CreateTaskResponseDto from(Task task) {
+
         return new CreateTaskResponseDto(
                 task.getId(),
                 task.getAssignee().getId(),
@@ -36,9 +37,5 @@ public class CreateTaskResponseDto {
                 task.getCreatedAt(),
                 task.getUpdatedAt()
         );
-
-
     }
 }
-
-

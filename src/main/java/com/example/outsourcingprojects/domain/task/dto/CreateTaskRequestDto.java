@@ -18,5 +18,4 @@ public class CreateTaskRequestDto {
     private String description;
     private String priority;
     private LocalDateTime dueDate;
-
 }

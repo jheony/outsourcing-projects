@@ -12,7 +12,6 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 public class StatusUpdateResponseDto {
 
-
     private final Long id;
     private final String title;
     private final String description;
@@ -23,7 +22,6 @@ public class StatusUpdateResponseDto {
     private final LocalDateTime updatedAt;
     private final LocalDateTime dueDate;
 
-    // 정적 팩토리 메서드
     public static StatusUpdateResponseDto from(Task task) {
         return new StatusUpdateResponseDto(
                 task.getId(),
@@ -38,8 +36,4 @@ public class StatusUpdateResponseDto {
 
         );
     }
-
-
 }
-
-

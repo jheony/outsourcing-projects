@@ -11,25 +11,17 @@ import java.time.LocalDateTime;
 @Getter
 @RequiredArgsConstructor
 public class UpdateTaskResponse {
-    // 속
-    //        "success": true,
-    //          "message": "작업이 수정되었습니다.",
+
     private final Long id;
     private final String title;
     private final String description;
     private final String status;
     private final String priority;
     private final Long assigneeId;
-
     private final LocalDateTime createdAt;
-
     private final LocalDateTime updateAt;
-
     private final LocalDateTime dueDate;
 
-    //        "timestamp":"2024-01-10T00:00:00.000Z"
-
-    // 정적 팩토리 메서드
     public static UpdateTaskResponse from(Task task) {
         return new UpdateTaskResponse(
                 task.getId(),
@@ -45,4 +37,3 @@ public class UpdateTaskResponse {
         );
     }
 }
-
