@@ -4,7 +4,6 @@ package com.example.outsourcingprojects.domain.task.service;
 import com.example.outsourcingprojects.common.entity.Task;
 import com.example.outsourcingprojects.common.entity.User;
 import com.example.outsourcingprojects.common.exception.CustomException;
-import com.example.outsourcingprojects.common.exception.ErrorCode;
 import com.example.outsourcingprojects.common.model.PriorityType;
 import com.example.outsourcingprojects.common.model.TaskStatusType;
 import com.example.outsourcingprojects.common.util.dto.PageDataDTO;
@@ -48,7 +47,8 @@ public class TaskService {
     @Transactional(readOnly = true)
     public TaskResponse getTask(Long taskId) {
 
-        Task task = taskRepository.getTaskById(taskId);
+        Task task = taskRepository.findByIdAndDeletedAtIsNull(taskId)
+                .orElseThrow(() -> new CustomException(TASK_NOT_FOUND));
 
         return TaskResponse.from(task);
     }
