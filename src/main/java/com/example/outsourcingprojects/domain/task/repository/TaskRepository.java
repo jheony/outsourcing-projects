@@ -12,6 +12,7 @@ import org.springframework.stereotype.Repository;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface TaskRepository extends JpaRepository<Task, Long>, TaskRepositoryCustom {
@@ -30,4 +31,6 @@ public interface TaskRepository extends JpaRepository<Task, Long>, TaskRepositor
             """)
     void softDelete(@Param("id") Long id,
                     @Param("now") LocalDateTime now);
+
+    Optional<Task> findByIdAndDeletedAtIsNull(Long id);
 }
