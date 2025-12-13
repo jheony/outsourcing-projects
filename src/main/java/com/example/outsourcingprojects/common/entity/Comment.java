@@ -1,13 +1,14 @@
 package com.example.outsourcingprojects.common.entity;
 
 import jakarta.persistence.*;
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Getter
 @Entity
 @Table(name = "comments")
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Comment extends BaseEntity{
 
     @Id
@@ -28,5 +29,12 @@ public class Comment extends BaseEntity{
 
     @Column
     private String content;
+
+    public Comment(User user, Task task, Comment comment, String content) {
+        this.user = user;
+        this.task = task;
+        this.comment = comment;
+        this.content = content;
+    }
 
 }
