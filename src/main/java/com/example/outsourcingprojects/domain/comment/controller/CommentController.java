@@ -5,6 +5,7 @@ import com.example.outsourcingprojects.domain.comment.dto.request.UpdateCommentR
 import com.example.outsourcingprojects.domain.comment.dto.request.createCommentRequest;
 import com.example.outsourcingprojects.domain.comment.dto.response.CommentListResponse;
 import com.example.outsourcingprojects.domain.comment.dto.response.CreateCommentResponse;
+import com.example.outsourcingprojects.domain.comment.dto.response.UpdateCommentResponse;
 import com.example.outsourcingprojects.domain.comment.service.CommentService;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
@@ -29,7 +30,6 @@ public class CommentController {
         return GlobalResponse.success("댓글이 작성되었습니다.", createComment);
     }
 
-
     //댓글 조회
     @GetMapping("/{taskId}/comments")
     public GlobalResponse<CommentListResponse> getCommentHandler(
@@ -42,14 +42,15 @@ public class CommentController {
         return GlobalResponse.success("댓글 목록을 조회했습니다.", response);
     }
 
-//    //댓글 수정
-//    @PutMapping("/{taskId}/comments/{commentId}")
-//    public void updateHandler(@PathVariable Long taskId, Long commentId,
-//                              @RequestBody UpdateCommentRequest request) {
-//        commentService.update(taskId, commentId, request);
-//
-//        //updateResponse
-//    }
+    //댓글 수정
+    @PutMapping("/{taskId}/comments/{commentId}")
+    public GlobalResponse<UpdateCommentResponse> updateHandler(@PathVariable Long taskId,
+                                                               @PathVariable Long commentId,
+                              @RequestBody UpdateCommentRequest request) {
+        UpdateCommentResponse response = commentService.update(taskId, commentId, request);
+        return GlobalResponse.success("댓글이 수정되었습니다.", response);
+    }
+
     //댓글 삭제
 
 }
