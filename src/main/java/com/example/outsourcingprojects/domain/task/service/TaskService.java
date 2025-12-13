@@ -48,8 +48,7 @@ public class TaskService {
     @Transactional(readOnly = true)
     public TaskResponse getTask(Long taskId) {
 
-        Task task = taskRepository.findById(taskId)
-                .orElseThrow(() -> new CustomException(ErrorCode.TASK_NOT_FOUND));
+        Task task = taskRepository.getTaskById(taskId);
 
         return TaskResponse.from(task);
     }

@@ -164,12 +164,32 @@ public class TaskRepositoryImpl implements TaskRepositoryCustom {
 
         List<Task> tasks = queryFactory
                 .selectFrom(task)
-                .where(task.title.containsIgnoreCase(query))
+                .where(
+                        task.title.containsIgnoreCase(query),
+                        task.deletedAt.isNull()
+                )
                 .orderBy(task.createdAt.desc())
                 .limit(100)
                 .fetch();
 
         return tasks.stream().map(SearchTaskResponse::from).toList();
+    }
+
+    @Override
+    public Task getTaskById(Long taskId) {
+
+        QTask task = QTask.task;
+        QUser user = QUser.user;
+
+        return queryFactory
+                .selectFrom(task)
+                .join(task.assignee, user)
+                .fetchJoin()
+                .where(
+                        task.assignee.id.eq(taskId),
+                        task.deletedAt.isNull()
+                )
+                .fetchOne();
     }
 
     @Override
@@ -185,8 +205,10 @@ public class TaskRepositoryImpl implements TaskRepositoryCustom {
                 .where(
                         queryEq(query),
                         statusEq(status),
-                        assigneeIdEq(assigneeId)
+                        assigneeIdEq(assigneeId),
+                        task.deletedAt.isNull()
                 )
+                .orderBy(task.createdAt.desc())
                 .fetch();
 
         JPAQuery<Long> countQuery = queryFactory
@@ -195,7 +217,8 @@ public class TaskRepositoryImpl implements TaskRepositoryCustom {
                 .where(
                         queryEq(query),
                         statusEq(status),
-                        assigneeIdEq(assigneeId)
+                        assigneeIdEq(assigneeId),
+                        task.deletedAt.isNull()
                 );
 
         return PageableExecutionUtils.getPage(tasks, pageable, countQuery::fetchOne);
