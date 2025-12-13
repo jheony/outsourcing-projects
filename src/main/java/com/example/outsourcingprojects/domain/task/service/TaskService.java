@@ -2,7 +2,6 @@ package com.example.outsourcingprojects.domain.task.service;
 
 
 import com.example.outsourcingprojects.common.entity.Task;
-import com.example.outsourcingprojects.common.entity.User;
 import com.example.outsourcingprojects.common.exception.CustomException;
 import com.example.outsourcingprojects.common.exception.ErrorCode;
 import com.example.outsourcingprojects.common.model.PriorityType;
@@ -28,38 +27,38 @@ public class TaskService {
     private final TaskRepository taskRepository;
     private final UserRepository userRepository;
     private final CommentRepository commentRepository;
+//
+//    // 1. 작업 생성
+//    @Transactional
+//    public CreateTaskResponseDto createTask(CreateTaskRequestDto request) {
+//
+//        // 담당자 조회
+//        User assignee = userRepository.findById(request.getAssigneeId())
+//                .orElseThrow(() -> {
+//                    log.error("담당자를 찾을 수 없습니다.assignId: {}", request.getAssigneeId());
+//                    throw new CustomException(ErrorCode.ASSIGNEE_NOT_FOUND);
+//                });
+//        // TODO 이넘 타입 요청 및 응답 객체 수정. / deletedat 안나오게.
+//
+//        PriorityType priorityType = PriorityType.toType(request.getPriority());
+//        TaskStatusType statusType = TaskStatusType.toType(10L); //status 디폴트 값 설정
+//        // Task 인스턴스 생성
+//        Task task = new Task(
+//                request.getTitle(),
+//                request.getDescription(),
+//                priorityType.getPriorityNum(),
+//                statusType.getStatusNum(),
+//                assignee,
+//                request.getDueDate()
 
-    // 1. 작업 생성
-    @Transactional
-    public CreateTaskResponseDto createTask(CreateTaskRequestDto request) {
-
-        // 담당자 조회
-        User assignee = userRepository.findById(request.getAssigneeId())
-                .orElseThrow(() -> {
-                    log.error("담당자를 찾을 수 없습니다.assignId: {}", request.getAssigneeId());
-                    throw new CustomException(ErrorCode.ASSIGNEE_NOT_FOUND);
-                });
-        // TODO 이넘 타입 요청 및 응답 객체 수정. / deletedat 안나오게.
-
-        PriorityType priorityType = PriorityType.toType(request.getPriority());
-        TaskStatusType statusType = TaskStatusType.toType(10L); //status 디폴트 값 설정
-        // Task 인스턴스 생성
-        Task task = new Task(
-                request.getTitle(),
-                request.getDescription(),
-                priorityType.getPriorityNum(),
-                statusType.getStatusNum(),
-                assignee,
-                request.getDueDate()
-        );
-
-        // DB 저장
-        Task savedTask = taskRepository.save(task);
-
-        // Entity -> Response DTO 변환 후 반환
-        return CreateTaskResponseDto.from(savedTask);
-    }
-
+    /// /        );
+//
+//        // DB 저장
+//        Task savedTask = taskRepository.save(task);
+//
+//        // Entity -> Response DTO 변환 후 반환
+//        return CreateTaskResponseDto.from(savedTask);
+//    }
     private CreateTaskResponseDto response(Task task) throws Exception {
         //메서드 명은 소문자로 시작해야 합니다. ok
         // 이 메서드는 정적 팩토리 메서드의 역할을 하고 있는것 같은데
@@ -93,16 +92,12 @@ public class TaskService {
 
     // 3. 작업 상세 조회
     @Transactional(readOnly = true)
-    public CreateTaskResponseDto getTaskById(Long taskId) {
+    public TaskResponse getTask(Long taskId) {
+
         Task task = taskRepository.findById(taskId)
-                .orElseThrow(() -> {
-                    log.error("작업을 찾을 수 없습니다, taskID");
-                    return new IllegalArgumentException("작업을 찾을 수 없습니다");
-                });
+                .orElseThrow(() -> new CustomException(ErrorCode.TASK_NOT_FOUND));
 
-        return CreateTaskResponseDto.from(task);
-
-
+        return TaskResponse.from(task);
     }
 
     // 4. 작업 수정
@@ -155,31 +150,31 @@ public class TaskService {
         task.delete();
     }
 
-    // 6. 작업 상태 변경
-    @Transactional
-    public StatusUpdateResponseDto statusUpdateTask(Long id, StatusUpdateRequestDto requestDto) {
-        // 작업 조회
-        Task task = taskRepository.findById(id)
-                .orElseThrow(() -> {
-                    log.error("유효하지 않은 상태 값입니다. taskId: {}", id);
-                    return new IllegalArgumentException("유효하지 않은 상태 값입니다.");
-                });
-
-        TaskStatusType newStatus;
-        try {
-            newStatus = TaskStatusType.toType(requestDto.getStatus());
-        } catch (IllegalArgumentException e) {
-            log.error("유효하지 않은 상태 값입니다. status: {}", requestDto.getStatus());
-            throw new IllegalArgumentException("유효하지 않은 상태 값입니다.");
-        }
-
-        // 상태 변경
-        task.updateStatus(newStatus.getStatusNum());
-
-        log.info("작업 상태가 변경되었습니다. taskId: {}, newStatus: {}", id, newStatus.name());
-
-        return StatusUpdateResponseDto.from(task);
-    }
+//    // 6. 작업 상태 변경
+//    @Transactional
+//    public StatusUpdateResponseDto statusUpdateTask(Long id, StatusUpdateRequestDto requestDto) {
+//        // 작업 조회
+//        Task task = taskRepository.findById(id)
+//                .orElseThrow(() -> {
+//                    log.error("유효하지 않은 상태 값입니다. taskId: {}", id);
+//                    return new IllegalArgumentException("유효하지 않은 상태 값입니다.");
+//                });
+//
+//        TaskStatusType newStatus;
+//        try {
+//            newStatus = TaskStatusType.toType(requestDto.getStatus());
+//        } catch (IllegalArgumentException e) {
+//            log.error("유효하지 않은 상태 값입니다. status: {}", requestDto.getStatus());
+//            throw new IllegalArgumentException("유효하지 않은 상태 값입니다.");
+//        }
+//
+//        // 상태 변경
+//        task.updateStatus(newStatus.getStatusNum());
+//
+//        log.info("작업 상태가 변경되었습니다. taskId: {}, newStatus: {}", id, newStatus.name());
+//
+//        return StatusUpdateResponseDto.from(task);
+//    }
 }
 
 

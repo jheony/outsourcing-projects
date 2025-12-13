@@ -6,6 +6,7 @@ import com.example.outsourcingprojects.domain.task.dto.*;
 import com.example.outsourcingprojects.domain.task.service.TaskService;
 import com.example.outsourcingprojects.domain.task.service.TempTaskService;
 import jakarta.servlet.http.HttpServletRequest;
+import com.example.outsourcingprojects.domain.task.service.TempTaskService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -25,6 +26,7 @@ public class TaskController {
     public GlobalResponse<CreateTaskResponseDto> createTaskHandler(
             @RequestBody CreateTaskRequestDto request, HttpServletRequest httpServletRequest
     ) {
+        CreateTaskResponseDto response = tempTaskService.createTask(request);
         Long userId = (Long) httpServletRequest.getAttribute("userId");
         CreateTaskResponseDto response = tempTaskService.createTask(request, userId);
         return GlobalResponse.success("작업이 생성되었습니다.", response);
@@ -46,11 +48,13 @@ public class TaskController {
         return GlobalResponse.success("작업 목록 조회 성공", result);
     }
 
-    // 특정 작업 조회
+    // 작업 상세 조회
     @GetMapping("/{taskId}")
-    public GlobalResponse<CreateTaskResponseDto> getTaskByIdHandler(@PathVariable Long taskId) {
-        CreateTaskResponseDto task = taskService.getTaskById(taskId);
-        return GlobalResponse.success("작업 조회 성공", task);
+    public GlobalResponse<TaskResponse> getTaskHandler(@PathVariable Long taskId) {
+
+        TaskResponse result = taskService.getTask(taskId);
+
+        return GlobalResponse.success("작업 조회 성공", result);
     }
 
     // 작업 수정
@@ -72,7 +76,7 @@ public class TaskController {
         return GlobalResponse.success("작업이 삭제되었습니다.", null);
     }
 
-    // 작업 상태 변경
+    //    // 작업 상태 변경
     @PatchMapping("/{taskId}/status")
     public GlobalResponse<StatusUpdateResponseDto> updateTaskStatusHandler(
             @PathVariable Long taskId,
