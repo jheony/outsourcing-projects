@@ -10,9 +10,6 @@ import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.core.types.dsl.NumberExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.Pageable;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -24,33 +21,50 @@ public class TaskRepositoryImpl implements TaskRepositoryCustom {
 
     private final JPAQueryFactory queryFactory;
 
-    @Override
-    public Page<Task> findAllByAssigneeIdAndStatus(Long assigneeId, Long status) {
+    public List<Task> findOverdueTasks(Long assigneeId, LocalDate now) {
         QTask task = QTask.task;
 
-        Pageable pageable = Pageable.ofSize(3).withPage(0);
-
-        List<Task> result = queryFactory
+        return queryFactory
                 .selectFrom(task)
-                .where(task.assignee.id.eq(assigneeId)
-                        .and(task.status.eq(status))
-                        .and(task.deletedAt.isNull()))
-                .orderBy(task.updatedAt.desc())
-                .offset(pageable.getOffset())
-                .limit(pageable.getPageSize())
+                .where(
+                        task.assignee.id.eq(assigneeId),
+                        task.deletedAt.isNull(),
+                        task.dueDate.lt(now.atStartOfDay())
+                )
+                .orderBy(task.dueDate.asc())
                 .fetch();
+    }
 
-        Long total = queryFactory
-                .select(task.id.count())
-                .from(task)
-                .where(task.assignee.id.eq(assigneeId)
-                        .and(task.status.eq(status))
-                        .and(task.deletedAt.isNull()))
-                .fetchOne();
 
-        total = total == null ? 0L : total;
+    public List<Task> findTodayTasks(Long assigneeId, LocalDate today) {
+        QTask task = QTask.task;
 
-        return new PageImpl<>(result, pageable, total);
+        return queryFactory
+                .selectFrom(task)
+                .where(
+                        task.assignee.id.eq(assigneeId),
+                        task.deletedAt.isNull(),
+                        task.dueDate.between(
+                                today.atStartOfDay(),
+                                today.plusDays(1).atStartOfDay()
+                        )
+                )
+                .orderBy(task.dueDate.asc())
+                .fetch();
+    }
+
+    public List<Task> findUpcomingTasks(Long assigneeId, LocalDate tomorrow) {
+        QTask task = QTask.task;
+
+        return queryFactory
+                .selectFrom(task)
+                .where(
+                        task.assignee.id.eq(assigneeId),
+                        task.deletedAt.isNull(),
+                        task.dueDate.gt(tomorrow.atStartOfDay())
+                )
+                .orderBy(task.dueDate.asc())
+                .fetch();
     }
 
     @Override
@@ -143,6 +157,7 @@ public class TaskRepositoryImpl implements TaskRepositoryCustom {
         List<Task> tasks = queryFactory
                 .selectFrom(task)
                 .where(task.title.containsIgnoreCase(query))
+                .orderBy(task.createdAt.desc())
                 .limit(100)
                 .fetch();
 
