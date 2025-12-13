@@ -10,6 +10,7 @@ public enum ErrorCode {
 
 
     // 400 Bad Request
+    EMPTY_TITLE_AND_ASSIGNEE(HttpStatus.BAD_REQUEST,"제목과 담당자는 필수입니다."),
     INVALID_EMAIL_FORMAT(HttpStatus.BAD_REQUEST, "올바른 이메일 형식이 아닙니다."),
     REQUIRED_FIELD_MISSING(HttpStatus.BAD_REQUEST, "필수 입력 값이 누락되었습니다."),
     INVALID_QUERY_PARAMETER(HttpStatus.BAD_REQUEST, "잘못된 요청 파라미터입니다."),
@@ -34,6 +35,7 @@ public enum ErrorCode {
     NO_READ_PERMISSION(HttpStatus.FORBIDDEN, "권한이 없습니다."),
 
     // 404 Not Found
+    ASSIGNEE_NOT_FOUND(HttpStatus.NOT_FOUND, "담당자를 찾을 수 없습니다."),
     TASK_NOT_FOUND(HttpStatus.NOT_FOUND, "작업을 찾을 수 없습니다."),
     TEAM_NOT_FOUND(HttpStatus.NOT_FOUND, "팀을 찾을 수 없습니다."),
     USER_NOT_FOUND(HttpStatus.NOT_FOUND, "사용자를 찾을 수 없습니다."),

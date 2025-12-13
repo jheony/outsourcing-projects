@@ -47,7 +47,7 @@ public class TaskController {
     // 작업 수정
     @PutMapping("/{taskId}")
     public GlobalResponse<UpdateTaskResponse> updateTaskHandler(
-            @PathVariable Long taskId, @RequestBody UpdateTaskRequest request,@RequestParam Long userId) {
+            @PathVariable Long taskId, @RequestBody UpdateTaskRequest request, @RequestParam Long userId) {
         UpdateTaskResponse response = taskService.updateTask(taskId, request, userId);
         return GlobalResponse.success("작업이 수정되었습니다.", response);
 
@@ -59,6 +59,16 @@ public class TaskController {
             @PathVariable Long taskId, @RequestParam Long userId) {
         taskService.deleteTask(taskId, userId);
         return GlobalResponse.success("작업이 삭제되었습니다.", null);
+    }
+
+    // 작업 상태 변경
+    @PatchMapping("/{taskId}/status")
+    public GlobalResponse<StatusUpdateResponseDto> updateTaskStatusHandler(
+            @PathVariable Long taskId,
+            @RequestBody StatusUpdateRequestDto requestDto
+    ) {
+        StatusUpdateResponseDto response = taskService.statusUpdateTask(taskId, requestDto);
+        return GlobalResponse.success("작업 상태가 변경되었습니다.", response);
     }
 
 

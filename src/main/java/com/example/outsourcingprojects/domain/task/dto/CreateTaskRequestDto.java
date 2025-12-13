@@ -1,7 +1,6 @@
 package com.example.outsourcingprojects.domain.task.dto;
 
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -20,9 +19,21 @@ public class CreateTaskRequestDto {
 
     private String description;
 
-    private String priority;
+    private Long priority;
 
     private LocalDateTime dueDate;
+
+
+
+
+
+    public Long getPriority() {
+        return priority;
+    }
+
+    public void setPriority(Long priority) {
+        this.priority = priority;
+    }
 
 
 }
