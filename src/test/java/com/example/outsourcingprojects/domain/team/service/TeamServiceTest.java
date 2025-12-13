@@ -3,6 +3,7 @@ package com.example.outsourcingprojects.domain.team.service;
 import com.example.outsourcingprojects.common.entity.Team;
 import com.example.outsourcingprojects.domain.team.dto.request.CreateTeamRequestDto;
 import com.example.outsourcingprojects.domain.team.dto.response.CreateTeamResponseDto;
+import com.example.outsourcingprojects.domain.team.dto.response.TeamResponseDto;
 import com.example.outsourcingprojects.domain.team.repository.TeamRepository;
 import com.example.outsourcingprojects.domain.teammember.repository.TeamMemberRepository;
 import com.example.outsourcingprojects.domain.user.repository.UserRepository;
@@ -13,6 +14,10 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.test.util.ReflectionTestUtils;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
@@ -60,4 +65,44 @@ class TeamServiceTest {
 
         verify(teamRepository, times(1)).save(any(Team.class));
     }
+
+    // 팀 목록 조회 단위테스트 진행
+    @Test
+    @DisplayName("팀 목록 조회")
+    void getAllTeams() {
+
+        // given
+        Team testTeam = Team.of("테스트팀", "테스트 설명");
+        ReflectionTestUtils.setField(testTeam, "id", 1L);
+
+        List<Team> testTeamList = new ArrayList<>();
+        testTeamList.add(testTeam);
+
+        when(teamRepository.findAll()).thenReturn(testTeamList);
+
+        // when
+        List<TeamResponseDto> result = teamService.getAllTeams();
+
+        // then
+        assertThat(result.get(0).getName()).isEqualTo("테스트팀");
+    }
+
+    // 팀 상세 조회 단위테스트 진행
+    @Test
+    @DisplayName("팀 상세 조회")
+    void getTeamById() {
+
+        // given
+        Team testTeam = Team.of("테스트팀", "테스트 설명");
+        ReflectionTestUtils.setField(testTeam, "id", 1L);
+
+        when(teamRepository.findByIdAndDeletedAtIsNull(1L)).thenReturn(Optional.of(testTeam));
+        when(userRepository.getUsersByTeam(1L)).thenReturn(new ArrayList<>());
+        // when
+        TeamResponseDto result = teamService.getTeamById(1L);
+
+        // then
+        assertThat(result.getName()).isEqualTo("테스트팀");
+    }
+
 }
