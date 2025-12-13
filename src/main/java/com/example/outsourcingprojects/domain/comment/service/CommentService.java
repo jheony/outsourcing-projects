@@ -42,23 +42,23 @@ public class CommentService {
     @Transactional
     public CreateCommentResponse create(Long taskId, Long userId, createCommentRequest commentRequest) {
 
-            User userinfo = userRepository.findByIdAndDeletedAtIsNull(userId)
-                    .orElseThrow(() -> new CustomException(ErrorCode.LOGIN_REQUIRED));
+        User userinfo = userRepository.findByIdAndDeletedAtIsNull(userId)
+                .orElseThrow(() -> new CustomException(ErrorCode.LOGIN_REQUIRED));
 
-            Task taskInfo = taskRepository.findById((taskId))
-                    .orElseThrow(() -> new CustomException(ErrorCode.TASK_NOT_FOUND));
+        Task taskInfo = taskRepository.findById((taskId))
+                .orElseThrow(() -> new CustomException(ErrorCode.TASK_NOT_FOUND));
 
-            Comment parentId = null;
-            if (commentRequest.getParentId() != null) {
-                parentId = commentRepository.findByIdAndDeletedAtIsNull(commentRequest.getParentId())
-                        .orElseThrow(() -> new CustomException(ErrorCode.TASK_OR_PARENT_COMMENT_NOT_FOUND));
-            }
+        Comment parentId = null;
+        if (commentRequest.getParentId() != null) {
+            parentId = commentRepository.findByIdAndDeletedAtIsNull(commentRequest.getParentId())
+                    .orElseThrow(() -> new CustomException(ErrorCode.TASK_OR_PARENT_COMMENT_NOT_FOUND));
+        }
 
-            UserDto.from(userinfo);
-            Comment comment = new Comment(userinfo, taskInfo, parentId, commentRequest.getContent());
-            Comment savedComment = commentRepository.save(comment);
+        UserDto.from(userinfo);
+        Comment comment = new Comment(userinfo, taskInfo, parentId, commentRequest.getContent());
+        Comment savedComment = commentRepository.save(comment);
 
-            return CreateCommentResponse.from(savedComment);
+        return CreateCommentResponse.from(savedComment);
     }
 
 
@@ -134,7 +134,7 @@ public class CommentService {
     @Transactional
     public void softDelete(Long userId, Long taskId, Long commentId) {
 
-        userRepository.findById(userId).orElseThrow(()->new CustomException(ErrorCode.NO_COMMENT_DELETE_PERMISSION));
+        userRepository.findById(userId).orElseThrow(() -> new CustomException(ErrorCode.NO_COMMENT_DELETE_PERMISSION));
 
         taskRepository.findByIdAndDeletedAtIsNull(taskId)
                 .orElseThrow(() -> new CustomException(ErrorCode.TASK_NOT_FOUND));

@@ -49,7 +49,7 @@ public class CommentController {
     @PutMapping("/{taskId}/comments/{commentId}")
     public GlobalResponse<UpdateCommentResponse> updateHandler(@PathVariable Long taskId,
                                                                @PathVariable Long commentId,
-                              @RequestBody UpdateCommentRequest request) {
+                                                               @RequestBody UpdateCommentRequest request) {
         UpdateCommentResponse response = commentService.update(taskId, commentId, request);
         return GlobalResponse.success("댓글이 수정되었습니다.", response);
     }
