@@ -187,6 +187,7 @@ public class TaskRepositoryImpl implements TaskRepositoryCustom {
                         statusEq(status),
                         assigneeIdEq(assigneeId)
                 )
+                .orderBy(task.createdAt.desc())
                 .fetch();
 
         JPAQuery<Long> countQuery = queryFactory
