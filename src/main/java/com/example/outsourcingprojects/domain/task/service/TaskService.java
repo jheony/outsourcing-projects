@@ -57,7 +57,7 @@ public class TaskService {
     @Transactional
     public CreateTaskResponseDto createTask(CreateTaskRequestDto request, Long userId) {
         User assignee;
-        if (request.getAssigneeId()==null) {
+        if (request.getAssigneeId() == null) {
             assignee = userRepository.findById(userId).orElseThrow(
                     () -> new CustomException(USER_NOT_FOUND));
         } else {
@@ -65,7 +65,10 @@ public class TaskService {
                     () -> new CustomException(USER_NOT_FOUND));
         }
 
-        if(assignee.getDeletedAt()!=null){
+        LocalDateTime dueDate = request.getDueDate() == null ? LocalDateTime.now().plusDays(7L) : request.getDueDate();
+
+
+        if (assignee.getDeletedAt() != null) {
             throw new CustomException(USER_NOT_FOUND);
         }
 
@@ -78,7 +81,7 @@ public class TaskService {
                 priorityType.getPriorityNum(),
                 statusType.getStatusNum(),
                 assignee,
-                request.getDueDate()
+                dueDate
         );
 
         // DB 저장
