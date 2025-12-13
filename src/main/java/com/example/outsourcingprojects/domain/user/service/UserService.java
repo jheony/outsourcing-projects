@@ -15,6 +15,9 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+import static com.example.outsourcingprojects.common.exception.ErrorCode.NO_READ_PERMISSION;
+import static com.example.outsourcingprojects.common.exception.ErrorCode.USER_NOT_FOUND;
+
 @RequiredArgsConstructor
 @Service
 public class UserService {
@@ -26,8 +29,11 @@ public class UserService {
     @Transactional
     public SignUpResponse signUpUser(SignUpRequest request) {
 
+        if (userRepository.existsByUsername(request.getUsername())) {
+            throw new CustomException(ErrorCode.DUPLICATE_USER_USERNAME);
+        }
         if (userRepository.existsByEmail(request.getEmail())) {
-            throw new CustomException(ErrorCode.USER_NAME_ALREADY_EXISTS);
+            throw new CustomException(ErrorCode.DUPLICATE_USER_EMAIL);
         }
 
         User user = new User(
@@ -47,12 +53,23 @@ public class UserService {
     @Transactional
     public UserInfoResponse info(Long targetId, Long userId) {
 
-        User target = userRepository.findById(targetId)
-                .orElseThrow(() -> new IllegalArgumentException("유저가 존재하지 않습니다."));
+        User target = userRepository.findByIdAndDeletedAtIsNull(targetId)
+                .orElseThrow(() -> new CustomException(USER_NOT_FOUND));
 
+        User requester = userRepository.findByIdAndDeletedAtIsNull(userId)
+                .orElseThrow(() -> new CustomException(USER_NOT_FOUND));
+
+        //수정 가능 조건(관리자 미허용)
         if (!userId.equals(target.getId())) {
-            throw new IllegalArgumentException("권한이 없습니다.");
+            throw new CustomException(NO_READ_PERMISSION);
         }
+
+//        //수정 가능 조건(관리자 허용)
+//        boolean isAdmin = requester.getRole() == 10L;
+//        if (!requester.getId().equals(target.getId()) && !isAdmin) {
+//            throw new CustomException(ErrorCode.NO_READ_PERMISSION);
+//        }
+
         return UserInfoResponse.from(target);
     }
 
@@ -60,8 +77,8 @@ public class UserService {
     @Transactional
     public List<UserSummaryResponse> usersInfo(Long userId) {
 
-        userRepository.findById(userId)
-                .orElseThrow(() -> new IllegalArgumentException("사용자 정보를 찾을 수 없습니다."));
+        userRepository.findByIdAndDeletedAtIsNull(userId)
+                .orElseThrow(() -> new CustomException(USER_NOT_FOUND));
 
         List<User> users = userRepository.findAllByDeletedAtIsNull();
 
@@ -76,20 +93,20 @@ public class UserService {
     public UpdateResponse update(Long loginUserId, Long targetId, UpdateUserRequest request) {
 
         if (!loginUserId.equals(targetId)) {
-            throw new CustomException(ErrorCode.ALREADY_TEAM_MEMBER);
+            throw new CustomException(NO_READ_PERMISSION);
         }
 
         User targetUser = userRepository.findByIdAndDeletedAtIsNull(targetId)
-                .orElseThrow(() -> new IllegalArgumentException("존재하지 않은 유저 입니다."));
+                .orElseThrow(() -> new CustomException(ErrorCode.TEAM_MEMBER_NOT_FOUND));
 
         if (request.getName() != null && request.getName().equals(targetUser.getName())) {
-            throw new IllegalArgumentException("기존 이름과 동일합니다.");
+            throw new CustomException(ErrorCode.DUPLICATE_USER_NAME);
         }
         if (request.getEmail() != null && request.getEmail().equals(targetUser.getEmail())) {
-            throw new IllegalArgumentException("기존 이메일과 동일합니다.");
+            throw new CustomException(ErrorCode.DUPLICATE_USER_EMAIL);
         }
         if (request.getPassword() != null && passwordEncoder.matches(targetUser.getPassword(), request.getPassword())) {
-            throw new IllegalArgumentException("기존 비밀번호와 동일합니다.");
+            throw new CustomException(ErrorCode.DUPLICATE_USER_PASSWORD);
         }
 
         targetUser.update(
@@ -100,44 +117,44 @@ public class UserService {
         return UpdateResponse.from(targetUser);
     }
 
+
     // 회원 탈퇴
     @Transactional
-    public void softDelete(Long targetId, Long sessionUserId) {
+    public void softDelete(Long targetId, Long loginUserId) {
 
-        if (!sessionUserId.equals(userRepository.findById(targetId).get().getId())) {
-            throw new IllegalArgumentException("권한이 없습니다.");
+        if (!loginUserId.equals(targetId)) {
+            throw new CustomException(ErrorCode.NO_READ_PERMISSION);
         }
 
-        User user = userRepository.findById(sessionUserId)
-                .orElseThrow(() -> new IllegalArgumentException("존재하지 않은 유저 입니다."));
+        User me = userRepository.findByIdAndDeletedAtIsNull(targetId)
+                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
 
-        if (user.getDeletedAt() != null) {
-            throw new IllegalArgumentException("이미 탈퇴 처리된 유저입니다.");
+
+        if (me.getDeletedAt() != null) {
+            throw new CustomException(ErrorCode.ALREADY_DELETED_USER);
         }
 
-        user.delete();
+        me.delete();
     }
+
 
     // 추가 가능한 사용자 조회
     @Transactional
     public List<AbleUserSummaryResponse> findAddableUsers(Long teamId, Long userId) {
 
-        User user =userRepository.findByIdAndDeletedAtIsNull(userId)
+        userRepository.findByIdAndDeletedAtIsNull(userId)
                 .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
 
         List<User> users;
-        if (user != null) {
+        if (teamId != null) {
             users = userRepository.findUsersNotInTeam(teamId);
         } else {
             users = userRepository.findAllByDeletedAtIsNull();
         }
 
-        List<AbleUserSummaryResponse> ableUsers = users
-                .stream()
+        return users.stream()
                 .map(AbleUserSummaryResponse::from)
                 .toList();
-
-        return ableUsers;
     }
 
 
@@ -145,14 +162,11 @@ public class UserService {
     @Transactional
     public VerifyPasswordResponse verifyPassword(Long userId, String inputPassword) {
 
-        // 1. 유저 조회
         User user = userRepository.findByIdAndDeletedAtIsNull(userId)
-                .orElseThrow(() -> new IllegalArgumentException("유저를 찾을 수 없습니다."));
+                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
 
-        // 2. 입력 비밀번호 vs 저장된 비밀번호 비교
         boolean match = passwordEncoder.matches(inputPassword, user.getPassword());
 
-        // 3. 결과 반환
         return new VerifyPasswordResponse(match);
     }
 
