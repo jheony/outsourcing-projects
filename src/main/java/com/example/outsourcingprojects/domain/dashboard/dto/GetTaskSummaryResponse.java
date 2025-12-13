@@ -13,7 +13,6 @@ public class GetTaskSummaryResponse {
     private final List<TaskSummaryDTO> todayTasks;
     private final List<TaskSummaryDTO> overdueTasks;
 
-
     public static GetTaskSummaryResponse from(List<TaskSummaryDTO> upcomingTasks, List<TaskSummaryDTO> todayTasks, List<TaskSummaryDTO> overdueTasks) {
         return new GetTaskSummaryResponse(
                 upcomingTasks,

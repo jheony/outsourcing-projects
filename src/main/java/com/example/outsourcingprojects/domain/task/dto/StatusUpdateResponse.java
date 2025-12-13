@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
 
 @Getter
 @AllArgsConstructor
-public class StatusUpdateResponseDto {
+public class StatusUpdateResponse {
 
     private final Long id;
     private final String title;
@@ -22,8 +22,8 @@ public class StatusUpdateResponseDto {
     private final LocalDateTime updatedAt;
     private final LocalDateTime dueDate;
 
-    public static StatusUpdateResponseDto from(Task task) {
-        return new StatusUpdateResponseDto(
+    public static StatusUpdateResponse from(Task task) {
+        return new StatusUpdateResponse(
                 task.getId(),
                 task.getTitle(),
                 task.getDescription(),

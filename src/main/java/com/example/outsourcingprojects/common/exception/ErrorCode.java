@@ -8,7 +8,6 @@ import org.springframework.http.HttpStatus;
 @RequiredArgsConstructor
 public enum ErrorCode {
 
-
     // 400 Bad Request
     EMPTY_TITLE_AND_ASSIGNEE(HttpStatus.BAD_REQUEST,"제목과 담당자는 필수입니다."),
     INVALID_EMAIL_FORMAT(HttpStatus.BAD_REQUEST, "올바른 이메일 형식이 아닙니다."),
@@ -23,7 +22,6 @@ public enum ErrorCode {
     INVALID_CREDENTIALS(HttpStatus.UNAUTHORIZED, "이메일 또는 비밀번호가 일치하지 않습니다."),
     NO_PERMISSION(HttpStatus.UNAUTHORIZED, "비밀번호가 올바르지 않습니다."),
     LOGIN_REQUIRED(HttpStatus.UNAUTHORIZED, "로그인이 필요한 서비스입니다."),
-
 
     // 403 Forbidden
     NO_DELETE_PERMISSION(HttpStatus.FORBIDDEN, "삭제 권한이 없습니다."),
