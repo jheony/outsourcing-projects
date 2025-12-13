@@ -32,4 +32,6 @@ public interface TaskRepositoryCustom {
 
     // 조건 포함 작업 목록 조회
     Page<Task> getAllTaskWithCondition(Long status, String query, Long assigneeId, Pageable pageable);
+
+    Task getTaskById(Long taskId);
 }
