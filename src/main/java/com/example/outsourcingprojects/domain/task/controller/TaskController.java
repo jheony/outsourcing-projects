@@ -5,6 +5,8 @@ import com.example.outsourcingprojects.common.util.response.GlobalResponse;
 import com.example.outsourcingprojects.domain.task.dto.*;
 import com.example.outsourcingprojects.domain.task.service.TaskService;
 import com.example.outsourcingprojects.domain.task.service.TempTaskService;
+import jakarta.servlet.http.HttpServletRequest;
+import com.example.outsourcingprojects.domain.task.service.TempTaskService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -22,9 +24,11 @@ public class TaskController {
     // 작업 생성
     @PostMapping
     public GlobalResponse<CreateTaskResponseDto> createTaskHandler(
-            @RequestBody CreateTaskRequestDto request
+            @RequestBody CreateTaskRequestDto request, HttpServletRequest httpServletRequest
     ) {
         CreateTaskResponseDto response = tempTaskService.createTask(request);
+        Long userId = (Long) httpServletRequest.getAttribute("userId");
+        CreateTaskResponseDto response = tempTaskService.createTask(request, userId);
         return GlobalResponse.success("작업이 생성되었습니다.", response);
     }
 
@@ -56,8 +60,9 @@ public class TaskController {
     // 작업 수정
     @PutMapping("/{taskId}")
     public GlobalResponse<UpdateTaskResponse> updateTaskHandler(
-            @PathVariable Long taskId, @RequestBody UpdateTaskRequest request, @RequestParam Long userId) {
-        UpdateTaskResponse response = taskService.updateTask(taskId, request, userId);
+            @PathVariable Long taskId, @RequestBody UpdateTaskRequest request, HttpServletRequest httpRequest) {
+        Long userId = (Long) httpRequest.getAttribute("userId");
+        UpdateTaskResponse response = tempTaskService.updateTask(taskId, request, userId);
         return GlobalResponse.success("작업이 수정되었습니다.", response);
 
     }
@@ -65,8 +70,9 @@ public class TaskController {
     // 작업 삭제
     @DeleteMapping("/{taskId}")
     public GlobalResponse<Void> deleteTaskHandler(
-            @PathVariable Long taskId, @RequestParam Long userId) {
-        taskService.deleteTask(taskId, userId);
+            @PathVariable Long taskId, HttpServletRequest request) {
+        Long userId = (Long) request.getAttribute("userId");
+        tempTaskService.deleteTask(taskId, userId);
         return GlobalResponse.success("작업이 삭제되었습니다.", null);
     }
 
