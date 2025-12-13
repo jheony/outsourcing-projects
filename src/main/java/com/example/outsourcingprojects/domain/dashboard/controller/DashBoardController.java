@@ -1,5 +1,6 @@
 package com.example.outsourcingprojects.domain.dashboard.controller;
 
+import com.example.outsourcingprojects.common.aop.TrackTime;
 import com.example.outsourcingprojects.common.util.response.GlobalResponse;
 import com.example.outsourcingprojects.domain.dashboard.service.DashBoardService;
 import com.example.outsourcingprojects.domain.dashboard.dto.DailyTaskDTO;

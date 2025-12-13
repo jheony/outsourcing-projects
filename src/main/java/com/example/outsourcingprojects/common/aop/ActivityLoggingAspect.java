@@ -7,12 +7,14 @@ import com.example.outsourcingprojects.common.model.ActivityType;
 import com.example.outsourcingprojects.common.model.TaskStatusType;
 import com.example.outsourcingprojects.common.util.response.GlobalResponse;
 import com.example.outsourcingprojects.domain.activitylog.repository.ActivityLogRepository;
+import com.example.outsourcingprojects.domain.task.dto.CreateTaskResponseDto;
 import com.example.outsourcingprojects.domain.task.repository.TaskRepository;
-import com.example.outsourcingprojects.domain.team.dto.response.CreateTeamResponseDto;
 import com.example.outsourcingprojects.domain.user.repository.UserRepository;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
+import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.AfterReturning;
+import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -66,7 +68,7 @@ public class ActivityLoggingAspect {
 
         // 작업 생성 시 작업 아이디 가져오기
         if (method.equals("POST") && target.equals("작업")) {
-            CreateTeamResponseDto responseDto = (CreateTeamResponseDto) result.getData();
+            CreateTaskResponseDto responseDto = (CreateTaskResponseDto) result.getData();
             taskId = responseDto.getId();
         }
 
@@ -101,7 +103,14 @@ public class ActivityLoggingAspect {
         log.info("AOP 성공~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
         return retVal;
     }
-}
 
-//실행 시간, 호출자, 메서드명, 입력 파라미터, 실행 결과, 예외 발생 여부
-//@Around()
+    //실행 시간, 호출자, 메서드명, 입력 파라미터, 실행 결과, 예외 발생 여부
+    @Around(value = "ActivityLoggingPointcut()")
+    public Object ActivityLoggingAdvice(ProceedingJoinPoint joinPoint) throws Throwable {
+
+        Object result = joinPoint.proceed();
+
+        return result;
+
+    }
+}

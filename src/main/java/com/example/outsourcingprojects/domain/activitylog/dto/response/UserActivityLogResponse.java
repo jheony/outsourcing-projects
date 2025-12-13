@@ -1,4 +1,4 @@
-package com.example.outsourcingprojects.domain.activitylog.dto;
+package com.example.outsourcingprojects.domain.activitylog.dto.response;
 
 import com.example.outsourcingprojects.common.entity.User;
 import lombok.Getter;
