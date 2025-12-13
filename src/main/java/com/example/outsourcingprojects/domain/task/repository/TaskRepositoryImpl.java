@@ -192,6 +192,8 @@ public class TaskRepositoryImpl implements TaskRepositoryCustom {
                         task.deletedAt.isNull()
                 )
                 .orderBy(task.createdAt.desc())
+                .limit(pageable.getPageSize())
+                .offset(pageable.getOffset())
                 .fetch();
 
         JPAQuery<Long> countQuery = queryFactory

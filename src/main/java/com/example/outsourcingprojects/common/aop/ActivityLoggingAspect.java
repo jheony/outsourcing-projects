@@ -86,7 +86,7 @@ public class ActivityLoggingAspect {
 
         Task task = taskRepository.findById(taskId).orElseThrow(() -> new IllegalStateException("작업 없음"));
 
-        String description = activityType.getFormatDescription(task.getTitle());
+        String description;
 
         // 작업 상태 변경 시 description 설정
         if (method.equals("PATCH")) {
@@ -98,6 +98,8 @@ public class ActivityLoggingAspect {
             int curStatus = (taskStatusTypes[1].equals(taskStatusType)) ? 0 : 1;
 
             description = activityType.getFormatDescription(taskStatusTypes[curStatus].name(), taskStatusType.name());
+        } else {
+            description = activityType.getFormatDescription(task.getTitle());
         }
 
         ActivityLog activityLog = new ActivityLog(
