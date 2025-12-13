@@ -6,7 +6,7 @@ import com.example.outsourcingprojects.common.exception.ErrorCode;
 import com.example.outsourcingprojects.common.util.PasswordEncoder;
 import com.example.outsourcingprojects.domain.user.dto.response.VerifyPasswordResponse;
 import com.example.outsourcingprojects.domain.user.dto.request.SignUpRequest;
-import com.example.outsourcingprojects.domain.user.dto.request.UpdateRequest;
+import com.example.outsourcingprojects.domain.user.dto.request.UpdateUserRequest;
 import com.example.outsourcingprojects.domain.user.dto.response.*;
 import com.example.outsourcingprojects.domain.user.repository.UserRepository;
 import jakarta.transaction.Transactional;
@@ -58,24 +58,22 @@ public class UserService {
 
     // 사용자 목록 조회
     @Transactional
-    public UserListResponse usersInfo(Long userId) {
+    public List<UserSummaryResponse> usersInfo(Long userId) {
 
         userRepository.findById(userId)
                 .orElseThrow(() -> new IllegalArgumentException("사용자 정보를 찾을 수 없습니다."));
 
         List<User> users = userRepository.findAllByDeletedAtIsNull();
 
-        List<UserSummaryResponse> summaries = users
+        return users
                 .stream()
                 .map(UserSummaryResponse::from)
                 .toList();
-
-        return UserListResponse.from(summaries);
     }
 
     // 사용자 정보 수정
     @Transactional
-    public UpdateResponse update(Long loginUserId, Long targetId, UpdateRequest request) {
+    public UpdateResponse update(Long loginUserId, Long targetId, UpdateUserRequest request) {
 
         if (!loginUserId.equals(targetId)) {
             throw new CustomException(ErrorCode.ALREADY_TEAM_MEMBER);
