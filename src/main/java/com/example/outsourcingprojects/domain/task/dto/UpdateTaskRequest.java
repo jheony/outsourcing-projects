@@ -8,15 +8,10 @@ import java.time.LocalDateTime;
 public class UpdateTaskRequest {
 
     private String title;
-
     private String description;
-
-    private Long priority;
-
-    private Long status;
-
+    private String priority;
+    private String status;
     private Long assigneeId;
-
     private LocalDateTime dueDate;
 }
 

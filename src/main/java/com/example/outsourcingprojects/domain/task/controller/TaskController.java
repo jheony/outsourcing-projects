@@ -4,6 +4,8 @@ import com.example.outsourcingprojects.common.util.dto.PageDataDTO;
 import com.example.outsourcingprojects.common.util.response.GlobalResponse;
 import com.example.outsourcingprojects.domain.task.dto.*;
 import com.example.outsourcingprojects.domain.task.service.TaskService;
+import com.example.outsourcingprojects.domain.task.service.TempTaskService;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -13,15 +15,18 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/tasks")
 public class TaskController {
     //Controller에서 사용하는 메서드는 서비스의 메서드명과 곂치지 않도록 Handler를 붙여주기로 약속했습니다. ok
+
     private final TaskService taskService;
+    private final TempTaskService tempTaskService;
     //TODO ResposneEntity  대신 GrobalResponse 로 바꿔서 , return GrobalResponse.success로 (다른팀원 controller 참고)
 
     // 작업 생성
     @PostMapping
     public GlobalResponse<CreateTaskResponseDto> createTaskHandler(
-            @RequestBody CreateTaskRequestDto request
+            @RequestBody CreateTaskRequestDto request, HttpServletRequest httpServletRequest
     ) {
-        CreateTaskResponseDto response = taskService.createTask(request);
+        Long userId = (Long) httpServletRequest.getAttribute("userId");
+        CreateTaskResponseDto response = tempTaskService.createTask(request, userId);
         return GlobalResponse.success("작업이 생성되었습니다.", response);
     }
 
@@ -47,8 +52,9 @@ public class TaskController {
     // 작업 수정
     @PutMapping("/{taskId}")
     public GlobalResponse<UpdateTaskResponse> updateTaskHandler(
-            @PathVariable Long taskId, @RequestBody UpdateTaskRequest request, @RequestParam Long userId) {
-        UpdateTaskResponse response = taskService.updateTask(taskId, request, userId);
+            @PathVariable Long taskId, @RequestBody UpdateTaskRequest request, HttpServletRequest httpRequest) {
+        Long userId = (Long) httpRequest.getAttribute("userId");
+        UpdateTaskResponse response = tempTaskService.updateTask(taskId, request, userId);
         return GlobalResponse.success("작업이 수정되었습니다.", response);
 
     }
@@ -56,8 +62,9 @@ public class TaskController {
     // 작업 삭제
     @DeleteMapping("/{taskId}")
     public GlobalResponse<Void> deleteTaskHandler(
-            @PathVariable Long taskId, @RequestParam Long userId) {
-        taskService.deleteTask(taskId, userId);
+            @PathVariable Long taskId, HttpServletRequest request) {
+        Long userId = (Long) request.getAttribute("userId");
+        tempTaskService.deleteTask(taskId, userId);
         return GlobalResponse.success("작업이 삭제되었습니다.", null);
     }
 
@@ -67,7 +74,7 @@ public class TaskController {
             @PathVariable Long taskId,
             @RequestBody StatusUpdateRequestDto requestDto
     ) {
-        StatusUpdateResponseDto response = taskService.statusUpdateTask(taskId, requestDto);
+        StatusUpdateResponseDto response = tempTaskService.statusUpdateTask(taskId, requestDto);
         return GlobalResponse.success("작업 상태가 변경되었습니다.", response);
     }
 
