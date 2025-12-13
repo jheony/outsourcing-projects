@@ -1,12 +1,13 @@
-package com.example.outsourcingprojects.domain.dashboard.repository;
+package com.example.outsourcingprojects.domain.task.repository;
 
 import com.example.outsourcingprojects.common.entity.QTask;
-import com.example.outsourcingprojects.common.entity.QUser;
 import com.example.outsourcingprojects.common.entity.Task;
 import com.example.outsourcingprojects.common.model.TaskStatusType;
-import com.example.outsourcingprojects.domain.search.dto.SearchTaskResponse;
 import com.example.outsourcingprojects.domain.dashboard.dto.DailyTaskDTO;
+import com.example.outsourcingprojects.domain.search.dto.SearchTaskResponse;
 import com.querydsl.core.Tuple;
+import com.querydsl.core.types.dsl.Expressions;
+import com.querydsl.core.types.dsl.NumberExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -19,20 +20,18 @@ import java.time.LocalTime;
 import java.util.List;
 
 @RequiredArgsConstructor
-public class DashBoardRepositoryImpl implements DashBoardRepositoryCustom {
+public class TaskRepositoryImpl implements TaskRepositoryCustom {
 
     private final JPAQueryFactory queryFactory;
 
     @Override
     public Page<Task> findAllByAssigneeIdAndStatus(Long assigneeId, Long status) {
         QTask task = QTask.task;
-        QUser user = QUser.user;
 
         Pageable pageable = Pageable.ofSize(3).withPage(0);
 
         List<Task> result = queryFactory
                 .selectFrom(task)
-                .join(task.assignee, user)
                 .where(task.assignee.id.eq(assigneeId)
                         .and(task.status.eq(status))
                         .and(task.deletedAt.isNull()))
@@ -42,14 +41,11 @@ public class DashBoardRepositoryImpl implements DashBoardRepositoryCustom {
                 .fetch();
 
         Long total = queryFactory
-                .select(task.count())
+                .select(task.id.count())
                 .from(task)
-                .join(task.assignee, user)
-                .where(
-                        task.assignee.id.eq(assigneeId)
-                                .and(task.status.eq(status))
-                                .and(task.deletedAt.isNull())
-                )
+                .where(task.assignee.id.eq(assigneeId)
+                        .and(task.status.eq(status))
+                        .and(task.deletedAt.isNull()))
                 .fetchOne();
 
         total = total == null ? 0L : total;
@@ -59,10 +55,10 @@ public class DashBoardRepositoryImpl implements DashBoardRepositoryCustom {
 
     @Override
     public List<Tuple> countTasksByStatus() {
-
         QTask task = QTask.task;
 
-        return queryFactory.select(task.status, task.id.count())
+        return queryFactory
+                .select(task.status, task.id.count())
                 .from(task)
                 .where(task.deletedAt.isNull())
                 .groupBy(task.status)
@@ -72,29 +68,34 @@ public class DashBoardRepositoryImpl implements DashBoardRepositoryCustom {
 
     @Override
     public Long countOverdueTask() {
-
         QTask task = QTask.task;
 
-        LocalDateTime currentTime = LocalDateTime.now();
+        LocalDateTime now = LocalDateTime.now();
 
-        Long result = queryFactory.select(task.id.count())
+        Long result = queryFactory
+                .select(task.id.count())
                 .from(task)
-                .where(task.dueDate.before(currentTime)
+                .where(task.dueDate.before(now)
                         .and(task.status.ne(TaskStatusType.DONE.getStatusNum()))
                         .and(task.deletedAt.isNull()))
                 .fetchOne();
 
-        return result != null ? result : 0;
+        return result != null ? result : 0L;
     }
 
     @Override
     public Long countMyTaskToday(Long userId) {
-
         QTask task = QTask.task;
 
-        Long result = queryFactory.select(task.id.count())
+        LocalDateTime start = LocalDate.now().atStartOfDay();
+        LocalDateTime end = LocalDate.now().atTime(LocalTime.MAX);
+
+        Long result = queryFactory
+                .select(task.id.count())
                 .from(task)
-                .where(task.deletedAt.isNull().and(task.assignee.id.eq(userId)))
+                .where(task.assignee.id.eq(userId)
+                        .and(task.deletedAt.isNull())
+                        .and(task.createdAt.between(start, end)))
                 .fetchOne();
 
         return result != null ? result : 0L;
@@ -102,49 +103,49 @@ public class DashBoardRepositoryImpl implements DashBoardRepositoryCustom {
 
     @Override
     public DailyTaskDTO getDailyTask(Integer before, Long userId) {
-
         QTask task = QTask.task;
 
         LocalDate date = LocalDate.now().minusDays(before);
-
         LocalDateTime startOfDay = date.atStartOfDay();
         LocalDateTime endOfDay = date.atTime(LocalTime.MAX);
+
+        NumberExpression<Long> completedExpr =
+                Expressions.numberTemplate(Long.class,
+                        "sum(case when {0} = {1} then 1 else 0 end)",
+                        task.status, TaskStatusType.DONE.getStatusNum()
+                );
 
         Tuple result = queryFactory
                 .select(
                         task.id.count(),
-                        task.status.eq(TaskStatusType.DONE.getStatusNum()).count()
+                        completedExpr
                 )
                 .from(task)
-                .where(task.createdAt.between(startOfDay, endOfDay)
-                        .and(task.assignee.id.eq(userId))
+                .where(task.assignee.id.eq(userId)
                         .and(task.deletedAt.isNull())
-                        )
+                        .and(task.createdAt.between(startOfDay, endOfDay)))
                 .fetchOne();
 
         Long tasks = result != null ? result.get(task.id.count()) : 0L;
-        Long completed = result != null ? result.get(task.status.eq(TaskStatusType.DONE.getStatusNum()).count()) : 0L;
+        Long completed = result != null ? result.get(completedExpr) : 0L;
 
         String[] korDays = {"일", "월", "화", "수", "목", "금", "토"};
         int dayIndex = date.getDayOfWeek().getValue();
         Character dayChar = korDays[dayIndex % 7].charAt(0);
 
-        String dateStr = date.toString();
-
-        return new DailyTaskDTO(dayChar, tasks, completed, dateStr);
+        return new DailyTaskDTO(dayChar, tasks, completed, date.toString());
     }
 
     @Override
     public List<SearchTaskResponse> getSearchTasks(String query) {
-
         QTask task = QTask.task;
 
-        List<Task> tasks = queryFactory.select(task)
-                .from(task)
+        List<Task> tasks = queryFactory
+                .selectFrom(task)
                 .where(task.title.containsIgnoreCase(query))
+                .limit(100)
                 .fetch();
 
         return tasks.stream().map(SearchTaskResponse::from).toList();
     }
-
 }

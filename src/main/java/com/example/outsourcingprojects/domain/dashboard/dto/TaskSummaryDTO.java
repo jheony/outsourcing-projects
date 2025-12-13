@@ -1,6 +1,7 @@
 package com.example.outsourcingprojects.domain.dashboard.dto;
 
 import com.example.outsourcingprojects.common.entity.Task;
+import com.example.outsourcingprojects.domain.user.dto.response.UserSummaryResponse;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
@@ -12,6 +13,7 @@ public class TaskSummaryDTO {
     private final Long id;
     private final String title;
     private final Long status;
+    private final UserSummaryResponse assignee;
     private final Long priority;
     private final LocalDateTime dueDate;
 
@@ -20,6 +22,7 @@ public class TaskSummaryDTO {
                 task.getId(),
                 task.getTitle(),
                 task.getStatus(),
+                UserSummaryResponse.from(task.getAssignee()),
                 task.getPriority(),
                 task.getDueDate()
         );

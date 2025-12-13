@@ -20,7 +20,6 @@ public class Task extends BaseEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "assignee_id")
-    @NotNull
     private User assignee;
 
     @Column(length = 100)
@@ -32,7 +31,6 @@ public class Task extends BaseEntity {
 
     @Column
     private Long priority;
-
 
     @Column
     private Long status;
