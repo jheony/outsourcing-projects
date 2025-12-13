@@ -8,7 +8,6 @@ import com.example.outsourcingprojects.common.exception.ErrorCode;
 import com.example.outsourcingprojects.common.model.PriorityType;
 import com.example.outsourcingprojects.common.model.TaskStatusType;
 import com.example.outsourcingprojects.common.util.dto.PageDataDTO;
-import com.example.outsourcingprojects.domain.comment.repository.CommentRepository;
 import com.example.outsourcingprojects.domain.task.dto.*;
 import com.example.outsourcingprojects.domain.task.repository.TaskRepository;
 import com.example.outsourcingprojects.domain.user.repository.UserRepository;
@@ -22,9 +21,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDateTime;
 
 import static com.example.outsourcingprojects.common.exception.ErrorCode.*;
-import static com.example.outsourcingprojects.common.exception.ErrorCode.INVALID_STATUS_VALUE;
-import static com.example.outsourcingprojects.common.exception.ErrorCode.NO_DELETE_PERMISSION;
-import static com.example.outsourcingprojects.common.exception.ErrorCode.TASK_NOT_FOUND;
 
 
 @Service
@@ -61,7 +57,7 @@ public class TaskService {
     @Transactional
     public CreateTaskResponseDto createTask(CreateTaskRequestDto request, Long userId) {
         User assignee;
-        if (request.getAssigneeId().equals(null)) {
+        if (request.getAssigneeId()==null) {
             assignee = userRepository.findById(userId).orElseThrow(
                     () -> new CustomException(USER_NOT_FOUND));
         } else {
@@ -69,8 +65,9 @@ public class TaskService {
                     () -> new CustomException(USER_NOT_FOUND));
         }
 
-        // 담당자 조회
-        // TODO 이넘 타입 요청 및 응답 객체 수정. / deletedat 안나오게.
+        if(assignee.getDeletedAt()!=null){
+            throw new CustomException(USER_NOT_FOUND);
+        }
 
         PriorityType priorityType = PriorityType.valueOf(request.getPriority());
         TaskStatusType statusType = TaskStatusType.toType(10L);
