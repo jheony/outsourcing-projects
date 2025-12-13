@@ -1,4 +1,4 @@
-package com.example.outsourcingprojects.domain.comment.dto;
+package com.example.outsourcingprojects.domain.comment.dto.userDto;
 
 import com.example.outsourcingprojects.common.entity.User;
 import lombok.Getter;
