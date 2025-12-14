@@ -93,15 +93,15 @@ public class DashBoardServiceTest {
         DashBoard dashBoard = DashBoard.from(1L, 1L, 1L, 1L, 1L, 1.0, 1.0);
         Long todayMyTasks = 1L;
 
-        DashBoardDTO dashBoardDTO = DashBoardDTO.from(dashBoard, todayMyTasks);
         when(dashBoardRepository.findLatestDashBoard()).thenReturn(dashBoard);
         when(taskRepository.countMyTaskToday(userId)).thenReturn(todayMyTasks);
+        DashBoardDTO dashBoardDTO = DashBoardDTO.from(dashBoard, todayMyTasks);
 
         //when
         DashBoardDTO result = dashBoardService.getDashBoard(userId);
 
         //then
-        assertThat(result).isEqualTo(dashBoardDTO);
+        assertThat(result).usingRecursiveComparison().isEqualTo(dashBoardDTO);
 
     }
 }
