@@ -39,7 +39,7 @@ class AuthServiceTest {
 
     @Test
     @DisplayName("로그인 성공")
-    void loginTest_success() {
+    void loginTest_Success() {
 
         // given
         LoginRequest testRequest = new LoginRequest();
@@ -47,7 +47,7 @@ class AuthServiceTest {
         ReflectionTestUtils.setField(testRequest, "username", "username");
         ReflectionTestUtils.setField(testRequest, "password", "password");
 
-        User user = new User("username", "test@test.com", "password", "name", 10L);
+        User user = new User("username", "email", "password", "name", 10L);
         ReflectionTestUtils.setField(user, "id", 1L);
 
         when(userRepository.findByUsernameAndDeletedAtIsNull(anyString())).thenReturn(Optional.of(user));
