@@ -19,7 +19,6 @@ public class CommentListResponse {
 
     public static CommentListResponse from(List<GetCommentResponse> comments, Page<Comment> page) {
 
-
         return new CommentListResponse(
                 comments,
                 page.getTotalElements(),

@@ -145,14 +145,11 @@ public class UserService {
     @Transactional
     public VerifyPasswordResponse verifyPassword(Long userId, String inputPassword) {
 
-        // 1. 유저 조회
         User user = userRepository.findByIdAndDeletedAtIsNull(userId)
                 .orElseThrow(() -> new IllegalArgumentException("유저를 찾을 수 없습니다."));
 
-        // 2. 입력 비밀번호 vs 저장된 비밀번호 비교
         boolean match = passwordEncoder.matches(inputPassword, user.getPassword());
 
-        // 3. 결과 반환
         return new VerifyPasswordResponse(match);
     }
 
