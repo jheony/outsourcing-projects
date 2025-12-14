@@ -6,7 +6,7 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
 @Getter
-@RequiredArgsConstructor(access = lombok.AccessLevel.PROTECTED)
+@RequiredArgsConstructor
 public class createCommentRequest {
 
     @NotBlank(message = "댓슬 내용은 필수 입니다.")

@@ -7,7 +7,7 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
 @Getter
-@RequiredArgsConstructor(access = lombok.AccessLevel.PROTECTED)
+@RequiredArgsConstructor
 public class SignUpRequest {
 
     @NotBlank(message = "유저이름은 필수 입력 값입니다.")
