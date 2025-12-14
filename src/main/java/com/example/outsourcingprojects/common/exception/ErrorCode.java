@@ -42,14 +42,16 @@ public enum ErrorCode {
     TASK_OR_PARENT_COMMENT_NOT_FOUND(HttpStatus.NOT_FOUND, "작업 또는 부모 댓글을 찾을 수 없습니다."),
     TYPE_NOT_FOUND(HttpStatus.NOT_FOUND, "해당하는 타입이 존재하지 않습니다."),
 
+
     // 409 Conflict
     TEAM_HAS_MEMBERS(HttpStatus.CONFLICT, "팀에 멤버가 존재하여 삭제할 수 없습니다."),
     ALREADY_TEAM_MEMBER(HttpStatus.CONFLICT, "이미 팀에 속한 멤버 입니다."),
     DUPLICATE_TEAM_NAME(HttpStatus.CONFLICT, "이미 존재하는 팀 이름 입니다."),
-    USER_NAME_ALREADY_EXISTS(HttpStatus.CONFLICT, "이미 존재하는 사용자명 입니다."),
+    DUPLICATE_USER_USERNAME(HttpStatus.CONFLICT, "이미 존재하는 사용자명 입니다."),
     DUPLICATE_USER_NAME(HttpStatus.CONFLICT, "이미 사용 중인 이름 입니다."),
     DUPLICATE_USER_EMAIL(HttpStatus.CONFLICT, "이미 사용 중인 이메일 입니다."),
-    DUPLICATE_USER_PASSWORD(HttpStatus.CONFLICT, "이미 사용 중인 비밀번호 입니다.")
+    DUPLICATE_USER_PASSWORD(HttpStatus.CONFLICT, "이미 사용 중인 비밀번호 입니다."),
+    ALREADY_DELETED_USER(HttpStatus.CONFLICT, "이미 탈퇴한 사용자 입니다.")
     ;
     private final HttpStatus status;
     private final String message;
