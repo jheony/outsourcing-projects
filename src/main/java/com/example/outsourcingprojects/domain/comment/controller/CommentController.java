@@ -18,6 +18,7 @@ public class CommentController {
 
     private final CommentService commentService;
 
+
     //댓글 생성
     @PostMapping("/{taskId}/comments")
     public GlobalResponse<CreateCommentResponse> createCommentHandler(
@@ -29,6 +30,7 @@ public class CommentController {
         CreateCommentResponse createComment = commentService.create(taskId, userId, request);
         return GlobalResponse.success("댓글이 작성되었습니다.", createComment);
     }
+
 
     //댓글 조회
     @GetMapping("/{taskId}/comments")
@@ -42,15 +44,25 @@ public class CommentController {
         return GlobalResponse.success("댓글 목록을 조회했습니다.", response);
     }
 
+
     //댓글 수정
     @PutMapping("/{taskId}/comments/{commentId}")
     public GlobalResponse<UpdateCommentResponse> updateHandler(@PathVariable Long taskId,
                                                                @PathVariable Long commentId,
-                              @RequestBody UpdateCommentRequest request) {
+                                                               @RequestBody UpdateCommentRequest request) {
         UpdateCommentResponse response = commentService.update(taskId, commentId, request);
         return GlobalResponse.success("댓글이 수정되었습니다.", response);
     }
 
-    //댓글 삭제
 
+    //댓글 삭제
+    @DeleteMapping("/{taskId}/comments/{commentId}")
+    public GlobalResponse<Void> deleteHandler(@PathVariable Long taskId,
+                                              @PathVariable Long commentId,
+                                              HttpServletRequest userToken) {
+
+        Long userId = (Long) userToken.getAttribute("userId");
+        commentService.softDelete(userId, taskId, commentId);
+        return GlobalResponse.success("댓글이 삭제되었습니다.", null);
+    }
 }

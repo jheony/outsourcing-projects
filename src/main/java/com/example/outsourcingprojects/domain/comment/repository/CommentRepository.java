@@ -13,8 +13,8 @@ public interface CommentRepository extends JpaRepository<Comment, Long> {
 
     Optional<Comment> findByIdAndDeletedAtIsNull(Long id);
 
-    Page<Comment> findAllByTaskIdAndCommentIsNull(Long taskId, Pageable pageable);
+    Page<Comment> findAllByTaskIdAndCommentIsNullAndDeletedAtIsNull(Long taskId, Pageable pageable);
 
-    List<Comment> findAllByTaskIdAndComment_IdIn(Long taskId, List<Long> parentIds, Sort sort);
+    List<Comment> findAllByTaskIdAndComment_IdInAndDeletedAtIsNull(Long taskId, List<Long> parentIds, Sort sort);
 
 }
