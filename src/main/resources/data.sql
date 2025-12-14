@@ -1,168 +1,216 @@
 INSERT INTO customers (username, email, password, name, role, created_at, updated_at, deleted_at) VALUES
-                                                                                                  ('alice.kim','alice.kim@example.com','password','Alice Kim',10,NOW() - INTERVAL 30 DAY,NOW() - INTERVAL 29 DAY,NULL),
-                                                                                                  ('bob.lee','bob.lee@example.com','password','Bob Lee',20,NOW() - INTERVAL 29 DAY,NOW() - INTERVAL 28 DAY,NULL),
-                                                                                                  ('charlie.park','charlie.park@example.com','password','Charlie Park',10,NOW() - INTERVAL 28 DAY,NOW() - INTERVAL 27 DAY,NOW() - INTERVAL 5 DAY),
-                                                                                                  ('diana.choi','diana.choi@example.com','password','Diana Choi',20,NOW() - INTERVAL 27 DAY,NOW() - INTERVAL 26 DAY,NULL),
-                                                                                                  ('ethan.jung','ethan.jung@example.com','password','Ethan Jung',10,NOW() - INTERVAL 26 DAY,NOW() - INTERVAL 25 DAY,NULL),
-                                                                                                  ('fiona.han','fiona.han@example.com','password','Fiona Han',20,NOW() - INTERVAL 25 DAY,NOW() - INTERVAL 24 DAY,NOW() - INTERVAL 10 DAY),
-                                                                                                  ('george.kwon','george.kwon@example.com','password','George Kwon',10,NOW() - INTERVAL 24 DAY,NOW() - INTERVAL 23 DAY,NULL),
-                                                                                                  ('hannah.lim','hannah.lim@example.com','password','Hannah Lim',20,NOW() - INTERVAL 23 DAY,NOW() - INTERVAL 22 DAY,NULL),
-                                                                                                  ('ian.seo','ian.seo@example.com','password','Ian Seo',10,NOW() - INTERVAL 22 DAY,NOW() - INTERVAL 21 DAY,NOW() - INTERVAL 7 DAY),
-                                                                                                  ('julia.shin','julia.shin@example.com','password','Julia Shin',20,NOW() - INTERVAL 21 DAY,NOW() - INTERVAL 20 DAY,NULL),
-                                                                                                  ('kevin.yoon','kevin.yoon@example.com','password','Kevin Yoon',10,NOW() - INTERVAL 20 DAY,NOW() - INTERVAL 19 DAY,NULL),
-                                                                                                  ('lisa.oh','lisa.oh@example.com','password','Lisa Oh',20,NOW() - INTERVAL 19 DAY,NOW() - INTERVAL 18 DAY,NOW() - INTERVAL 12 DAY),
-                                                                                                  ('matt.seo','matt.seo@example.com','password','Matt Seo',10,NOW() - INTERVAL 18 DAY,NOW() - INTERVAL 17 DAY,NULL),
-                                                                                                  ('nina.kim','nina.kim@example.com','password','Nina Kim',20,NOW() - INTERVAL 17 DAY,NOW() - INTERVAL 16 DAY,NULL),
-                                                                                                  ('oliver.park','oliver.park@example.com','password','Oliver Park',10,NOW() - INTERVAL 16 DAY,NOW() - INTERVAL 15 DAY,NOW() - INTERVAL 15 DAY),
-                                                                                                  ('paula.choi','paula.choi@example.com','password','Paula Choi',20,NOW() - INTERVAL 15 DAY,NOW() - INTERVAL 14 DAY,NULL),
-                                                                                                  ('quentin.han','quentin.han@example.com','password','Quentin Han',10,NOW() - INTERVAL 14 DAY,NOW() - INTERVAL 13 DAY,NULL),
-                                                                                                  ('rachel.lim','rachel.lim@example.com','password','Rachel Lim',20,NOW() - INTERVAL 13 DAY,NOW() - INTERVAL 12 DAY,NOW() - INTERVAL 3 DAY),
-                                                                                                  ('sam.kwon','sam.kwon@example.com','password','Sam Kwon',10,NOW() - INTERVAL 12 DAY,NOW() - INTERVAL 11 DAY,NULL),
-                                                                                                  ('tina.shin','tina.shin@example.com','password','Tina Shin',20,NOW() - INTERVAL 11 DAY,NOW() - INTERVAL 10 DAY,NULL),
-                                                                                                  ('ursula.oh','ursula.oh@example.com','password','Ursula Oh',10,NOW() - INTERVAL 10 DAY,NOW() - INTERVAL 9 DAY,NOW() - INTERVAL 8 DAY),
-                                                                                                  ('victor.yoon','victor.yoon@example.com','password','Victor Yoon',20,NOW() - INTERVAL 9 DAY,NOW() - INTERVAL 8 DAY,NULL),
-                                                                                                  ('wendy.kim','wendy.kim@example.com','password','Wendy Kim',10,NOW() - INTERVAL 8 DAY,NOW() - INTERVAL 7 DAY,NULL),
-                                                                                                  ('xander.park','xander.park@example.com','password','Xander Park',20,NOW() - INTERVAL 7 DAY,NOW() - INTERVAL 6 DAY,NOW() - INTERVAL 9 DAY),
-                                                                                                  ('yvonne.lee','yvonne.lee@example.com','password','Yvonne Lee',10,NOW() - INTERVAL 6 DAY,NOW() - INTERVAL 5 DAY,NULL),
-                                                                                                  ('zach.choi','zach.choi@example.com','password','Zach Choi',20,NOW() - INTERVAL 5 DAY,NOW() - INTERVAL 4 DAY,NULL),
-                                                                                                  ('amy.han','amy.han@example.com','password','Amy Han',10,NOW() - INTERVAL 4 DAY,NOW() - INTERVAL 3 DAY,NOW() - INTERVAL 11 DAY),
-                                                                                                  ('brian.lim','brian.lim@example.com','password','Brian Lim',20,NOW() - INTERVAL 3 DAY,NOW() - INTERVAL 2 DAY,NULL),
-                                                                                                  ('cara.seo','cara.seo@example.com','password','Cara Seo',10,NOW() - INTERVAL 2 DAY,NOW() - INTERVAL 1 DAY,NULL),
-                                                                                                  ('앙팡12','daniel.oh@example.com','$2a$04$M3G.ZuXIEEqy7UMQ3wd/H.KdGfI0xIRMD4uO2Uuqu1tg4ne1.Rf4S','Daniel Oh',20,NOW() - INTERVAL 1 DAY,NOW(),NOW() - INTERVAL 13 DAY);
+                                                                                                      ('test', 'test@test.com', '$2a$04$5rLEgDtcvmbDu0qS2FT8I.C5ZFZjNeANS.vo9hiQAcAmS93tkU25q', '발표용 계정', 10, NOW(), NOW(), NULL),
+                                                                                                      ('user2', 'user2@example.com', 'password123', 'Jane Smith', 20, NOW(), NOW(), NULL),
+                                                                                                      ('user3', 'user3@example.com', 'password123', 'Michael Johnson', 20, NOW(), NOW(), NULL),
+                                                                                                      ('admin1', 'admin1@example.com', 'adminpass123', 'Admin One', 10, NOW(), NOW(), NULL),
+                                                                                                      ('admin2', 'admin2@example.com', 'adminpass123', 'Admin Two', 10, NOW(), NOW(), NULL),
+                                                                                                      ('user4', 'user4@example.com', 'password123', 'Emily Davis', 20, NOW(), NOW(), NULL),
+                                                                                                      ('user5', 'user5@example.com', 'password123', 'David Lee', 20, NOW(), NOW(), NULL),
+                                                                                                      ('user6', 'user6@example.com', 'password123', 'Sarah Wilson', 20, NOW(), NOW(), NULL),
+                                                                                                      ('admin3', 'admin3@example.com', 'adminpass123', 'Admin Three', 10, NOW(), NOW(), NULL),
+                                                                                                      ('user7', 'user7@example.com', 'password123', 'Daniel Brown', 20, NOW(), NOW(), NULL),
+                                                                                                      ('user8', 'user8@example.com', 'password123', 'Olivia Martinez', 20, NOW(), NOW(), NULL),
+                                                                                                      ('admin4', 'admin4@example.com', 'adminpass123', 'Admin Four', 10, NOW(), NOW(), NULL),
+                                                                                                      ('user9', 'user9@example.com', 'password123', 'Sophia Taylor', 20, NOW(), NOW(), NULL),
+                                                                                                      ('admin5', 'admin5@example.com', 'adminpass123', 'Admin Five', 10, NOW(), NOW(), NULL),
+                                                                                                      ('user10', 'user10@example.com', 'password123', 'Lucas Anderson', 20, NOW(), NOW(), NULL),
+                                                                                                      ('user11', 'user11@example.com', 'password123', 'Ava Thomas', 20, NOW(), NOW(), NULL),
+                                                                                                      ('user12', 'user12@example.com', 'password123', 'Liam Jackson', 20, NOW(), NOW(), NULL),
+                                                                                                      ('admin6', 'admin6@example.com', 'adminpass123', 'Admin Six', 10, NOW(), NOW(), NULL),
+                                                                                                      ('user13', 'user13@example.com', 'password123', 'Mason Harris', 20, NOW(), NOW(), NULL),
+                                                                                                      ('user14', 'user14@example.com', 'password123', 'Isabella Clark', 20, NOW(), NOW(), NULL),
+                                                                                                      ('user15', 'user15@example.com', 'password123', 'Ethan Lewis', 20, NOW(), NOW(), NULL),
+                                                                                                      ('admin7', 'admin7@example.com', 'adminpass123', 'Admin Seven', 10, NOW(), NOW(), NULL),
+                                                                                                      ('user16', 'user16@example.com', 'password123', 'Charlotte Young', 20, NOW(), NOW(), NULL),
+                                                                                                      ('user17', 'user17@example.com', 'password123', 'Amelia King', 20, NOW(), NOW(), NULL),
+                                                                                                      ('admin8', 'admin8@example.com', 'adminpass123', 'Admin Eight', 10, NOW(), NOW(), NULL),
+                                                                                                      ('user18', 'user18@example.com', 'password123', 'Harper Scott', 20, NOW(), NOW(), NULL),
+                                                                                                      ('user19', 'user19@example.com', 'password123', 'Ella Green', 20, NOW(), NOW(), NULL),
+                                                                                                      ('admin9', 'admin9@example.com', 'adminpass123', 'Admin Nine', 10, NOW(), NOW(), NULL),
+                                                                                                      ('user20', 'user20@example.com', 'password123', 'Mila Adams', 20, NOW(), NOW(), NULL),
+                                                                                                      ('user21', 'user21@example.com', 'password123', 'Jackson Nelson', 20, NOW(), NOW(), NULL),
+                                                                                                      ('admin10', 'admin10@example.com', 'adminpass123', 'Admin Ten', 10, NOW(), NOW(), NULL),
+                                                                                                      ('user22', 'user22@example.com', 'password123', 'Benjamin Hall', 20, NOW(), NOW(), NULL),
+                                                                                                      ('user23', 'user23@example.com', 'password123', 'Amos Wright', 20, NOW(), NOW(), NULL),
+                                                                                                      ('admin11', 'admin11@example.com', 'adminpass123', 'Admin Eleven', 10, NOW(), NOW(), NULL);
 
-
-INSERT INTO tasks (assignee_id, title, description, priority, status, due_date, created_at, updated_at, deleted_at) VALUES
-                                                                                                                        (1,'Design Login Page','Create wireframes and design for login',10,10,NOW() + INTERVAL 5 DAY,NOW() - INTERVAL 30 DAY,NOW() - INTERVAL 29 DAY,NULL),
-                                                                                                                        (2,'API Integration','Integrate REST API for products',20,20,NOW() + INTERVAL 7 DAY,NOW() - INTERVAL 29 DAY,NOW() - INTERVAL 28 DAY,NULL),
-                                                                                                                        (3,'Database Migration','Migrate old DB to new schema',30,30,NOW() + INTERVAL 10 DAY,NOW() - INTERVAL 28 DAY,NOW() - INTERVAL 27 DAY,NOW() - INTERVAL 5 DAY),
-                                                                                                                        (4,'Create Landing Page','Landing page for marketing',10,20,NOW() + INTERVAL 3 DAY,NOW() - INTERVAL 27 DAY,NOW() - INTERVAL 26 DAY,NULL),
-                                                                                                                        (5,'Unit Testing','Write unit tests for service layer',20,10,NOW() + INTERVAL 2 DAY,NOW() - INTERVAL 26 DAY,NOW() - INTERVAL 25 DAY,NULL),
-                                                                                                                        (6,'Fix Bug #234','Resolve login redirect bug',30,30,NOW() + INTERVAL 1 DAY,NOW() - INTERVAL 25 DAY,NOW() - INTERVAL 24 DAY,NOW() - INTERVAL 10 DAY),
-                                                                                                                        (7,'Frontend Refactor','Refactor React components',10,10,NOW() + INTERVAL 6 DAY,NOW() - INTERVAL 24 DAY,NOW() - INTERVAL 23 DAY,NULL),
-                                                                                                                        (8,'Setup CI/CD','Configure Jenkins pipeline',20,20,NOW() + INTERVAL 8 DAY,NOW() - INTERVAL 23 DAY,NOW() - INTERVAL 22 DAY,NULL),
-                                                                                                                        (9,'Write Documentation','Prepare user guide',30,30,NOW() + INTERVAL 12 DAY,NOW() - INTERVAL 22 DAY,NOW() - INTERVAL 21 DAY,NOW() - INTERVAL 7 DAY),
-                                                                                                                        (10,'Optimize Queries','Improve DB query performance',10,20,NOW() + INTERVAL 4 DAY,NOW() - INTERVAL 21 DAY,NOW() - INTERVAL 20 DAY,NULL),
-                                                                                                                        (11,'Email Notifications','Setup email alert system',20,10,NOW() + INTERVAL 5 DAY,NOW() - INTERVAL 20 DAY,NOW() - INTERVAL 19 DAY,NULL),
-                                                                                                                        (12,'Security Audit','Perform vulnerability assessment',30,30,NOW() + INTERVAL 15 DAY,NOW() - INTERVAL 19 DAY,NOW() - INTERVAL 18 DAY,NOW() - INTERVAL 6 DAY),
-                                                                                                                        (13,'User Feedback Form','Create feedback form UI',10,10,NOW() + INTERVAL 3 DAY,NOW() - INTERVAL 18 DAY,NOW() - INTERVAL 17 DAY,NULL),
-                                                                                                                        (14,'Implement Search','Add search functionality',20,20,NOW() + INTERVAL 6 DAY,NOW() - INTERVAL 17 DAY,NOW() - INTERVAL 16 DAY,NULL),
-                                                                                                                        (15,'Refactor Backend','Clean up service logic',30,30,NOW() + INTERVAL 8 DAY,NOW() - INTERVAL 16 DAY,NOW() - INTERVAL 15 DAY,NOW() - INTERVAL 8 DAY),
-                                                                                                                        (16,'Set Up Logger','Configure logging mechanism',10,10,NOW() + INTERVAL 5 DAY,NOW() - INTERVAL 15 DAY,NOW() - INTERVAL 14 DAY,NULL),
-                                                                                                                        (17,'Implement Cache','Add caching layer for API',20,20,NOW() + INTERVAL 7 DAY,NOW() - INTERVAL 14 DAY,NOW() - INTERVAL 13 DAY,NULL),
-                                                                                                                        (18,'Performance Testing','Load test API endpoints',30,30,NOW() + INTERVAL 9 DAY,NOW() - INTERVAL 13 DAY,NOW() - INTERVAL 12 DAY,NOW() - INTERVAL 9 DAY),
-                                                                                                                        (19,'Deploy to Staging','Deploy latest build',10,10,NOW() + INTERVAL 2 DAY,NOW() - INTERVAL 12 DAY,NOW() - INTERVAL 11 DAY,NULL),
-                                                                                                                        (20,'Bug Fix #456','Fix issue with file upload',20,20,NOW() + INTERVAL 3 DAY,NOW() - INTERVAL 11 DAY,NOW() - INTERVAL 10 DAY,NULL),
-                                                                                                                        (21,'Integrate Analytics','Setup Google Analytics',30,30,NOW() + INTERVAL 10 DAY,NOW() - INTERVAL 10 DAY,NOW() - INTERVAL 9 DAY,NOW() - INTERVAL 7 DAY),
-                                                                                                                        (22,'Update Dependencies','Upgrade npm packages',10,10,NOW() + INTERVAL 2 DAY,NOW() - INTERVAL 9 DAY,NOW() - INTERVAL 8 DAY,NULL),
-                                                                                                                        (23,'Fix UI Glitch','Resolve mobile layout issue',20,20,NOW() + INTERVAL 4 DAY,NOW() - INTERVAL 8 DAY,NOW() - INTERVAL 7 DAY,NULL),
-                                                                                                                        (24,'Refactor CSS','Clean up stylesheets',30,30,NOW() + INTERVAL 5 DAY,NOW() - INTERVAL 7 DAY,NOW() - INTERVAL 6 DAY,NOW() - INTERVAL 5 DAY),
-                                                                                                                        (25,'Create Dockerfile','Dockerize application',10,10,NOW() + INTERVAL 6 DAY,NOW() - INTERVAL 6 DAY,NOW() - INTERVAL 5 DAY,NULL),
-                                                                                                                        (26,'Write Tests for API','Postman test scripts',20,20,NOW() + INTERVAL 7 DAY,NOW() - INTERVAL 5 DAY,NOW() - INTERVAL 4 DAY,NULL),
-                                                                                                                        (27,'Refactor Services','Optimize service classes',30,30,NOW() + INTERVAL 8 DAY,NOW() - INTERVAL 4 DAY,NOW() - INTERVAL 3 DAY,NOW() - INTERVAL 6 DAY),
-                                                                                                                        (28,'Setup Redis','Add Redis caching',10,10,NOW() + INTERVAL 9 DAY,NOW() - INTERVAL 3 DAY,NOW() - INTERVAL 2 DAY,NULL),
-                                                                                                                        (29,'Implement OAuth','Add Google login',20,20,NOW() + INTERVAL 10 DAY,NOW() - INTERVAL 2 DAY,NOW() - INTERVAL 1 DAY,NULL),
-                                                                                                                        (30,'Final QA','Perform final quality check',30,30,NOW() + INTERVAL 12 DAY,NOW() - INTERVAL 1 DAY,NOW(),NOW() - INTERVAL 10 DAY),
-                                                                                                                        (1,'Task 1','Dummy description for task 1',10,10,NOW() + INTERVAL 3 DAY,NOW() - INTERVAL 40 DAY,NOW() - INTERVAL 39 DAY,NULL),
-                                                                                                                        (2,'Task 2','Dummy description for task 2',20,20,NOW() + INTERVAL 7 DAY,NOW() - INTERVAL 25 DAY,NOW() - INTERVAL 24 DAY,NULL),
-                                                                                                                        (3,'Task 3','Dummy description for task 3',30,30,NOW() + INTERVAL 12 DAY,NOW() - INTERVAL 50 DAY,NOW() - INTERVAL 49 DAY,NULL),
-                                                                                                                        (4,'Task 4','Dummy description for task 4',10,10,NOW() + INTERVAL 15 DAY,NOW() - INTERVAL 12 DAY,NOW() - INTERVAL 11 DAY,NULL),
-                                                                                                                        (5,'Task 5','Dummy description for task 5',20,20,NOW() + INTERVAL 9 DAY,NOW() - INTERVAL 33 DAY,NOW() - INTERVAL 32 DAY,NULL),
-                                                                                                                        (6,'Task 6','Dummy description for task 6',30,30,NOW() + INTERVAL 10 DAY,NOW() - INTERVAL 20 DAY,NOW() - INTERVAL 19 DAY,NULL),
-                                                                                                                        (7,'Task 7','Dummy description for task 7',10,10,NOW() + INTERVAL 5 DAY,NOW() - INTERVAL 18 DAY,NOW() - INTERVAL 17 DAY,NULL),
-                                                                                                                        (8,'Task 8','Dummy description for task 8',20,20,NOW() + INTERVAL 20 DAY,NOW() - INTERVAL 42 DAY,NOW() - INTERVAL 41 DAY,NULL),
-                                                                                                                        (9,'Task 9','Dummy description for task 9',30,30,NOW() + INTERVAL 11 DAY,NOW() - INTERVAL 30 DAY,NOW() - INTERVAL 29 DAY,NULL),
-                                                                                                                        (10,'Task 10','Dummy description for task 10',10,10,NOW() + INTERVAL 6 DAY,NOW() - INTERVAL 10 DAY,NOW() - INTERVAL 9 DAY,NULL),
-                                                                                                                        (1,'Task 11','Dummy description for task 11',20,20,NOW() + INTERVAL 13 DAY,NOW() - INTERVAL 60 DAY,NOW() - INTERVAL 59 DAY,NULL),
-                                                                                                                        (2,'Task 12','Dummy description for task 12',30,30,NOW() + INTERVAL 18 DAY,NOW() - INTERVAL 21 DAY,NOW() - INTERVAL 20 DAY,NULL),
-                                                                                                                        (3,'Task 13','Dummy description for task 13',10,10,NOW() + INTERVAL 14 DAY,NOW() - INTERVAL 28 DAY,NOW() - INTERVAL 27 DAY,NULL),
-                                                                                                                        (4,'Task 14','Dummy description for task 14',20,20,NOW() + INTERVAL 17 DAY,NOW() - INTERVAL 15 DAY,NOW() - INTERVAL 14 DAY,NULL),
-                                                                                                                        (5,'Task 15','Dummy description for task 15',30,30,NOW() + INTERVAL 8 DAY,NOW() - INTERVAL 41 DAY,NOW() - INTERVAL 40 DAY,NULL),
-                                                                                                                        (6,'Task 16','Dummy description for task 16',10,10,NOW() + INTERVAL 4 DAY,NOW() - INTERVAL 32 DAY,NOW() - INTERVAL 31 DAY,NULL),
-                                                                                                                        (7,'Task 17','Dummy description for task 17',20,20,NOW() + INTERVAL 19 DAY,NOW() - INTERVAL 14 DAY,NOW() - INTERVAL 13 DAY,NULL),
-                                                                                                                        (8,'Task 18','Dummy description for task 18',30,30,NOW() + INTERVAL 16 DAY,NOW() - INTERVAL 11 DAY,NOW() - INTERVAL 10 DAY,NULL),
-                                                                                                                        (9,'Task 19','Dummy description for task 19',10,10,NOW() + INTERVAL 30 DAY,NOW() - INTERVAL 9 DAY,NOW() - INTERVAL 8 DAY,NULL),
-                                                                                                                        (10,'Task 20','Dummy description for task 20',20,20,NOW() + INTERVAL 21 DAY,NOW() - INTERVAL 7 DAY,NOW() - INTERVAL 6 DAY,NULL),
-
-                                                                                                                        (1,'Task 21','Dummy description for task 21',30,30,NOW() + INTERVAL 5 DAY,NOW() - INTERVAL 37 DAY,NOW() - INTERVAL 36 DAY,NULL),
-                                                                                                                        (2,'Task 22','Dummy description for task 22',10,10,NOW() + INTERVAL 27 DAY,NOW() - INTERVAL 45 DAY,NOW() - INTERVAL 44 DAY,NULL),
-                                                                                                                        (3,'Task 23','Dummy description for task 23',20,20,NOW() + INTERVAL 14 DAY,NOW() - INTERVAL 38 DAY,NOW() - INTERVAL 37 DAY,NULL),
-                                                                                                                        (4,'Task 24','Dummy description for task 24',30,30,NOW() + INTERVAL 18 DAY,NOW() - INTERVAL 26 DAY,NOW() - INTERVAL 25 DAY,NULL),
-                                                                                                                        (5,'Task 25','Dummy description for task 25',10,10,NOW() + INTERVAL 12 DAY,NOW() - INTERVAL 19 DAY,NOW() - INTERVAL 18 DAY,NULL),
-                                                                                                                        (6,'Task 26','Dummy description for task 26',20,20,NOW() + INTERVAL 15 DAY,NOW() - INTERVAL 31 DAY,NOW() - INTERVAL 30 DAY,NULL),
-                                                                                                                        (7,'Task 27','Dummy description for task 27',30,30,NOW() + INTERVAL 22 DAY,NOW() - INTERVAL 13 DAY,NOW() - INTERVAL 12 DAY,NULL),
-                                                                                                                        (8,'Task 28','Dummy description for task 28',10,10,NOW() + INTERVAL 16 DAY,NOW() - INTERVAL 8 DAY,NOW() - INTERVAL 7 DAY,NULL),
-                                                                                                                        (9,'Task 29','Dummy description for task 29',20,20,NOW() + INTERVAL 29 DAY,NOW() - INTERVAL 6 DAY,NOW() - INTERVAL 5 DAY,NULL),
-                                                                                                                        (10,'Task 30','Dummy description for task 30',30,30,NOW() + INTERVAL 11 DAY,NOW() - INTERVAL 55 DAY,NOW() - INTERVAL 54 DAY,NULL),
-
-                                                                                                                        (1,'Task 31','Dummy description for task 31',10,10,NOW() + INTERVAL 5 DAY,NOW() - INTERVAL 35 DAY,NOW() - INTERVAL 34 DAY,NULL),
-                                                                                                                        (2,'Task 32','Dummy description for task 32',20,20,NOW() + INTERVAL 8 DAY,NOW() - INTERVAL 40 DAY,NOW() - INTERVAL 39 DAY,NULL),
-                                                                                                                        (3,'Task 33','Dummy description for task 33',30,30,NOW() + INTERVAL 12 DAY,NOW() - INTERVAL 50 DAY,NOW() - INTERVAL 49 DAY,NULL),
-                                                                                                                        (4,'Task 34','Dummy description for task 34',10,10,NOW() + INTERVAL 7 DAY,NOW() - INTERVAL 28 DAY,NOW() - INTERVAL 27 DAY,NULL),
-                                                                                                                        (5,'Task 35','Dummy description for task 35',20,20,NOW() + INTERVAL 11 DAY,NOW() - INTERVAL 20 DAY,NOW() - INTERVAL 19 DAY,NULL),
-                                                                                                                        (6,'Task 36','Dummy description for task 36',30,30,NOW() + INTERVAL 5 DAY,NOW() - INTERVAL 15 DAY,NOW() - INTERVAL 14 DAY,NULL),
-                                                                                                                        (7,'Task 37','Dummy description for task 37',10,10,NOW() + INTERVAL 9 DAY,NOW() - INTERVAL 22 DAY,NOW() - INTERVAL 21 DAY,NULL),
-                                                                                                                        (8,'Task 38','Dummy description for task 38',20,20,NOW() + INTERVAL 10 DAY,NOW() - INTERVAL 19 DAY,NOW() - INTERVAL 18 DAY,NULL),
-                                                                                                                        (9,'Task 39','Dummy description for task 39',30,30,NOW() + INTERVAL 6 DAY,NOW() - INTERVAL 24 DAY,NOW() - INTERVAL 23 DAY,NULL),
-                                                                                                                        (10,'Task 40','Dummy description for task 40',10,10,NOW() + INTERVAL 15 DAY,NOW() - INTERVAL 30 DAY,NOW() - INTERVAL 29 DAY,NULL);
-
-
-INSERT INTO comments (customer_id, task_id, parent_id, content, created_at, updated_at, deleted_at) VALUES
-                                                                                                    (1,1,NULL,'Initial comment for Task 1',NOW() - INTERVAL 30 DAY,NOW() - INTERVAL 29 DAY,NULL),
-                                                                                                    (2,2,NULL,'Discussed API integration steps',NOW() - INTERVAL 29 DAY,NOW() - INTERVAL 28 DAY,NULL),
-                                                                                                    (3,3,1,'Follow-up on DB migration',NOW() - INTERVAL 28 DAY,NOW() - INTERVAL 27 DAY,NOW() - INTERVAL 5 DAY),
-                                                                                                    (4,4,NULL,'Landing page design approved',NOW() - INTERVAL 27 DAY,NOW() - INTERVAL 26 DAY,NULL),
-                                                                                                    (5,5,NULL,'Unit tests completed',NOW() - INTERVAL 26 DAY,NOW() - INTERVAL 25 DAY,NULL),
-                                                                                                    (6,6,3,'Bug fix verified',NOW() - INTERVAL 25 DAY,NOW() - INTERVAL 24 DAY,NOW() - INTERVAL 10 DAY),
-                                                                                                    (7,7,NULL,'Frontend refactor done',NOW() - INTERVAL 24 DAY,NOW() - INTERVAL 23 DAY,NULL),
-                                                                                                    (8,8,NULL,'CI/CD pipeline configured',NOW() - INTERVAL 23 DAY,NOW() - INTERVAL 22 DAY,NULL),
-                                                                                                    (9,9,6,'Documentation updated',NOW() - INTERVAL 22 DAY,NOW() - INTERVAL 21 DAY,NOW() - INTERVAL 7 DAY),
-                                                                                                    (10,10,NULL,'Query optimization complete',NOW() - INTERVAL 21 DAY,NOW() - INTERVAL 20 DAY,NULL),
-                                                                                                    (11,11,NULL,'Email notification tests done',NOW() - INTERVAL 20 DAY,NOW() - INTERVAL 19 DAY,NULL),
-                                                                                                    (12,12,11,'Security audit findings documented',NOW() - INTERVAL 19 DAY,NOW() - INTERVAL 18 DAY,NOW() - INTERVAL 6 DAY),
-                                                                                                    (13,13,NULL,'Feedback form implemented',NOW() - INTERVAL 18 DAY,NOW() - INTERVAL 17 DAY,NULL),
-                                                                                                    (14,14,NULL,'Search functionality working',NOW() - INTERVAL 17 DAY,NOW() - INTERVAL 16 DAY,NULL),
-                                                                                                    (15,15,12,'Backend refactor completed',NOW() - INTERVAL 16 DAY,NOW() - INTERVAL 15 DAY,NOW() - INTERVAL 8 DAY),
-                                                                                                    (16,16,NULL,'Logger configured',NOW() - INTERVAL 15 DAY,NOW() - INTERVAL 14 DAY,NULL),
-                                                                                                    (17,17,NULL,'Caching implemented',NOW() - INTERVAL 14 DAY,NOW() - INTERVAL 13 DAY,NULL),
-                                                                                                    (18,18,15,'Performance testing results ready',NOW() - INTERVAL 13 DAY,NOW() - INTERVAL 12 DAY,NOW() - INTERVAL 5 DAY),
-                                                                                                    (19,19,NULL,'Staging deployment successful',NOW() - INTERVAL 12 DAY,NOW() - INTERVAL 11 DAY,NULL),
-                                                                                                    (20,20,NULL,'Bug #456 fixed',NOW() - INTERVAL 11 DAY,NOW() - INTERVAL 10 DAY,NULL),
-                                                                                                    (21,21,18,'Analytics integrated',NOW() - INTERVAL 10 DAY,NOW() - INTERVAL 9 DAY,NOW() - INTERVAL 7 DAY),
-                                                                                                    (22,22,NULL,'Dependencies updated',NOW() - INTERVAL 9 DAY,NOW() - INTERVAL 8 DAY,NULL),
-                                                                                                    (23,23,NULL,'UI glitch resolved',NOW() - INTERVAL 8 DAY,NOW() - INTERVAL 7 DAY,NULL),
-                                                                                                    (24,24,21,'CSS refactor done',NOW() - INTERVAL 7 DAY,NOW() - INTERVAL 6 DAY,NOW() - INTERVAL 9 DAY),
-                                                                                                    (25,25,NULL,'Dockerfile created',NOW() - INTERVAL 6 DAY,NOW() - INTERVAL 5 DAY,NULL),
-                                                                                                    (26,26,NULL,'API test scripts written',NOW() - INTERVAL 5 DAY,NOW() - INTERVAL 4 DAY,NULL),
-                                                                                                    (27,27,24,'Service classes refactored',NOW() - INTERVAL 4 DAY,NOW() - INTERVAL 3 DAY,NOW() - INTERVAL 6 DAY),
-                                                                                                    (28,28,NULL,'Redis caching setup',NOW() - INTERVAL 3 DAY,NOW() - INTERVAL 2 DAY,NULL),
-                                                                                                    (29,29,NULL,'Google OAuth added',NOW() - INTERVAL 2 DAY,NOW() - INTERVAL 1 DAY,NULL),
-                                                                                                    (30,30,27,'Final QA completed',NOW() - INTERVAL 1 DAY,NOW(),NOW() - INTERVAL 11 DAY);
+INSERT INTO tasks (
+    assignee_id,
+    title,
+    description,
+    priority,
+    status,
+    due_date,
+    created_at,
+    updated_at,
+    deleted_at
+) VALUES
+      (
+          1,
+          'Task 1 - 댓글 기능 구현',
+          '댓글 및 대댓글 기능을 구현합니다.',
+          10,
+          10,
+          DATE_ADD(NOW(), INTERVAL 7 DAY),
+          NOW(),
+          NOW(),
+          NULL
+      ),
+      (
+          1,
+          'Task 2 - 댓글 조회 최적화',
+          '댓글 조회 성능 개선 및 정렬 로직을 구현합니다.',
+          20,
+          20,
+          DATE_ADD(NOW(), INTERVAL 10 DAY),
+          NOW(),
+          NOW(),
+          NULL
+      ),
+      (
+          1,
+          'Task 3 - 댓글 삭제 처리',
+          '댓글 soft delete 처리 및 조회 예외를 구현합니다.',
+          30,
+          30,
+          DATE_ADD(NOW(), INTERVAL 14 DAY),
+          NOW(),
+          NOW(),
+          NULL
+      );
 
 INSERT INTO teams (name, description, created_at, updated_at, deleted_at) VALUES
-                                                                              ('Alpha Team','Responsible for frontend development',NOW() - INTERVAL 30 DAY,NOW() - INTERVAL 29 DAY,NULL),
-                                                                              ('Beta Team','Handles backend services',NOW() - INTERVAL 29 DAY,NOW() - INTERVAL 28 DAY,NULL),
-                                                                              ('Gamma Team','QA and testing team',NOW() - INTERVAL 28 DAY,NOW() - INTERVAL 27 DAY,NULL),
-                                                                              ('Delta Team','DevOps and deployment',NOW() - INTERVAL 27 DAY,NOW() - INTERVAL 26 DAY,NULL),
-                                                                              ('Epsilon Team','Research and innovation',NOW() - INTERVAL 26 DAY,NOW() - INTERVAL 25 DAY,NULL);
+                                                                              ('Backend Team', '백엔드 API 및 서버 로직을 담당하는 팀', NOW(), NOW(), NULL),
+                                                                              ('Frontend Team', '프론트엔드 UI 및 UX 개발을 담당하는 팀', NOW(), NOW(), NULL),
+                                                                              ('DevOps Team', '배포, 인프라, CI/CD를 관리하는 팀', NOW(), NOW(), NULL),
+                                                                              ('QA Team', '테스트 및 품질 관리를 담당하는 팀', NOW(), NOW(), NULL),
+                                                                              ('Planning Team', '기획 및 요구사항 정의를 담당하는 팀', NOW(), NOW(), NULL);
 
-INSERT INTO team_members (customer_id, team_id, created_at, updated_at, deleted_at) VALUES
-                                                                                          (1,1,NOW() - INTERVAL 30 DAY,NOW() - INTERVAL 29 DAY,NULL),
-                                                                                          (2,1,NOW() - INTERVAL 29 DAY,NOW() - INTERVAL 28 DAY,NULL),
-                                                                                          (3,2,NOW() - INTERVAL 28 DAY,NOW() - INTERVAL 27 DAY,NOW() - INTERVAL 5 DAY),
-                                                                                          (4,2,NOW() - INTERVAL 27 DAY,NOW() - INTERVAL 26 DAY,NULL),
-                                                                                          (5,3,NOW() - INTERVAL 26 DAY,NOW() - INTERVAL 25 DAY,NULL),
-                                                                                          (6,3,NOW() - INTERVAL 25 DAY,NOW() - INTERVAL 24 DAY,NOW() - INTERVAL 10 DAY),
-                                                                                          (7,4,NOW() - INTERVAL 24 DAY,NOW() - INTERVAL 23 DAY,NULL),
-                                                                                          (9,5,NOW() - INTERVAL 22 DAY,NOW() - INTERVAL 21 DAY,NOW() - INTERVAL 7 DAY),
-                                                                                          (8,4,NOW() - INTERVAL 23 DAY,NOW() - INTERVAL 22 DAY,NULL),
-                                                                                          (10,5,NOW() - INTERVAL 21 DAY,NOW() - INTERVAL 20 DAY,NULL),
-                                                                                          (11,1,NOW() - INTERVAL 20 DAY,NOW() - INTERVAL 19 DAY,NULL),
-                                                                                          (12,2,NOW() - INTERVAL 19 DAY,NOW() - INTERVAL 18 DAY,NOW() - INTERVAL 6 DAY),
-                                                                                          (13,3,NOW() - INTERVAL 18 DAY,NOW() - INTERVAL 17 DAY,NULL),
-                                                                                          (14,4,NOW() - INTERVAL 17 DAY,NOW() - INTERVAL 16 DAY,NULL),
-                                                                                          (15,5,NOW() - INTERVAL 16 DAY,NOW() - INTERVAL 15 DAY,NOW() - INTERVAL 8 DAY),
-                                                                                          (16,1,NOW() - INTERVAL 15 DAY,NOW() - INTERVAL 14 DAY,NULL),
-                                                                                          (17,2,NOW() - INTERVAL 14 DAY,NOW() - INTERVAL 13 DAY,NULL),
-                                                                                          (18,3,NOW() - INTERVAL 13 DAY,NOW() - INTERVAL 12 DAY,NOW() - INTERVAL 5 DAY),
-                                                                                          (19,4,NOW() - INTERVAL 12 DAY,NOW() - INTERVAL 11 DAY,NULL),
-                                                                                          (20,5,NOW() - INTERVAL 11 DAY,NOW() - INTERVAL 10 DAY,NULL);
+INSERT INTO comments (customer_id, task_id, parent_id, content, created_at, updated_at, deleted_at) VALUES
+-- ===== 기본 댓글 (1 ~ 15) =====
+(1, 1, NULL, 'Task1 첫 번째 댓글입니다.', NOW(), NOW(), NULL),   -- id 1
+(2, 1, NULL, '작업 진행 상황 공유 부탁드립니다.', NOW(), NOW(), NULL), -- id 2
+(3, 1, NULL, '확인했습니다.', NOW(), NOW(), NULL), -- id 3
+(4, 1, NULL, '이 부분은 잘 구현된 것 같습니다.', NOW(), NOW(), NULL), -- id 4
+(5, 1, NULL, '수정이 필요해 보입니다.', NOW(), NOW(), NULL), -- id 5
+
+(1, 1, NULL, '테스트는 완료되었나요?', NOW(), NOW(), NULL), -- id 6
+(2, 1, NULL, '배포 일정이 궁금합니다.', NOW(), NOW(), NULL), -- id 7
+(3, 1, NULL, '관련 문서가 있으면 공유해주세요.', NOW(), NOW(), NULL), -- id 8
+(4, 1, NULL, '이슈는 현재 없는 상태입니다.', NOW(), NOW(), NULL), -- id 9
+(5, 1, NULL, '성능 개선 여지가 있어 보입니다.', NOW(), NOW(), NULL), -- id 10
+
+(1, 1, NULL, '리팩토링 계획이 있나요?', NOW(), NOW(), NULL), -- id 11
+(2, 1, NULL, 'API 응답 시간이 조금 느립니다.', NOW(), NOW(), NULL), -- id 12
+(3, 1, NULL, '코드 리뷰 요청드립니다.', NOW(), NOW(), NULL), -- id 13
+(4, 1, NULL, '전반적으로 잘 작성된 코드입니다.', NOW(), NOW(), NULL), -- id 14
+(5, 1, NULL, '추가 기능 논의가 필요합니다.', NOW(), NOW(), NULL), -- id 15
+
+-- ===== 대댓글 (16 ~ 30) =====
+(2, 1, 1, '첫 번째 댓글에 대한 답변입니다.', NOW(), NOW(), NULL),
+(3, 1, 1, '저도 같은 의견입니다.', NOW(), NOW(), NULL),
+
+(1, 1, 2, '오늘 중으로 공유하겠습니다.', NOW(), NOW(), NULL),
+(4, 1, 2, '확인 감사합니다.', NOW(), NOW(), NULL),
+
+(5, 1, 5, '어떤 부분을 수정하면 좋을까요?', NOW(), NOW(), NULL),
+
+(2, 1, 6, '테스트는 거의 완료되었습니다.', NOW(), NOW(), NULL),
+
+(3, 1, 7, '이번 주 금요일 배포 예정입니다.', NOW(), NOW(), NULL),
+
+(1, 1, 8, '문서 정리해서 공유드릴게요.', NOW(), NOW(), NULL),
+
+(5, 1, 10, '캐싱 적용을 고려해보면 좋을 것 같습니다.', NOW(), NOW(), NULL),
+
+(4, 1, 11, '리팩토링 일정은 다음 스프린트입니다.', NOW(), NOW(), NULL),
+
+(1, 1, 12, '해당 부분 최적화 진행 중입니다.', NOW(), NOW(), NULL),
+
+(2, 1, 13, '리뷰 완료 후 코멘트 남기겠습니다.', NOW(), NOW(), NULL),
+
+(3, 1, 15, '다음 회의 때 논의해보죠.', NOW(), NOW(), NULL);
+
+INSERT INTO team_members (
+    team_id,
+    customer_id,
+    created_at,
+    updated_at,
+    deleted_at
+) VALUES
+-- ===== Team 1 =====
+(1, 1, NOW(), NOW(), NULL),
+(1, 2, NOW(), NOW(), NULL),
+(1, 3, NOW(), NOW(), NULL),
+(1, 4, NOW(), NOW(), NULL),
+
+-- ===== Team 2 =====
+(2, 5, NOW(), NOW(), NULL),
+(2, 6, NOW(), NOW(), NULL),
+(2, 7, NOW(), NOW(), NULL),
+(2, 8, NOW(), NOW(), NULL),
+
+-- ===== Team 3 =====
+(3, 9, NOW(), NOW(), NULL),
+(3, 10, NOW(), NOW(), NULL),
+(3, 11, NOW(), NOW(), NULL),
+(3, 12, NOW(), NOW(), NULL),
+
+-- ===== Team 4 =====
+(4, 13, NOW(), NOW(), NULL),
+(4, 14, NOW(), NOW(), NULL),
+(4, 15, NOW(), NOW(), NULL),
+(4, 16, NOW(), NOW(), NULL),
+
+-- ===== Team 5 =====
+(5, 17, NOW(), NOW(), NULL),
+(5, 18, NOW(), NOW(), NULL),
+(5, 19, NOW(), NOW(), NULL),
+(5, 20, NOW(), NOW(), NULL);
+
+INSERT INTO activities (
+    customer_id,
+    task_id,
+    type,
+    description,
+    timestamp
+) VALUES
+-- ===== TASK 관련 =====
+(1, 1, 101, '새 작업 "댓글 기능 구현"을 생성했습니다.', NOW()),
+(2, 2, 101, '새 작업 "댓글 조회 최적화"를 생성했습니다.', NOW()),
+(3, 3, 101, '새 작업 "댓글 삭제 처리"를 생성했습니다.', NOW()),
+
+(1, 1, 102, '작업 "댓글 기능 구현" 정보를 수정했습니다.', NOW()),
+(2, 2, 102, '작업 "댓글 조회 최적화" 정보를 수정했습니다.', NOW()),
+(3, 3, 102, '작업 "댓글 삭제 처리" 정보를 수정했습니다.', NOW()),
+
+(1, 1, 104, '작업 상태를 TODO에서 IN_PROGRESS로 변경했습니다.', NOW()),
+(2, 2, 104, '작업 상태를 TODO에서 DONE으로 변경했습니다.', NOW()),
+(3, 3, 104, '작업 상태를 IN_PROGRESS에서 DONE으로 변경했습니다.', NOW()),
+
+(1, 1, 103, '작업 "댓글 기능 구현"을 삭제했습니다.', NOW()),
+(2, 2, 103, '작업 "댓글 조회 최적화"를 삭제했습니다.', NOW()),
+
+-- ===== COMMENT 생성 =====
+(1, 1, 201, '작업 "댓글 기능 구현"에 댓글을 작성했습니다.', NOW()),
+(2, 1, 201, '작업 "댓글 기능 구현"에 댓글을 작성했습니다.', NOW()),
+(3, 1, 201, '작업 "댓글 기능 구현"에 댓글을 작성했습니다.', NOW()),
+(1, 2, 201, '작업 "댓글 조회 최적화"에 댓글을 작성했습니다.', NOW()),
+(2, 3, 201, '작업 "댓글 삭제 처리"에 댓글을 작성했습니다.', NOW()),
+
+-- ===== COMMENT 수정 =====
+(1, 1, 202, '댓글을 수정했습니다.', NOW()),
+(2, 1, 202, '댓글을 수정했습니다.', NOW()),
+(3, 1, 202, '댓글을 수정했습니다.', NOW()),
+(1, 2, 202, '댓글을 수정했습니다.', NOW()),
+(2, 3, 202, '댓글을 수정했습니다.', NOW()),
+
+-- ===== COMMENT 삭제 =====
+(1, 1, 203, '댓글을 삭제했습니다.', NOW()),
+(2, 1, 203, '댓글을 삭제했습니다.', NOW()),
+(3, 1, 203, '댓글을 삭제했습니다.', NOW()),
+(1, 2, 203, '댓글을 삭제했습니다.', NOW()),
+(2, 3, 203, '댓글을 삭제했습니다.', NOW()),
+(3, 2, 203, '댓글을 삭제했습니다.', NOW()),
+(1, 3, 203, '댓글을 삭제했습니다.', NOW()),
+(2, 2, 203, '댓글을 삭제했습니다.', NOW());
