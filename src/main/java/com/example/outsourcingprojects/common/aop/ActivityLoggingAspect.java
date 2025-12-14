@@ -3,6 +3,8 @@ package com.example.outsourcingprojects.common.aop;
 import com.example.outsourcingprojects.common.entity.ActivityLog;
 import com.example.outsourcingprojects.common.entity.Task;
 import com.example.outsourcingprojects.common.entity.User;
+import com.example.outsourcingprojects.common.exception.CustomException;
+import com.example.outsourcingprojects.common.exception.ErrorCode;
 import com.example.outsourcingprojects.common.model.ActivityType;
 import com.example.outsourcingprojects.common.model.TaskStatusType;
 import com.example.outsourcingprojects.common.util.response.GlobalResponse;
@@ -38,8 +40,10 @@ public class ActivityLoggingAspect {
 
     @Autowired
     private ActivityLogRepository activityLogRepository;
+
     @Autowired
     private UserRepository userRepository;
+
     @Autowired
     private TaskRepository taskRepository;
 
@@ -56,7 +60,7 @@ public class ActivityLoggingAspect {
         String requestURI = requestWrapper.getRequestURI();
 
         Long userId = (Long) requestWrapper.getAttribute("userId");
-        User user = userRepository.findById(userId).orElseThrow(() -> new IllegalStateException("사용자 없음"));
+        User user = userRepository.findById(userId).orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
 
         GlobalResponse result = (GlobalResponse) returnValue;
 
@@ -72,11 +76,10 @@ public class ActivityLoggingAspect {
         int uriLen = uri.length;
 
         Long taskId = 0L;
-        if (uriLen > 4) {
+        if (uriLen > 3) {
             taskId = Long.parseLong(uri[3]);
         }
 
-        // 작업 생성 시 작업 아이디 가져오기
         if (method.equals("POST") && target.equals("작업")) {
             CreateTaskResponse responseDto = (CreateTaskResponse) result.getData();
             taskId = responseDto.getId();
@@ -84,15 +87,14 @@ public class ActivityLoggingAspect {
 
         ActivityType activityType = ActivityType.methodToType(action, method);
 
-        Task task = taskRepository.findById(taskId).orElseThrow(() -> new IllegalStateException("작업 없음"));
+        Task task = taskRepository.findById(taskId)
+                .orElseThrow(() -> new CustomException(ErrorCode.TASK_NOT_FOUND));
 
         String description;
 
-        // 작업 상태 변경 시 description 설정
         if (method.equals("PATCH")) {
 
             TaskStatusType taskStatusType = TaskStatusType.toType(task.getStatus());
-
             TaskStatusType[] taskStatusTypes = TaskStatusType.values();
 
             int curStatus = (taskStatusTypes[1].equals(taskStatusType)) ? 0 : 1;
@@ -127,7 +129,6 @@ public class ActivityLoggingAspect {
         boolean isException = false;
 
         Long startTime = System.currentTimeMillis();
-        Long runTime = null;
         String resultStr = null;
 
         try {
@@ -145,7 +146,7 @@ public class ActivityLoggingAspect {
             throw throwable;
         } finally {
             Long endTime = System.currentTimeMillis();
-            runTime = endTime - startTime;
+            Long runTime = endTime - startTime;
 
             log.info("""
                             실행 시간: {}
