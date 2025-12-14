@@ -44,7 +44,7 @@ class CommentServiceTest {
         Long taskId = 1L;
         Long userId = 2L;
 
-        User user = mock(User.class);   // 엔티티도 그냥 mock
+        User user = mock(User.class);
         Task task = mock(Task.class);
 
         createCommentRequest req = mock(createCommentRequest.class);

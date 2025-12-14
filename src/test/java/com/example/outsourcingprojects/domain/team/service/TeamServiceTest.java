@@ -51,7 +51,7 @@ class TeamServiceTest {
         Team testTeam = Team.of("테스트팀", "테스트 설명입니다.");
         ReflectionTestUtils.setField(testTeam, "id", 1L);
 
-        when(teamRepository.existsByName(request.getName())).thenReturn(false);
+        when(teamRepository.existsByNameAndDeletedAtIsNull(request.getName())).thenReturn(false);
         when(teamRepository.save(any(Team.class))).thenReturn(testTeam);
 
         // when
