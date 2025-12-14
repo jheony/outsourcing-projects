@@ -45,6 +45,11 @@ RESTful API 설계 원칙을 따르며, JWT 기반 인증/인가, JPA를 활용�
 - **Container**: Docker & Docker Compose
 
 ---
+## ERD
+
+<img width="1968" height="984" alt="image" src="https://github.com/user-attachments/assets/b71de1e9-a187-4a62-be5b-bdf77c5e69fc" />
+
+---
 
 ## 🎯 주요 기능
 
