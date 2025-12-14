@@ -19,7 +19,7 @@ public class UpdateTaskResponse {
     private final String priority;
     private final Long assigneeId;
     private final LocalDateTime createdAt;
-    private final LocalDateTime updateAt;
+    private final LocalDateTime updatedAt;
     private final LocalDateTime dueDate;
 
     public static UpdateTaskResponse from(Task task) {
@@ -33,7 +33,6 @@ public class UpdateTaskResponse {
                 task.getCreatedAt(),
                 task.getUpdatedAt(),
                 task.getDueDate()
-
         );
     }
 }

@@ -41,7 +41,7 @@ public class TaskService {
         assignee = userRepository.findByIdAndDeletedAtIsNull(request.getAssigneeId())
                 .orElseThrow(() -> new CustomException(USER_NOT_FOUND));
 
-        LocalDateTime dueDate = request.getDueDate() == null ? LocalDateTime.now().plusDays(7L) : request.getDueDate();
+        LocalDateTime dueDate = (request.getDueDate() == null) ? LocalDateTime.now().plusDays(7L) : request.getDueDate();
 
         PriorityType priorityType = PriorityType.valueOf(request.getPriority());
         TaskStatusType statusType = TaskStatusType.toType(10L);
@@ -64,7 +64,7 @@ public class TaskService {
     @Transactional(readOnly = true)
     public PageDataDTO<TaskDTO> getAllTasks(String status, String query, Long assigneeId, Pageable pageable) {
 
-        Long statusNum = status != null ? TaskStatusType.valueOf(status).getStatusNum() : null;
+        Long statusNum = (status != null) ? TaskStatusType.valueOf(status).getStatusNum() : null;
 
         Page<Task> taskPage = taskRepository.getAllTaskWithCondition(statusNum, query, assigneeId, pageable);
 
@@ -86,6 +86,7 @@ public class TaskService {
     // 4. 작업 수정
     @Transactional
     public UpdateTaskResponse updateTask(Long taskId, UpdateTaskRequest requestDto, Long userId) {
+
         Task task = taskRepository.findById(taskId)
                 .orElseThrow(() -> new CustomException(TASK_NOT_FOUND));
 
@@ -98,7 +99,9 @@ public class TaskService {
         }
 
         PriorityType priorityType = PriorityType.valueOf(requestDto.getPriority());
-        TaskStatusType statusType = TaskStatusType.valueOf(requestDto.getStatus());
+        TaskStatusType statusType = (requestDto.getStatus() == null)
+                ? TaskStatusType.toType(task.getStatus())
+                : TaskStatusType.valueOf(requestDto.getStatus());
 
         task.update(
                 requestDto.getTitle(),
@@ -114,6 +117,7 @@ public class TaskService {
     // 5. 작업 삭제
     @Transactional
     public void deleteTask(Long taskId, Long userId) {
+
         Task task = taskRepository.findByIdAndDeletedAtIsNull(taskId)
                 .orElseThrow(() -> new CustomException(TASK_NOT_FOUND));
 

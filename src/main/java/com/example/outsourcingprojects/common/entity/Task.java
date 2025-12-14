@@ -48,14 +48,15 @@ public class Task extends BaseEntity {
         this.dueDate = dueDate;
     }
 
-    public void update(String title, String description, Long status, long statusNum, LocalDateTime dueDate) {
+    public void update(String title, String description, Long priorityNum, Long statusNum, LocalDateTime dueDate) {
         this.title = title;
         this.description = description;
-        this.status = status;
+        this.priority = priorityNum;
+        this.status = statusNum;
         this.dueDate = dueDate;
     }
 
-    public void updateStatus(long statusNum) {
+    public void updateStatus(Long statusNum) {
         this.status = statusNum;
     }
 }
