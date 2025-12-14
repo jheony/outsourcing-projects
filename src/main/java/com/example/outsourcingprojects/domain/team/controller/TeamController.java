@@ -8,7 +8,7 @@ import com.example.outsourcingprojects.domain.team.dto.response.CreateTeamRespon
 import com.example.outsourcingprojects.domain.team.dto.response.TeamMemberResponseDto;
 import com.example.outsourcingprojects.domain.team.dto.response.TeamResponseDto;
 import com.example.outsourcingprojects.domain.team.service.TeamService;
-import jakarta.servlet.http.HttpServlet;
+import com.example.outsourcingprojects.domain.teammember.service.TeamMemberService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -21,6 +21,8 @@ import java.util.List;
 @RequestMapping("/api/teams")
 public class TeamController {
     private final TeamService teamService;
+    private final TeamMemberService teamMemberService;
+
 
     // 팀 생성
     @PostMapping
@@ -46,7 +48,7 @@ public class TeamController {
     // 특정 팀의 멤버 조회
     @GetMapping("/{teamId}/members")
     public GlobalResponse<List<TeamMemberResponseDto>> getTeamMembersHandler(@PathVariable Long teamId) {
-        List<TeamMemberResponseDto> members = teamService.getTeamMembers(teamId);
+        List<TeamMemberResponseDto> members = teamMemberService.getTeamMembers(teamId);
         return GlobalResponse.success("팀 멤버 조회 성공", members);
     }
 
@@ -72,7 +74,7 @@ public class TeamController {
     // 팀 멤버 추가
     @PostMapping("/{teamId}/members")
     public GlobalResponse<TeamResponseDto> addTeamMemberHandler(@PathVariable Long teamId, @Valid @RequestBody AddTeamMemberRequestDto request) {
-        TeamResponseDto responseDto = teamService.addTeamMember(teamId, request.getUserId());
+        TeamResponseDto responseDto = teamMemberService.addTeamMember(teamId, request.getUserId());
         return GlobalResponse.success("팀 멤버가 추가되었습니다.", responseDto);
     }
 
@@ -83,7 +85,7 @@ public class TeamController {
             @PathVariable Long userId,
             HttpServletRequest userToken) {
         String userRole = (String) userToken.getAttribute("role");
-        teamService.removeTeamMember(teamId, userId, userRole);
+        teamMemberService.removeTeamMember(teamId, userId, userRole);
         return GlobalResponse.success("팀 멤버가 제거되었습니다.", null);
     }
 }
