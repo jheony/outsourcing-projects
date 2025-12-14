@@ -40,4 +40,9 @@ public class Team extends BaseEntity {
             this.description = description;
         }
     }
+
+    public void updateRevive(String description) {
+        this.revive();
+        this.description = description;
+    }
 }

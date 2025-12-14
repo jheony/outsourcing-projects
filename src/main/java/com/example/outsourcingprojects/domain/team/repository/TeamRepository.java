@@ -9,7 +9,11 @@ import java.util.Optional;
 @Repository
 public interface TeamRepository extends JpaRepository<Team, Long>, TeamRepositoryCustom {
 
-    boolean existsByName(String name);
 
     Optional<Team> findByIdAndDeletedAtIsNull(Long id);
+
+    boolean existsByNameAndDeletedAtIsNull(String name);
+
+    Optional<Team> findByNameAndDeletedAtIsNotNull(String name);
+
 }

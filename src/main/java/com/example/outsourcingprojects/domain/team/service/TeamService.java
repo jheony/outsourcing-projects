@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -29,12 +30,22 @@ public class TeamService {
     @Transactional
     public CreateTeamResponseDto createTeam(CreateTeamRequestDto requestDto) {
         // 팀 이름 중복 검사
-        if (teamRepository.existsByName(requestDto.getName())) {
+        if (teamRepository.existsByNameAndDeletedAtIsNull(requestDto.getName())) {
             throw new CustomException(ErrorCode.DUPLICATE_TEAM_NAME);
         }
 
-        // 정적 팩토리 메서드로 팀 생성
-        Team team = Team.of(requestDto.getName(), requestDto.getDescription());
+        Optional<Team> deletedTeam = teamRepository.findByNameAndDeletedAtIsNotNull(requestDto.getName());
+
+        Team team;
+
+        if (deletedTeam.isPresent()) {
+            team = deletedTeam.get();
+            team.updateRevive(requestDto.getDescription()); // 있으면 부활하고 팀 설명 새로 집어넣기
+        } else {
+        // 삭제된 팀 중 같은이름이 없으면 정적 팩토리 메서드로 팀 생성
+            team = Team.of(requestDto.getName(), requestDto.getDescription());
+        }
+
         // 저장 및 반환
         Team savedTeam = teamRepository.save(team);
 
@@ -80,7 +91,14 @@ public class TeamService {
         Team team = teamRepository.findByIdAndDeletedAtIsNull(id)
                 .orElseThrow(() -> new CustomException(ErrorCode.TEAM_NOT_FOUND));
 
+        Optional<Team> deletedTeam = teamRepository.findByNameAndDeletedAtIsNotNull(requestDto.getName());
+
+        if (deletedTeam.isPresent()) {
+            team = deletedTeam.get();
+            team.updateRevive(requestDto.getDescription()); // 있으면 부활하고 팀 설명 새로 집어넣기
+        } else {
         team.update(requestDto.getName(), requestDto.getDescription()); // 팀 정보 업데이트
+        }
         List<User> users = userRepository.getUsersByTeam(team.getId()); // 업데이트된 팀의 멤버 조회
         List<TeamMemberResponseDto> members = users.stream() // User 리스트 -> DTO로 변환
                 .map(TeamMemberResponseDto::from)
