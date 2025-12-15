@@ -20,6 +20,7 @@ public class AuthController {
 
     private final AuthService authService;
 
+    // 로그인
     @PostMapping("/login")
     public ResponseEntity<GlobalResponse<LoginResponse>> loginHandler(@Valid @RequestBody LoginRequest request) {
 

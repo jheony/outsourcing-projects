@@ -1,6 +1,6 @@
 package com.example.outsourcingprojects.domain.dashboard.dto;
 
-import com.example.outsourcingprojects.common.entity.Task;
+import com.example.outsourcingprojects.domain.entity.Task;
 import com.example.outsourcingprojects.domain.user.dto.response.UserSummaryResponse;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

@@ -11,7 +11,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
 
-
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/tasks")
@@ -62,7 +61,9 @@ public class TaskController {
             @PathVariable Long taskId, @RequestBody UpdateTaskRequest request, HttpServletRequest httpRequest
     ) {
         Long userId = (Long) httpRequest.getAttribute("userId");
+
         UpdateTaskResponse response = taskService.updateTask(taskId, request, userId);
+
         return GlobalResponse.success("작업이 수정되었습니다.", response);
 
     }
@@ -74,7 +75,9 @@ public class TaskController {
             @PathVariable Long taskId, HttpServletRequest request
     ) {
         Long userId = (Long) request.getAttribute("userId");
+
         taskService.deleteTask(taskId, userId);
+
         return GlobalResponse.success("작업이 삭제되었습니다.", null);
     }
 
@@ -83,9 +86,10 @@ public class TaskController {
     @PatchMapping("/{taskId}/status")
     public GlobalResponse<StatusUpdateResponse> updateTaskStatusHandler(
             @PathVariable Long taskId,
-            @RequestBody StatusUpdateRequest requestDto
+            @RequestBody UpdateTaskStatusRequest requestDto
     ) {
         StatusUpdateResponse response = taskService.statusUpdateTask(taskId, requestDto);
+
         return GlobalResponse.success("작업 상태가 변경되었습니다.", response);
     }
 }

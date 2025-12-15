@@ -1,6 +1,6 @@
 package com.example.outsourcingprojects.domain.activitylog.service;
 
-import com.example.outsourcingprojects.common.entity.ActivityLog;
+import com.example.outsourcingprojects.domain.entity.ActivityLog;
 import com.example.outsourcingprojects.common.model.ActivityType;
 import com.example.outsourcingprojects.common.util.dto.PageDataDTO;
 import com.example.outsourcingprojects.domain.activitylog.dto.response.ActivityLogResponse;
@@ -56,7 +56,7 @@ public class ActivityLogService {
         return PageDataDTO.of(result);
     }
 
-    // 조건 하나라도 있는지 체크
+    // 조건(활동 로그 타입, 작업Id, 시작 날짜, 종료 날짜) 하나라도 있는지 체크
     private boolean searchCondition(String type, Long taskId, String startDate, String endDate) {
         return (type != null) || (taskId != null) || (startDate != null) || (endDate != null);
     }

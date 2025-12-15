@@ -1,6 +1,6 @@
 package com.example.outsourcingprojects.domain.auth.service;
 
-import com.example.outsourcingprojects.common.entity.User;
+import com.example.outsourcingprojects.domain.entity.User;
 import com.example.outsourcingprojects.common.exception.CustomException;
 import com.example.outsourcingprojects.common.exception.ErrorCode;
 import com.example.outsourcingprojects.common.model.UserRoleType;
@@ -21,6 +21,7 @@ public class AuthService {
     private final PasswordEncoder passwordEncoder;
     private final JwtUtil jwtUtil;
 
+    // 로그인
     @Transactional
     public LoginResponse login(LoginRequest request) {
 

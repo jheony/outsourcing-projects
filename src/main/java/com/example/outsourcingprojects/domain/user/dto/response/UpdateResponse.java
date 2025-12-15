@@ -1,6 +1,6 @@
 package com.example.outsourcingprojects.domain.user.dto.response;
 
-import com.example.outsourcingprojects.common.entity.User;
+import com.example.outsourcingprojects.domain.entity.User;
 import com.fasterxml.jackson.annotation.JsonGetter;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -11,7 +11,6 @@ import java.time.LocalDateTime;
 @RequiredArgsConstructor
 public class UpdateResponse {
 
-    //생성자 관련 어노테이션들에 대해 공부해보시기 바랍니다.
     private final Long id;
     private final String username;
     private final String email;

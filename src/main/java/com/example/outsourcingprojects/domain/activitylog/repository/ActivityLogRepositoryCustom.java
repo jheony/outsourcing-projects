@@ -1,6 +1,6 @@
 package com.example.outsourcingprojects.domain.activitylog.repository;
 
-import com.example.outsourcingprojects.common.entity.ActivityLog;
+import com.example.outsourcingprojects.domain.entity.ActivityLog;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 

@@ -1,9 +1,9 @@
 package com.example.outsourcingprojects.domain.dashboard.service;
 
 import com.example.outsourcingprojects.common.aop.TrackTime;
-import com.example.outsourcingprojects.common.entity.DashBoard;
-import com.example.outsourcingprojects.common.entity.QTask;
-import com.example.outsourcingprojects.common.entity.Task;
+import com.example.outsourcingprojects.domain.entity.DashBoard;
+import com.example.outsourcingprojects.domain.entity.QTask;
+import com.example.outsourcingprojects.domain.entity.Task;
 import com.example.outsourcingprojects.common.model.TaskStatusType;
 import com.example.outsourcingprojects.domain.dashboard.dto.DailyTaskDTO;
 import com.example.outsourcingprojects.domain.dashboard.dto.DashBoardDTO;
@@ -30,6 +30,7 @@ public class DashBoardService {
     private final TaskRepository taskRepository;
     private final DashBoardRepository dashBoardRepository;
 
+    // 작업 요약 조회
     @Transactional(readOnly = true)
     public GetTaskSummaryResponse getTaskSummaries(Long userId) {
 
@@ -48,9 +49,12 @@ public class DashBoardService {
 
     }
 
+    // 대시보드 통계 연산 스케줄러
+    // 10분에 한번씩 통계 자동연산
     @Scheduled(fixedRate = 1000 * 60 * 10)
     @Transactional
     public void refreshDashBoard() {
+
         List<Tuple> statusTask = taskRepository.countTasksByStatus();
 
         //Todo(10L) > InProgress(20L) > Done(30L)
@@ -96,6 +100,7 @@ public class DashBoardService {
         dashBoardRepository.save(dashBoard);
     }
 
+    // 주간 작업 추세 조회
     @TrackTime
     @Transactional(readOnly = true)
     public List<DailyTaskDTO> getWeeklyTasks(Long userId) {
@@ -109,6 +114,7 @@ public class DashBoardService {
         return result;
     }
 
+    // 대시보드 조회
     @TrackTime
     @Transactional(readOnly = true)
     public DashBoardDTO getDashBoard(Long userId) {

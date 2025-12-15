@@ -1,6 +1,6 @@
 package com.example.outsourcingprojects.domain.search.dto;
 
-import com.example.outsourcingprojects.common.entity.Task;
+import com.example.outsourcingprojects.domain.entity.Task;
 import com.example.outsourcingprojects.common.model.TaskStatusType;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

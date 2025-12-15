@@ -21,6 +21,7 @@ public class SearchService {
     private final UserRepository userRepository;
     private final TeamRepository teamRepository;
 
+    // 통합 검색
     @Transactional(readOnly = true)
     public SearchResponse search(String query) {
 

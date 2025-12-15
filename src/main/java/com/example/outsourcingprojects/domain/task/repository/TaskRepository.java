@@ -1,6 +1,6 @@
 package com.example.outsourcingprojects.domain.task.repository;
 
-import com.example.outsourcingprojects.common.entity.Task;
+import com.example.outsourcingprojects.domain.entity.Task;
 import jakarta.transaction.Transactional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

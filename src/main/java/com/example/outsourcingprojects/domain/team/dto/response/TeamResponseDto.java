@@ -1,11 +1,10 @@
 package com.example.outsourcingprojects.domain.team.dto.response;
 
-import com.example.outsourcingprojects.common.entity.Team;
+import com.example.outsourcingprojects.domain.entity.Team;
 import lombok.Getter;
 
 import java.time.LocalDateTime;
 import java.util.List;
-
 
 @Getter
 public class TeamResponseDto {

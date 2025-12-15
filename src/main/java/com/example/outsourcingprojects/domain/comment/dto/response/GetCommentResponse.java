@@ -1,6 +1,6 @@
 package com.example.outsourcingprojects.domain.comment.dto.response;
 
-import com.example.outsourcingprojects.common.entity.Comment;
+import com.example.outsourcingprojects.domain.entity.Comment;
 import com.example.outsourcingprojects.domain.comment.dto.userDto.GetUserDto;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Getter;

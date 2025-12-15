@@ -1,6 +1,6 @@
 package com.example.outsourcingprojects.domain.task.repository;
 
-import com.example.outsourcingprojects.common.entity.Task;
+import com.example.outsourcingprojects.domain.entity.Task;
 import com.example.outsourcingprojects.domain.dashboard.dto.DailyTaskDTO;
 import com.example.outsourcingprojects.domain.search.dto.SearchTaskResponse;
 import com.querydsl.core.Tuple;

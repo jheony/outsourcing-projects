@@ -1,8 +1,8 @@
 package com.example.outsourcingprojects.domain.commentServiceTest.service;
 
-import com.example.outsourcingprojects.common.entity.Comment;
-import com.example.outsourcingprojects.common.entity.Task;
-import com.example.outsourcingprojects.common.entity.User;
+import com.example.outsourcingprojects.domain.entity.Comment;
+import com.example.outsourcingprojects.domain.entity.Task;
+import com.example.outsourcingprojects.domain.entity.User;
 import com.example.outsourcingprojects.domain.comment.dto.request.createCommentRequest;
 import com.example.outsourcingprojects.domain.comment.dto.response.CreateCommentResponse;
 import com.example.outsourcingprojects.domain.comment.repository.CommentRepository;
@@ -39,7 +39,7 @@ class CommentServiceTest {
 
     @Test
     @DisplayName("댓글 생성 성공 - parentId 없음")
-    void create_success_parentNull() {
+    void create_Comment_success_parentNull() {
         // Given
         Long taskId = 1L;
         Long userId = 2L;
@@ -61,7 +61,7 @@ class CommentServiceTest {
                 .thenReturn(saved);
 
         // When
-        CreateCommentResponse res = commentService.create(taskId, userId, req);
+        CreateCommentResponse res = commentService.createComment(taskId, userId, req);
 
         // Then
         assertEquals("내용", res.getContent());

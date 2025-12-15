@@ -1,14 +1,16 @@
-package com.example.outsourcingprojects.common.entity;
+package com.example.outsourcingprojects.domain.entity;
 
 import jakarta.persistence.*;
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 @Entity
 @Table(name = "dashboards")
 public class DashBoard {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

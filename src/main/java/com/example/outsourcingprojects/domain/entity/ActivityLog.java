@@ -1,6 +1,7 @@
-package com.example.outsourcingprojects.common.entity;
+package com.example.outsourcingprojects.domain.entity;
 
 import jakarta.persistence.*;
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.CreatedDate;
@@ -9,7 +10,7 @@ import java.time.LocalDateTime;
 
 @Getter
 @Entity
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "activities")
 public class ActivityLog {
 

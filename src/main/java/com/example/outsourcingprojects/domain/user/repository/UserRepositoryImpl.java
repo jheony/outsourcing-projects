@@ -1,6 +1,8 @@
 package com.example.outsourcingprojects.domain.user.repository;
 
-import com.example.outsourcingprojects.common.entity.*;
+import com.example.outsourcingprojects.domain.entity.QTeamMember;
+import com.example.outsourcingprojects.domain.entity.QUser;
+import com.example.outsourcingprojects.domain.entity.User;
 import com.example.outsourcingprojects.domain.search.dto.SearchUserResponse;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
@@ -17,15 +19,14 @@ public class UserRepositoryImpl implements UserRepositoryCustom {
 
         QTeamMember teamMember = QTeamMember.teamMember;
         QUser user = QUser.user;
-        List<User> teamUsers = queryFactory.select(user)
+
+        return queryFactory.select(user)
                 .from(teamMember)
                 .join(teamMember.user, user)
-                .where(user.deletedAt.isNull().and(teamMember.deletedAt.isNull()).and(teamMember.team.id.eq(teamId)))
+                .where(user.deletedAt.isNull()
+                        .and(teamMember.deletedAt.isNull())
+                        .and(teamMember.team.id.eq(teamId)))
                 .fetch();
-
-        return teamUsers;
-
-
     }
 
     @Override
@@ -36,8 +37,8 @@ public class UserRepositoryImpl implements UserRepositoryCustom {
         List<User> users = queryFactory.select(user)
                 .from(user)
                 .where(
-                        user.name.containsIgnoreCase(query),
-                        user.deletedAt.isNull()
+                        user.name.containsIgnoreCase(query)
+                                .and(user.deletedAt.isNull())
                 )
                 .orderBy(user.createdAt.desc())
                 .limit(100)
@@ -51,6 +52,7 @@ public class UserRepositoryImpl implements UserRepositoryCustom {
 
         QUser user = QUser.user;
         QTeamMember teamMember = QTeamMember.teamMember;
+
         return queryFactory
                 .select(user)
                 .from(user)
@@ -66,6 +68,4 @@ public class UserRepositoryImpl implements UserRepositoryCustom {
                 )
                 .fetch();
     }
-
-
 }

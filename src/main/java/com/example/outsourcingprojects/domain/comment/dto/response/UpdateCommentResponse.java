@@ -1,6 +1,6 @@
 package com.example.outsourcingprojects.domain.comment.dto.response;
 
-import com.example.outsourcingprojects.common.entity.Comment;
+import com.example.outsourcingprojects.domain.entity.Comment;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 

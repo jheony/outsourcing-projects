@@ -1,11 +1,11 @@
 package com.example.outsourcingprojects.domain.team.service;
 
-import com.example.outsourcingprojects.common.entity.Team;
-import com.example.outsourcingprojects.common.entity.User;
+import com.example.outsourcingprojects.domain.entity.Team;
+import com.example.outsourcingprojects.domain.entity.User;
 import com.example.outsourcingprojects.common.exception.CustomException;
 import com.example.outsourcingprojects.common.exception.ErrorCode;
-import com.example.outsourcingprojects.domain.team.dto.request.CreateTeamRequestDto;
-import com.example.outsourcingprojects.domain.team.dto.request.UpdateTeamRequestDto;
+import com.example.outsourcingprojects.domain.team.dto.request.CreateTeamRequest;
+import com.example.outsourcingprojects.domain.team.dto.request.UpdateTeamRequest;
 import com.example.outsourcingprojects.domain.team.dto.response.CreateTeamResponseDto;
 import com.example.outsourcingprojects.domain.team.dto.response.TeamMemberResponseDto;
 import com.example.outsourcingprojects.domain.team.dto.response.TeamResponseDto;
@@ -28,7 +28,7 @@ public class TeamService {
 
     // 팀 생성
     @Transactional
-    public CreateTeamResponseDto createTeam(CreateTeamRequestDto requestDto) {
+    public CreateTeamResponseDto createTeam(CreateTeamRequest requestDto) {
         // 팀 이름 중복 검사
         if (teamRepository.existsByNameAndDeletedAtIsNull(requestDto.getName())) {
             throw new CustomException(ErrorCode.DUPLICATE_TEAM_NAME);
@@ -83,7 +83,7 @@ public class TeamService {
 
     // 팀 수정
     @Transactional
-    public TeamResponseDto updateTeam(Long id, UpdateTeamRequestDto requestDto, String  userRole) {
+    public TeamResponseDto updateTeam(Long id, UpdateTeamRequest requestDto, String  userRole) {
         if (!"ADMIN".equals(userRole)) {
             throw new CustomException(ErrorCode.NO_UPDATE_PERMISSION);
         }

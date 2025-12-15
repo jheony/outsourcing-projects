@@ -1,10 +1,9 @@
 package com.example.outsourcingprojects.domain.team.dto.request;
 
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 
 @Getter
-public class AddTeamMemberRequestDto {
+public class AddTeamMemberRequest {
 
     private Long userId;
 }

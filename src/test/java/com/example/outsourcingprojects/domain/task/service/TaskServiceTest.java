@@ -1,9 +1,8 @@
 package com.example.outsourcingprojects.domain.task.service;
 
-import com.example.outsourcingprojects.common.entity.Task;
-import com.example.outsourcingprojects.common.entity.User;
+import com.example.outsourcingprojects.domain.entity.Task;
+import com.example.outsourcingprojects.domain.entity.User;
 import com.example.outsourcingprojects.common.exception.CustomException;
-import com.example.outsourcingprojects.common.model.response.ErrorResponse;
 import com.example.outsourcingprojects.common.util.dto.PageDataDTO;
 import com.example.outsourcingprojects.domain.task.dto.CreateTaskRequest;
 import com.example.outsourcingprojects.domain.task.dto.CreateTaskResponse;
@@ -50,7 +49,14 @@ public class TaskServiceTest {
     void createTask_success() {
         //given < 테스트를 하는 데 필요한 데이터
         Long userId = 1L;
-        CreateTaskRequest request = new CreateTaskRequest(1L, "title", "description", "HIGH", LocalDateTime.now());
+
+        CreateTaskRequest request = new CreateTaskRequest();
+
+        ReflectionTestUtils.setField(request,"assigneeId",1L);
+        ReflectionTestUtils.setField(request,"title","title");
+        ReflectionTestUtils.setField(request,"description","description");
+        ReflectionTestUtils.setField(request,"priority","HIGH");
+        ReflectionTestUtils.setField(request,"dueDate",LocalDateTime.now());
 
         User assignee = new User("username", "email", "password", "name", 10L);
         Task task = new Task("title", "description", 30L, 10L, assignee, request.getDueDate());
@@ -72,7 +78,13 @@ public class TaskServiceTest {
     void createTask_Fail_AssignIdNull() {
         //given
         Long userId = 1L;
-        CreateTaskRequest request = new CreateTaskRequest(null, "title", "description", "HIGH", LocalDateTime.now());
+        CreateTaskRequest request = new CreateTaskRequest();
+
+        ReflectionTestUtils.setField(request,"assigneeId",1L);
+        ReflectionTestUtils.setField(request,"title","title");
+        ReflectionTestUtils.setField(request,"description","description");
+        ReflectionTestUtils.setField(request,"priority","HIGH");
+        ReflectionTestUtils.setField(request,"dueDate",LocalDateTime.now());
 
         when(userRepository.findByIdAndDeletedAtIsNull(userId)).thenReturn(Optional.empty());
         //when & then

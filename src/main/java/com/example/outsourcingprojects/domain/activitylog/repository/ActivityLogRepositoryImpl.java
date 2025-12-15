@@ -1,8 +1,8 @@
 package com.example.outsourcingprojects.domain.activitylog.repository;
 
-import com.example.outsourcingprojects.common.entity.ActivityLog;
-import com.example.outsourcingprojects.common.entity.QActivityLog;
-import com.example.outsourcingprojects.common.entity.QUser;
+import com.example.outsourcingprojects.domain.entity.ActivityLog;
+import com.example.outsourcingprojects.domain.entity.QActivityLog;
+import com.example.outsourcingprojects.domain.entity.QUser;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -14,7 +14,8 @@ import org.springframework.data.support.PageableExecutionUtils;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import static com.example.outsourcingprojects.common.entity.QActivityLog.activityLog;
+import static com.example.outsourcingprojects.domain.entity.QActivityLog.activityLog;
+
 
 @RequiredArgsConstructor
 public class ActivityLogRepositoryImpl implements ActivityLogRepositoryCustom {

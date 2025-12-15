@@ -1,13 +1,11 @@
 package com.example.outsourcingprojects.domain.team.service;
 
-import com.example.outsourcingprojects.common.entity.Team;
-import com.example.outsourcingprojects.domain.team.dto.request.CreateTeamRequestDto;
-import com.example.outsourcingprojects.domain.team.dto.request.UpdateTeamRequestDto;
+import com.example.outsourcingprojects.domain.entity.Team;
+import com.example.outsourcingprojects.domain.team.dto.request.CreateTeamRequest;
+import com.example.outsourcingprojects.domain.team.dto.request.UpdateTeamRequest;
 import com.example.outsourcingprojects.domain.team.dto.response.CreateTeamResponseDto;
-import com.example.outsourcingprojects.domain.team.dto.response.TeamMemberResponseDto;
 import com.example.outsourcingprojects.domain.team.dto.response.TeamResponseDto;
 import com.example.outsourcingprojects.domain.team.repository.TeamRepository;
-import com.example.outsourcingprojects.domain.teammember.repository.TeamMemberRepository;
 import com.example.outsourcingprojects.domain.user.repository.UserRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -44,7 +42,7 @@ class TeamServiceTest {
     void createTeam_success() {
 
         // given
-        CreateTeamRequestDto request = new CreateTeamRequestDto();
+        CreateTeamRequest request = new CreateTeamRequest();
         ReflectionTestUtils.setField(request, "name", "테스트팀");
         ReflectionTestUtils.setField(request, "description", "테스트 설명입니다.");
 
@@ -115,7 +113,7 @@ class TeamServiceTest {
         Team testTeam = Team.of("테스트팀", "테스트 설명");
         ReflectionTestUtils.setField(testTeam, "id", 1L);
 
-        UpdateTeamRequestDto request = new UpdateTeamRequestDto();
+        UpdateTeamRequest request = new UpdateTeamRequest();
         ReflectionTestUtils.setField(request, "name", "팀수정 테스트");
         ReflectionTestUtils.setField(request, "description", "수정테스트 설명입니다.");
 

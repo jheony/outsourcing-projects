@@ -1,9 +1,9 @@
 package com.example.outsourcingprojects.domain.team.controller;
 
 import com.example.outsourcingprojects.common.util.response.GlobalResponse;
-import com.example.outsourcingprojects.domain.team.dto.request.AddTeamMemberRequestDto;
-import com.example.outsourcingprojects.domain.team.dto.request.CreateTeamRequestDto;
-import com.example.outsourcingprojects.domain.team.dto.request.UpdateTeamRequestDto;
+import com.example.outsourcingprojects.domain.team.dto.request.AddTeamMemberRequest;
+import com.example.outsourcingprojects.domain.team.dto.request.CreateTeamRequest;
+import com.example.outsourcingprojects.domain.team.dto.request.UpdateTeamRequest;
 import com.example.outsourcingprojects.domain.team.dto.response.CreateTeamResponseDto;
 import com.example.outsourcingprojects.domain.team.dto.response.TeamMemberResponseDto;
 import com.example.outsourcingprojects.domain.team.dto.response.TeamResponseDto;
@@ -20,35 +20,43 @@ import java.util.List;
 @RequiredArgsConstructor
 @RequestMapping("/api/teams")
 public class TeamController {
+
     private final TeamService teamService;
     private final TeamMemberService teamMemberService;
 
-
     // 팀 생성
     @PostMapping
-    public GlobalResponse<CreateTeamResponseDto> createTeamHandler(@Valid @RequestBody CreateTeamRequestDto request) {
+    public GlobalResponse<CreateTeamResponseDto> createTeamHandler(@Valid @RequestBody CreateTeamRequest request) {
+
         CreateTeamResponseDto responseDto = teamService.createTeam(request);
+
         return GlobalResponse.success("팀이 생성되었습니다", responseDto);
     }
 
     // 팀 목록 조회
     @GetMapping
     public GlobalResponse<List<TeamResponseDto>> getAllTeamsHandler() {
+
         List<TeamResponseDto> teams = teamService.getAllTeams();
+
         return GlobalResponse.success("팀 목록 조회 성공", teams);
     }
 
     // 팀 상세 조회
     @GetMapping("/{id}")
     public GlobalResponse<TeamResponseDto> getTeamByIdHandler(@PathVariable Long id) {
+
         TeamResponseDto team = teamService.getTeamById(id);
+
         return GlobalResponse.success("팀 멤버 조회 성공", team);
     }
 
     // 특정 팀의 멤버 조회
     @GetMapping("/{teamId}/members")
     public GlobalResponse<List<TeamMemberResponseDto>> getTeamMembersHandler(@PathVariable Long teamId) {
+
         List<TeamMemberResponseDto> members = teamMemberService.getTeamMembers(teamId);
+
         return GlobalResponse.success("팀 멤버 조회 성공", members);
     }
 
@@ -56,25 +64,33 @@ public class TeamController {
     @PutMapping("/{id}")
     public GlobalResponse<TeamResponseDto> updateTeamHandler(
             @PathVariable Long id,
-            @Valid @RequestBody UpdateTeamRequestDto request,
-            HttpServletRequest userToken) {
+            @Valid @RequestBody UpdateTeamRequest request,
+            HttpServletRequest userToken
+    ) {
         String userRole = (String) userToken.getAttribute("role");
+
         TeamResponseDto responseDto = teamService.updateTeam(id, request, userRole);
+
         return GlobalResponse.success("팀 정보가 수정되었습니다.", responseDto);
     }
-
 
     // 팀 삭제
     @DeleteMapping("/{id}")
     public GlobalResponse<Void> deleteTeamHandler(@PathVariable Long id) {
+
         teamService.deleteTeam(id);
+
         return GlobalResponse.success("팀이 삭제되었습니다.", null);
     }
 
     // 팀 멤버 추가
     @PostMapping("/{teamId}/members")
-    public GlobalResponse<TeamResponseDto> addTeamMemberHandler(@PathVariable Long teamId, @Valid @RequestBody AddTeamMemberRequestDto request) {
+    public GlobalResponse<TeamResponseDto> addTeamMemberHandler(
+            @PathVariable Long teamId,
+            @Valid @RequestBody AddTeamMemberRequest request
+    ) {
         TeamResponseDto responseDto = teamMemberService.addTeamMember(teamId, request.getUserId());
+
         return GlobalResponse.success("팀 멤버가 추가되었습니다.", responseDto);
     }
 
@@ -83,9 +99,12 @@ public class TeamController {
     public GlobalResponse<Void> removeTeamMemberHandler(
             @PathVariable Long teamId,
             @PathVariable Long userId,
-            HttpServletRequest userToken) {
+            HttpServletRequest userToken
+    ) {
         String userRole = (String) userToken.getAttribute("role");
-        teamMemberService.removeTeamMember(teamId, userId, userRole);
+
+        teamMemberService.deleteTeamMember(teamId, userId, userRole);
+
         return GlobalResponse.success("팀 멤버가 제거되었습니다.", null);
     }
 }

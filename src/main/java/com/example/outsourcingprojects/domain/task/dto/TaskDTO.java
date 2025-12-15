@@ -1,6 +1,6 @@
 package com.example.outsourcingprojects.domain.task.dto;
 
-import com.example.outsourcingprojects.common.entity.Task;
+import com.example.outsourcingprojects.domain.entity.Task;
 import com.example.outsourcingprojects.common.model.PriorityType;
 import com.example.outsourcingprojects.common.model.TaskStatusType;
 import lombok.AllArgsConstructor;
@@ -18,7 +18,7 @@ public class TaskDTO {
     private final String status;
     private final String priority;
     private final Long assigneeId;
-    private final TaskAssigneeReponse assignee;
+    private final UpdateTaskStatusResponse assignee;
     private final LocalDateTime createdAt;
     private final LocalDateTime updatedAt;
     private final LocalDateTime dueDate;
@@ -31,7 +31,7 @@ public class TaskDTO {
                 TaskStatusType.toType(task.getStatus()).name(),
                 PriorityType.toType(task.getPriority()).name(),
                 task.getAssignee().getId(),
-                new TaskAssigneeReponse(
+                new UpdateTaskStatusResponse(
                         task.getAssignee().getId(),
                         task.getAssignee().getUsername(),
                         task.getAssignee().getName()
