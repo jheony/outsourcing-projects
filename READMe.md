@@ -264,6 +264,9 @@ Authorization: Bearer {your_jwt_token}
 ./gradlew integrationTest
 ```
 
+### 테스트 커버리지
+<img width="757" height="210" alt="image" src="https://github.com/user-attachments/assets/3f97ba2f-4d23-4125-aad6-988f02541699" />
+
 ---
 
 ## 📂 프로젝트 구조
