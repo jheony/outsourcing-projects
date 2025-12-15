@@ -1,0 +1,71 @@
+package com.example.outsourcingprojects.domain.user.repository;
+
+import com.example.outsourcingprojects.domain.entity.QTeamMember;
+import com.example.outsourcingprojects.domain.entity.QUser;
+import com.example.outsourcingprojects.domain.entity.User;
+import com.example.outsourcingprojects.domain.search.dto.SearchUserResponse;
+import com.querydsl.jpa.impl.JPAQueryFactory;
+import lombok.RequiredArgsConstructor;
+
+import java.util.List;
+
+@RequiredArgsConstructor
+public class UserRepositoryImpl implements UserRepositoryCustom {
+
+    private final JPAQueryFactory queryFactory;
+
+    @Override
+    public List<User> getUsersByTeam(Long teamId) {
+
+        QTeamMember teamMember = QTeamMember.teamMember;
+        QUser user = QUser.user;
+
+        return queryFactory.select(user)
+                .from(teamMember)
+                .join(teamMember.user, user)
+                .where(user.deletedAt.isNull()
+                        .and(teamMember.deletedAt.isNull())
+                        .and(teamMember.team.id.eq(teamId)))
+                .fetch();
+    }
+
+    @Override
+    public List<SearchUserResponse> getSearchUsers(String query) {
+
+        QUser user = QUser.user;
+
+        List<User> users = queryFactory.select(user)
+                .from(user)
+                .where(
+                        user.name.containsIgnoreCase(query)
+                                .and(user.deletedAt.isNull())
+                )
+                .orderBy(user.createdAt.desc())
+                .limit(100)
+                .fetch();
+
+        return users.stream().map(SearchUserResponse::from).toList();
+    }
+
+    @Override
+    public List<User> findUsersNotInTeam(Long teamId) {
+
+        QUser user = QUser.user;
+        QTeamMember teamMember = QTeamMember.teamMember;
+
+        return queryFactory
+                .select(user)
+                .from(user)
+                .leftJoin(teamMember)
+                .on(
+                        teamMember.user.id.eq(user.id)
+                                .and(teamMember.team.id.eq(teamId))
+                                .and(teamMember.deletedAt.isNull())
+                )
+                .where(
+                        user.deletedAt.isNull(),
+                        teamMember.id.isNull()
+                )
+                .fetch();
+    }
+}
