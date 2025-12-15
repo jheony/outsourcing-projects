@@ -134,7 +134,7 @@ public class TaskRepositoryImpl implements TaskRepositoryCustom {
 
         NumberExpression<Long> completedExpr =
                 Expressions.numberTemplate(Long.class,
-                        "sum(case when {0} = {1} then 1 else 0 end)",
+                        "coalesce(sum(case when {0} = {1} then 1 else 0 end), 0)",
                         task.status, TaskStatusType.DONE.getStatusNum()
                 );
 

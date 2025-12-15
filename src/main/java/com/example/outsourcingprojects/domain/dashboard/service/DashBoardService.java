@@ -105,13 +105,13 @@ public class DashBoardService {
     @Transactional(readOnly = true)
     public List<DailyTaskDTO> getWeeklyTasks(Long userId) {
 
-        List<DailyTaskDTO> result = new ArrayList<>();
+        List<DailyTaskDTO> dailyTaskDTOS = new ArrayList<>();
 
         for (int i = 6; i >= 0; i--) {
-            result.add(taskRepository.getDailyTask(i, userId));
+            dailyTaskDTOS.add(taskRepository.getDailyTask(i, userId));
         }
 
-        return result;
+        return dailyTaskDTOS.stream().toList();
     }
 
     // 대시보드 조회
