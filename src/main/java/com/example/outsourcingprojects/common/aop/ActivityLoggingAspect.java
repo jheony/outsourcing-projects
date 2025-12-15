@@ -1,8 +1,8 @@
 package com.example.outsourcingprojects.common.aop;
 
-import com.example.outsourcingprojects.common.entity.ActivityLog;
-import com.example.outsourcingprojects.common.entity.Task;
-import com.example.outsourcingprojects.common.entity.User;
+import com.example.outsourcingprojects.domain.entity.ActivityLog;
+import com.example.outsourcingprojects.domain.entity.Task;
+import com.example.outsourcingprojects.domain.entity.User;
 import com.example.outsourcingprojects.common.exception.CustomException;
 import com.example.outsourcingprojects.common.exception.ErrorCode;
 import com.example.outsourcingprojects.common.model.ActivityType;

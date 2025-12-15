@@ -18,6 +18,7 @@ public class DashBoardController {
 
     private final DashBoardService dashBoardService;
 
+    // 내 작업 요약 조회
     @GetMapping("/api/dashboard/tasks")
     public GlobalResponse<GetTaskSummaryResponse> getSummaryTasksHandler(HttpServletRequest request) {
 
@@ -28,6 +29,7 @@ public class DashBoardController {
         return GlobalResponse.success("내 작업 요약 조회 성공", result);
     }
 
+    // 대시보드 통계 조회
     @GetMapping("/api/dashboard/stats")
     public GlobalResponse<DashBoardDTO> getDashBoardHandler(HttpServletRequest request){
 
@@ -38,6 +40,7 @@ public class DashBoardController {
         return GlobalResponse.success("대시보드 통계 조회 성공",result);
     }
 
+    // 주간 작업 추세 조회
     @GetMapping("/api/dashboard/weekly-trend")
     public GlobalResponse<List<DailyTaskDTO>> getWeeklyTasksHandler(HttpServletRequest request){
 

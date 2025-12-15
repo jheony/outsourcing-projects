@@ -1,8 +1,8 @@
 package com.example.outsourcingprojects.domain.dashboard.service;
 
-import com.example.outsourcingprojects.common.entity.DashBoard;
-import com.example.outsourcingprojects.common.entity.Task;
-import com.example.outsourcingprojects.common.entity.User;
+import com.example.outsourcingprojects.domain.entity.DashBoard;
+import com.example.outsourcingprojects.domain.entity.Task;
+import com.example.outsourcingprojects.domain.entity.User;
 import com.example.outsourcingprojects.domain.dashboard.dto.DailyTaskDTO;
 import com.example.outsourcingprojects.domain.dashboard.dto.DashBoardDTO;
 import com.example.outsourcingprojects.domain.dashboard.dto.GetTaskSummaryResponse;

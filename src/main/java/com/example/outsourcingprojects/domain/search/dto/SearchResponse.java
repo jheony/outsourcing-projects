@@ -12,5 +12,4 @@ public class SearchResponse {
     private final List<SearchTaskResponse> tasks;
     private final List<SearchTeamResponse> teams;
     private final List<SearchUserResponse> users;
-
 }

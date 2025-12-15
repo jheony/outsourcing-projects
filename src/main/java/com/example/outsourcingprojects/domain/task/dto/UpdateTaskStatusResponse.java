@@ -1,11 +1,11 @@
 package com.example.outsourcingprojects.domain.task.dto;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 
 @Getter
-@AllArgsConstructor
-public class TaskAssigneeReponse {
+@RequiredArgsConstructor
+public class UpdateTaskStatusResponse {
 
     private final Long id;
     private final String username;

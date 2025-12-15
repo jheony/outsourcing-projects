@@ -1,6 +1,6 @@
 package com.example.outsourcingprojects.domain.userServiceTest.service;
 
-import com.example.outsourcingprojects.common.entity.User;
+import com.example.outsourcingprojects.domain.entity.User;
 import com.example.outsourcingprojects.common.util.PasswordEncoder;
 import com.example.outsourcingprojects.domain.user.dto.request.SignUpRequest;
 import com.example.outsourcingprojects.domain.user.dto.response.SignUpResponse;

@@ -1,6 +1,6 @@
 package com.example.outsourcingprojects.domain.dashboard.repository;
 
-import com.example.outsourcingprojects.common.entity.DashBoard;
+import com.example.outsourcingprojects.domain.entity.DashBoard;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;

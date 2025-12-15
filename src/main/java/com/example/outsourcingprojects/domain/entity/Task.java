@@ -1,5 +1,6 @@
-package com.example.outsourcingprojects.common.entity;
+package com.example.outsourcingprojects.domain.entity;
 
+import com.example.outsourcingprojects.common.entity.BaseEntity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.AccessLevel;

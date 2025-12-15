@@ -1,6 +1,6 @@
 package com.example.outsourcingprojects.domain.user.dto.response;
 
-import com.example.outsourcingprojects.common.entity.User;
+import com.example.outsourcingprojects.domain.entity.User;
 import com.fasterxml.jackson.annotation.JsonGetter;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

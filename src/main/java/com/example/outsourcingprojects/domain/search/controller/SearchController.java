@@ -14,6 +14,7 @@ public class SearchController {
 
     private final SearchService searchService;
 
+    // 통합 검색
     @GetMapping("/api/search")
     public GlobalResponse<SearchResponse> searchHandler(@RequestParam String query) {
 

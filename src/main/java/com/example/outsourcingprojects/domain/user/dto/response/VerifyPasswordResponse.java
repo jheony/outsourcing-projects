@@ -8,5 +8,4 @@ import lombok.RequiredArgsConstructor;
 public class VerifyPasswordResponse {
 
     private final boolean valid;
-
 }

@@ -1,8 +1,8 @@
 package com.example.outsourcingprojects.domain.task.repository;
 
-import com.example.outsourcingprojects.common.entity.QTask;
-import com.example.outsourcingprojects.common.entity.QUser;
-import com.example.outsourcingprojects.common.entity.Task;
+import com.example.outsourcingprojects.domain.entity.QTask;
+import com.example.outsourcingprojects.domain.entity.QUser;
+import com.example.outsourcingprojects.domain.entity.Task;
 import com.example.outsourcingprojects.common.model.TaskStatusType;
 import com.example.outsourcingprojects.domain.dashboard.dto.DailyTaskDTO;
 import com.example.outsourcingprojects.domain.search.dto.SearchTaskResponse;
@@ -22,7 +22,8 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
 
-import static com.example.outsourcingprojects.common.entity.QTask.task;
+import static com.example.outsourcingprojects.domain.entity.QTask.task;
+
 
 @RequiredArgsConstructor
 public class TaskRepositoryImpl implements TaskRepositoryCustom {

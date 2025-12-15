@@ -1,10 +1,9 @@
 package com.example.outsourcingprojects.domain.user.service;
 
-import com.example.outsourcingprojects.common.entity.User;
 import com.example.outsourcingprojects.common.exception.CustomException;
 import com.example.outsourcingprojects.common.exception.ErrorCode;
 import com.example.outsourcingprojects.common.util.PasswordEncoder;
-import com.example.outsourcingprojects.domain.user.dto.response.VerifyPasswordResponse;
+import com.example.outsourcingprojects.domain.entity.User;
 import com.example.outsourcingprojects.domain.user.dto.request.SignUpRequest;
 import com.example.outsourcingprojects.domain.user.dto.request.UpdateUserRequest;
 import com.example.outsourcingprojects.domain.user.dto.response.*;
@@ -51,34 +50,29 @@ public class UserService {
 
     // 사용자 정보 조회
     @Transactional
-    public UserInfoResponse info(Long targetId, Long userId) {
+    public UserInfoResponse getUserInfo(Long targetId, Long userId) {
 
-        User target = userRepository.findByIdAndDeletedAtIsNull(targetId)
-                .orElseThrow(() -> new CustomException(USER_NOT_FOUND));
+        User target = userRepository.findByIdAndDeletedAtIsNull(targetId).orElseThrow(
+                () -> new CustomException(USER_NOT_FOUND));
 
-        User requester = userRepository.findByIdAndDeletedAtIsNull(userId)
-                .orElseThrow(() -> new CustomException(USER_NOT_FOUND));
+        if (!userRepository.existsByIdAndDeletedAtIsNull(userId)) {
+            throw new CustomException(USER_NOT_FOUND);
+        }
 
-        //수정 가능 조건(관리자 미허용)
         if (!userId.equals(target.getId())) {
             throw new CustomException(NO_READ_PERMISSION);
         }
-
-//        //수정 가능 조건(관리자 허용)
-//        boolean isAdmin = requester.getRole() == 10L;
-//        if (!requester.getId().equals(target.getId()) && !isAdmin) {
-//            throw new CustomException(ErrorCode.NO_READ_PERMISSION);
-//        }
 
         return UserInfoResponse.from(target);
     }
 
     // 사용자 목록 조회
     @Transactional
-    public List<UserSummaryResponse> usersInfo(Long userId) {
+    public List<UserSummaryResponse> getUsersInfo(Long userId) {
 
-        userRepository.findByIdAndDeletedAtIsNull(userId)
-                .orElseThrow(() -> new CustomException(USER_NOT_FOUND));
+        if (!userRepository.existsByIdAndDeletedAtIsNull(userId)) {
+            throw new CustomException(USER_NOT_FOUND);
+        }
 
         List<User> users = userRepository.findAllByDeletedAtIsNull();
 
@@ -90,7 +84,7 @@ public class UserService {
 
     // 사용자 정보 수정
     @Transactional
-    public UpdateResponse update(Long loginUserId, Long targetId, UpdateUserRequest request) {
+    public UpdateResponse updateUser(Long loginUserId, Long targetId, UpdateUserRequest request) {
 
         if (!loginUserId.equals(targetId)) {
             throw new CustomException(NO_READ_PERMISSION);
@@ -102,9 +96,11 @@ public class UserService {
         if (request.getName() != null && request.getName().equals(targetUser.getName())) {
             throw new CustomException(ErrorCode.DUPLICATE_USER_NAME);
         }
+
         if (request.getEmail() != null && request.getEmail().equals(targetUser.getEmail())) {
             throw new CustomException(ErrorCode.DUPLICATE_USER_EMAIL);
         }
+
         if (request.getPassword() != null && passwordEncoder.matches(targetUser.getPassword(), request.getPassword())) {
             throw new CustomException(ErrorCode.DUPLICATE_USER_PASSWORD);
         }
@@ -117,18 +113,16 @@ public class UserService {
         return UpdateResponse.from(targetUser);
     }
 
-
     // 회원 탈퇴
     @Transactional
-    public void softDelete(Long targetId, Long loginUserId) {
+    public void deleteUser(Long targetId, Long loginUserId) {
 
         if (!loginUserId.equals(targetId)) {
             throw new CustomException(ErrorCode.NO_READ_PERMISSION);
         }
 
-        User me = userRepository.findByIdAndDeletedAtIsNull(targetId)
-                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
-
+        User me = userRepository.findByIdAndDeletedAtIsNull(targetId).orElseThrow(
+                () -> new CustomException(ErrorCode.USER_NOT_FOUND));
 
         if (me.getDeletedAt() != null) {
             throw new CustomException(ErrorCode.ALREADY_DELETED_USER);
@@ -140,7 +134,7 @@ public class UserService {
 
     // 추가 가능한 사용자 조회
     @Transactional
-    public List<AbleUserSummaryResponse> findAddableUsers(Long teamId, Long userId) {
+    public List<AbleUserSummaryResponse> getAddableUsers(Long teamId, Long userId) {
 
         userRepository.findByIdAndDeletedAtIsNull(userId)
                 .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
@@ -162,8 +156,8 @@ public class UserService {
     @Transactional
     public VerifyPasswordResponse verifyPassword(Long userId, String inputPassword) {
 
-        User user = userRepository.findByIdAndDeletedAtIsNull(userId)
-                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
+        User user = userRepository.findByIdAndDeletedAtIsNull(userId).orElseThrow(
+                () -> new CustomException(ErrorCode.USER_NOT_FOUND));
 
         boolean match = passwordEncoder.matches(inputPassword, user.getPassword());
 

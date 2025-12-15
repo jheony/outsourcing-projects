@@ -21,6 +21,7 @@ public class ActivityLogController {
 
     private final ActivityLogService activityLogService;
 
+    // 전체 활동 로그 조회
     @GetMapping
     public GlobalResponse<PageDataDTO<ActivityLogResponse>> getAllActivityLogsHandler(
             @RequestParam(required = false, defaultValue = "0") int page,
@@ -36,6 +37,7 @@ public class ActivityLogController {
         return GlobalResponse.success("활동 로그 조회 성공", result);
     }
 
+    // 내 활동 로그 조회
     @GetMapping("/me")
     public GlobalResponse<PageDataDTO<MyActivityLogResponse>> getActivityLogsHandler(
             HttpServletRequest request,

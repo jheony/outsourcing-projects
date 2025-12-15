@@ -1,7 +1,7 @@
 package com.example.outsourcingprojects.domain.task.service;
 
-import com.example.outsourcingprojects.common.entity.Task;
-import com.example.outsourcingprojects.common.entity.User;
+import com.example.outsourcingprojects.domain.entity.Task;
+import com.example.outsourcingprojects.domain.entity.User;
 import com.example.outsourcingprojects.common.exception.CustomException;
 import com.example.outsourcingprojects.common.model.PriorityType;
 import com.example.outsourcingprojects.common.model.TaskStatusType;
@@ -60,7 +60,7 @@ public class TaskService {
         return CreateTaskResponse.from(savedTask);
     }
 
-    // 2. 전체 작업(목록) 조회
+    // 전체 작업(목록) 조회
     @Transactional(readOnly = true)
     public PageDataDTO<TaskDTO> getAllTasks(String status, String query, Long assigneeId, Pageable pageable) {
 
@@ -73,7 +73,7 @@ public class TaskService {
         return PageDataDTO.of(responseDtoPage);
     }
 
-    // 3. 작업 상세 조회
+    // 작업 상세 조회
     @Transactional(readOnly = true)
     public TaskDTO getTask(Long taskId) {
 
@@ -83,7 +83,7 @@ public class TaskService {
         return TaskDTO.from(task);
     }
 
-    // 4. 작업 수정
+    // 작업 수정
     @Transactional
     public UpdateTaskResponse updateTask(Long taskId, UpdateTaskRequest requestDto, Long userId) {
 
@@ -114,7 +114,7 @@ public class TaskService {
         return UpdateTaskResponse.from(task);
     }
 
-    // 5. 작업 삭제
+    // 작업 삭제
     @Transactional
     public void deleteTask(Long taskId, Long userId) {
 
@@ -128,9 +128,9 @@ public class TaskService {
         taskRepository.softDelete(taskId, LocalDateTime.now());
     }
 
-    // 6. 작업 상태 변경
+    // 작업 상태 변경
     @Transactional
-    public StatusUpdateResponse statusUpdateTask(Long id, StatusUpdateRequest requestDto) {
+    public StatusUpdateResponse statusUpdateTask(Long id, UpdateTaskStatusRequest requestDto) {
 
         Task task = taskRepository.findByIdAndDeletedAtIsNull(id)
                 .orElseThrow(() -> new CustomException(TASK_NOT_FOUND));

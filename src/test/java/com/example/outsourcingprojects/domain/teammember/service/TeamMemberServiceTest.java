@@ -1,6 +1,6 @@
 package com.example.outsourcingprojects.domain.teammember.service;
 
-import com.example.outsourcingprojects.common.entity.Team;
+import com.example.outsourcingprojects.domain.entity.Team;
 import com.example.outsourcingprojects.domain.team.dto.response.TeamMemberResponseDto;
 import com.example.outsourcingprojects.domain.team.repository.TeamRepository;
 import com.example.outsourcingprojects.domain.user.repository.UserRepository;

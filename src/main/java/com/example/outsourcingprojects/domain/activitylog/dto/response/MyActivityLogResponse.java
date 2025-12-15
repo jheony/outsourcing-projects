@@ -1,6 +1,6 @@
 package com.example.outsourcingprojects.domain.activitylog.dto.response;
 
-import com.example.outsourcingprojects.common.entity.ActivityLog;
+import com.example.outsourcingprojects.domain.entity.ActivityLog;
 import com.example.outsourcingprojects.common.model.ActivityType;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

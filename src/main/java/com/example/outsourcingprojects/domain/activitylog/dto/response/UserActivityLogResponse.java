@@ -1,6 +1,6 @@
 package com.example.outsourcingprojects.domain.activitylog.dto.response;
 
-import com.example.outsourcingprojects.common.entity.User;
+import com.example.outsourcingprojects.domain.entity.User;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 

@@ -1,7 +1,7 @@
 package com.example.outsourcingprojects.domain.team.repository;
 
-import com.example.outsourcingprojects.common.entity.QTeam;
-import com.example.outsourcingprojects.common.entity.Team;
+import com.example.outsourcingprojects.domain.entity.QTeam;
+import com.example.outsourcingprojects.domain.entity.Team;
 import com.example.outsourcingprojects.domain.search.dto.SearchTeamResponse;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;

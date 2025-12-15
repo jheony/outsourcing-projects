@@ -1,21 +1,20 @@
 package com.example.outsourcingprojects.domain.user.repository;
 
-import com.example.outsourcingprojects.common.entity.User;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Pattern;
-import jakarta.validation.constraints.Size;
+import com.example.outsourcingprojects.domain.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
+
 import java.util.List;
 import java.util.Optional;
 
 @Repository
-public interface UserRepository extends JpaRepository<User, Long>,UserRepositoryCustom {
-    Optional<User> findByUsername(String username);
+public interface UserRepository extends JpaRepository<User, Long>, UserRepositoryCustom {
 
     Boolean existsByEmail(String email);
 
     Optional<User> findByIdAndDeletedAtIsNull(Long id);
+
+    Boolean existsByIdAndDeletedAtIsNull(Long id);
 
     List<User> findAllByDeletedAtIsNull();
 

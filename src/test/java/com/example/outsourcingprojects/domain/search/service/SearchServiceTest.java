@@ -1,8 +1,8 @@
 package com.example.outsourcingprojects.domain.search.service;
 
-import com.example.outsourcingprojects.common.entity.Task;
-import com.example.outsourcingprojects.common.entity.Team;
-import com.example.outsourcingprojects.common.entity.User;
+import com.example.outsourcingprojects.domain.entity.Task;
+import com.example.outsourcingprojects.domain.entity.Team;
+import com.example.outsourcingprojects.domain.entity.User;
 import com.example.outsourcingprojects.domain.search.dto.SearchResponse;
 import com.example.outsourcingprojects.domain.search.dto.SearchTaskResponse;
 import com.example.outsourcingprojects.domain.search.dto.SearchTeamResponse;
